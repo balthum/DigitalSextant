@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Quartermaster Lite</string>
+    <string name="app_home">Home</string>
+    <string name="app_manual">Manual</string>
+    <string name="app_observation_list">Observation List</string>
+    <string name="app_preferences">Preferences</string>
+    <string name="app_previous_position_list">Previous Position List</string>
+    <string name="app_quit">Quit</string>
+    <string name="app_add">Add</string>
+
+    <string name="fragment_preferences">This is the PREFERENCES Fragment</string>
+    <string name="fragment_manual">This is the MANUAL Fragment</string>
+    <string name="fragment_observation_list">This is the OBSERVATION LIST Fragment</string>
+
+    <string name="header">Digital Sextant Menu</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="dummy_button">Take Celestial Body Fix</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="gps_message">Select how often you want to update the GPS position from GPS sensor.</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="gps_radioButton">
+        <item>30 minutes</item>
+        <item>45 minutes</item>
+        <item>60 minutes</item>
+        <item>75 minutes</item>
+        <item>90 minutes</item>
+    </string-array>
+
+    <string-array name="position_raidoButton">
+        <item>20 positions</item>
+        <item>30 positions</item>
+        <item>40 positions</item>
+        <item>50 positions</item>
+        <item>60 positions</item>
+    </string-array>
+
+</resources>
