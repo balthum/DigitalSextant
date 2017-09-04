@@ -65,27 +65,8 @@ public class ObservationListPageFragment extends Fragment
         //creates a warning dialog
         if(arrayList.size() == 0)
         {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity().getApplicationContext());//creates the AlertDialog
-            builder.setTitle("WARNING");//sets the title for the dialog
-            builder.setMessage("Push the ADD ICON to add an observation to the list.");//sets the message of the dialog
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i)
-                {
-
-                }
-            });
-            builder.setNegativeButton("CANCLE", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            });
-            builder.setView(view);
-            builder.create();
-
-                //builder.show();// creates the dialog
+            ObservationDialog myDialog = new ObservationDialog(this);
+            myDialog.show(getFragmentManager(), "warning");
         }
 
         //when you select an observation from the ListView it sets the observation
