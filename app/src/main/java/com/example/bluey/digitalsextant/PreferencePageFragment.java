@@ -64,6 +64,7 @@ public class PreferencePageFragment extends Fragment
             //sets gps data and adds it to the array list and listview
             preference.setPreferenceName("GPS");
             preference.setPreferenceInfo("30 minutes");
+            preference.setPreferenceNum(30);
             this.arrayList.add(preference);
 
             //creates the previous positions preference
@@ -72,6 +73,7 @@ public class PreferencePageFragment extends Fragment
             //sets previous position data
             preference.setPreferenceName("Previous Positions");
             preference.setPreferenceInfo("30 records");
+            preference.setPreferenceNum(30);
 
             //adds gps and position data
             this.arrayList.add(preference);// adds record to ArrayList

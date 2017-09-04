@@ -18,6 +18,7 @@ import static com.example.bluey.digitalsextant.PreferencePageFragment.position;
 public class PreferenceDialog extends DialogFragment
 {
     private String                      info;//the info of the preference info
+    private int                         num; //the num of the preference num
     private Preference                  preference;//So the records can be updated
     private PreferencePageFragment      prefFragment;//communicates with the PreferencePageFragment
 
@@ -72,7 +73,19 @@ public class PreferenceDialog extends DialogFragment
             builder.setSingleChoiceItems(R.array.gps_radioButton, -1, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i)
-                {info = gps[i];}
+                {
+                    info = gps[i];
+                    if(info == "30 minutes")
+                        num = 30;
+                    else if(info == "45 minutes")
+                        num = 45;
+                    else if (info == "60 minutes")
+                        num = 60;
+                    else if (info == "75 minutes")
+                        num = 75;
+                    else if (info == "90 minutes")
+                        num = 90;
+                }
             });
         }
 
@@ -87,7 +100,19 @@ public class PreferenceDialog extends DialogFragment
             builder.setSingleChoiceItems(R.array.position_raidoButton, -1, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i)
-                {info = savedPosition[i];}
+                {
+                    info = savedPosition[i];
+                    if (info == "20 positions")
+                        num = 20;
+                    else if(info == "30 positions")
+                        num = 30;
+                    else if(info == "40 positions")
+                        num = 40;
+                    else if (info == "50 positions")
+                        num = 50;
+                    else if(info == "60 positions")
+                        num = 60;
+                }
             });
         }
 
@@ -97,9 +122,10 @@ public class PreferenceDialog extends DialogFragment
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
-                preference.PreferenceInfo = info;//(1)
-                PreferenceDialog.this.prefFragment.updatePreference(preference);//(2)
-                Toast.makeText(getActivity(), "PREFERENCES UPDATED",Toast.LENGTH_SHORT).show();//(3)
+                preference.PreferenceInfo = info;
+                preference.PreferenceNum = num;
+                PreferenceDialog.this.prefFragment.updatePreference(preference);
+                Toast.makeText(getActivity(), "PREFERENCES UPDATED",Toast.LENGTH_SHORT).show();
             }
         });
 

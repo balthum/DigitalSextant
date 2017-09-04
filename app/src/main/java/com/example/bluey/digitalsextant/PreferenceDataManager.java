@@ -14,6 +14,7 @@ public class PreferenceDataManager
     private final static String         PreferenceSharedPreferencesName = "Preference"; //The SharedPreference name to access the SharedPreference Database
     private final static String         PreferenceNameKeyPrefix = "PreferenceName"; //where the name data is stored in the SharedPreference Database
     private final static String         PreferenceInfoKeyPrefix = "PreferenceInfo"; //where the Info data is stored in the SharedPreference Database
+    private final static String         PreferenceNumKeyPrefix = "PreferenceNum"; //where the Number data is stored in the SharedPreference Database
     private final static String         PreferenceItemCount = "PreferenceItemCount"; //The number of records stored in the SharedPreference Database
     private SharedPreferences           sharedPreferences;// is used for accessing and modifying the contents of the preferences file name
     private Context                     context;//Interface to global information about an application environment
@@ -39,7 +40,8 @@ public class PreferenceDataManager
      * (4) Puts the data from the ArrayList into the SharedPreference database for all the Preference objects in the ArrayList
      *      (a) Gets the Preference object from a certain position in the ArrayList
      *      (b) Sets the key, then puts the preference name in the key from the Preference object to the SharedPreference database
-     *      (C) Sets the key, then puts the preference info in the key from the Preference object to the SharedPreference database
+     *      (c) Sets the key, then puts the preference info in the key from the Preference object to the SharedPreference database
+     *      (d) Sets the key, then puts the preference num in the key from the Preference object to the SharedPreference database
      * (5) Commit your preferences and changes back from this Editor to the SharedPreferences object it is editing
      * @param dataArrayList ArrayList<Preference>
      */
@@ -69,6 +71,10 @@ public class PreferenceDataManager
             //(c)
             keyName = String.format("%s%d", PreferenceDataManager.PreferenceInfoKeyPrefix, i);
             editor.putString(keyName, preference.PreferenceInfo);
+
+            //(d)
+            keyName = String.format("%s%d", PreferenceDataManager.PreferenceNumKeyPrefix, i);
+            editor.putInt(keyName, preference.PreferenceNum);
         }
         //(5)
         editor.commit();
@@ -85,7 +91,8 @@ public class PreferenceDataManager
      *          and then gets each PreviousPosition Object in the database
      *          (a1) If the keyName exist set the Preference Object name from the keyName in the SharedPreference database
      *          (a2) If the keyName exist set the Preference Object info from the keyName in the SharedPreference database
-     *          (a3) Adds the Preference Object to the ArrayList
+     *          (a3) If the keyName exist set the Preference Object num from the keyName in the SharedPreference database
+     *          (a4) Adds the Preference Object to the ArrayList
      * @return ArrayList<Preference>
      */
     public ArrayList<Preference> getPreferenceFromDatabase()
@@ -114,6 +121,11 @@ public class PreferenceDataManager
                     preference.setPreferenceInfo(this.sharedPreferences.getString(keyName, ""));
 
                 //(a3)
+                keyName = String.format("%s%d", PreferenceDataManager.PreferenceNumKeyPrefix, i);
+                if (this.sharedPreferences.contains(keyName))
+                    preference.setPreferenceNum(this.sharedPreferences.getInt(keyName, 0));
+
+                //(a4)
                 dataArrayList.add(preference);
             }
         }
