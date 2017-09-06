@@ -44,7 +44,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class CelestialBodyObservationFragmentActivity extends Fragment implements SensorChange
+public class CelestialBodyObservationFragment extends Fragment implements SensorChange
 {
     //** -------------------------------------------------------------------------------------**\\
     // Square Robot Code
@@ -175,7 +175,7 @@ public class CelestialBodyObservationFragmentActivity extends Fragment implement
                             if (null == cameraDevice) return;
                             Log.e(TAGCAM, "createCameraPreview Step: a");
                             // (b)
-                            CelestialBodyObservationFragmentActivity.this.cameraCaptureSessions = cameraCaptureSession;
+                            CelestialBodyObservationFragment.this.cameraCaptureSessions = cameraCaptureSession;
                             Log.e(TAGCAM, "createCameraPreview Step: b");
                             updatePreview();
                         }
@@ -353,7 +353,7 @@ public class CelestialBodyObservationFragmentActivity extends Fragment implement
 //    };
 
     @SuppressLint("ValidFragment")
-    public CelestialBodyObservationFragmentActivity()
+    public CelestialBodyObservationFragment()
     {
         // Required empty public constructor
     }

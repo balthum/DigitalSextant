@@ -1,7 +1,12 @@
 package com.example.bluey.digitalsextant;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -11,24 +16,23 @@ import java.util.ArrayList;
 
 public class PreferenceDataManager
 {
-    private final static String         PreferenceSharedPreferencesName = "Preference"; //The SharedPreference name to access the SharedPreference Database
-    private final static String         PreferenceNameKeyPrefix = "PreferenceName"; //where the name data is stored in the SharedPreference Database
-    private final static String         PreferenceInfoKeyPrefix = "PreferenceInfo"; //where the Info data is stored in the SharedPreference Database
-    private final static String         PreferenceNumKeyPrefix = "PreferenceNum"; //where the Number data is stored in the SharedPreference Database
-    private final static String         PreferenceItemCount = "PreferenceItemCount"; //The number of records stored in the SharedPreference Database
-    private SharedPreferences           sharedPreferences;// is used for accessing and modifying the contents of the preferences file name
-    private Context                     context;//Interface to global information about an application environment
+
+    private Context                 context;//Interface to global information about an application environment
+    private SQLiteDatabase          sqLiteDatabase;
+    private PreferenceDatabase      preferenceDatabase;
+    private static final String         PREFERENCE_QUERY = "SELECT * FROM " + PreferenceDatabase.TABLE_PREFERENCE + " ORDER BY ID ";
+
 
     /**
      * The Default constructor for PreferenceDataManager which initializes the following
      * (1)Interface to global information about an application environment
-     * (2)Where you retrieve and hold the contents of the preferences file name in. The file name is called PreferenceSharedPreferencesName
      * @param context Context
      */
     public PreferenceDataManager(Context context)
     {
         this.context = context;//(1)
-        this.sharedPreferences = context.getSharedPreferences(PreferenceDataManager.PreferenceSharedPreferencesName, Context.MODE_PRIVATE);//(2)
+        this.preferenceDatabase = new PreferenceDatabase(context);
+        this.sqLiteDatabase = null;
     }
 
     /**
@@ -47,37 +51,24 @@ public class PreferenceDataManager
      */
     public void updatePreferenceDatabase(ArrayList<Preference> dataArrayList)
     {
-        //(1)
-        String keyName;
-        Preference preference;
-
-        //(2)
-        SharedPreferences.Editor editor = this.sharedPreferences.edit();
-        editor.clear();
-
-        //(3)
-        editor.putInt(PreferenceDataManager.PreferenceItemCount, dataArrayList.size());
-
-        //(4)
-        for (int i = 0; i < dataArrayList.size(); i++)
-        {
-            //(a)
-            preference = dataArrayList.get(i);
-
-            //(b)
-            keyName = String.format("%s%d", PreferenceDataManager.PreferenceNameKeyPrefix, i);
-            editor.putString(keyName, preference.PreferenceName);
-
-            //(c)
-            keyName = String.format("%s%d", PreferenceDataManager.PreferenceInfoKeyPrefix, i);
-            editor.putString(keyName, preference.PreferenceInfo);
-
-            //(d)
-            keyName = String.format("%s%d", PreferenceDataManager.PreferenceNumKeyPrefix, i);
-            editor.putInt(keyName, preference.PreferenceNum);
+        if (null == this.sqLiteDatabase)
+            this.sqLiteDatabase = this.preferenceDatabase.getWritableDatabase();
+        try {
+            this.sqLiteDatabase.execSQL(String.format("DELETE FROM %s", preferenceDatabase.TABLE_PREFERENCE));
+        } catch (SQLException e) {
+            Log.e("updateDatabase", e.getMessage());
         }
-        //(5)
-        editor.commit();
+
+        for (int i = 0; i < dataArrayList.size(); i++) {
+            Preference preference = dataArrayList.get(i);
+            ContentValues values = new ContentValues();
+            values.put(PreferenceDatabase.COL_2, preference.PreferenceName);
+            values.put(PreferenceDatabase.COL_3, preference.PreferenceInfo);
+            values.put(PreferenceDatabase.COL_4, preference.PreferenceNum);
+            long insertId = this.sqLiteDatabase.insert(preferenceDatabase.TABLE_PREFERENCE,
+                    null,
+                    values);
+        }
     }
 
     /**
@@ -97,38 +88,43 @@ public class PreferenceDataManager
      */
     public ArrayList<Preference> getPreferenceFromDatabase()
     {
-        //(1)
         ArrayList<Preference> dataArrayList = new ArrayList<Preference>();
-        int itemCount = 0;
-        Preference preference = new Preference();
-        String keyName;
 
-        //(2)
-        if (this.sharedPreferences.contains(PreferenceDataManager.PreferenceItemCount))
+        if (null == this.sqLiteDatabase)
+            this.sqLiteDatabase = this.preferenceDatabase.getWritableDatabase();
+
+        Cursor cursor = null;
+
+        try {
+            cursor = this.sqLiteDatabase.rawQuery(PREFERENCE_QUERY, null);
+        } catch (Exception e)
         {
-            //(a)
-            itemCount = this.sharedPreferences.getInt(PreferenceDataManager.PreferenceItemCount, 0);
-            for (int i = 0; i < itemCount; i++)
-            {
-                //(a1)
-                keyName = String.format("%s%d", PreferenceDataManager.PreferenceNameKeyPrefix, i);
-                if (this.sharedPreferences.contains(keyName))
-                    preference.setPreferenceName(this.sharedPreferences.getString(keyName, ""));
-
-                //(a2)
-                keyName = String.format("%s%d", PreferenceDataManager.PreferenceInfoKeyPrefix, i);
-                if (this.sharedPreferences.contains(keyName))
-                    preference.setPreferenceInfo(this.sharedPreferences.getString(keyName, ""));
-
-                //(a3)
-                keyName = String.format("%s%d", PreferenceDataManager.PreferenceNumKeyPrefix, i);
-                if (this.sharedPreferences.contains(keyName))
-                    preference.setPreferenceNum(this.sharedPreferences.getInt(keyName, 0));
-
-                //(a4)
-                dataArrayList.add(preference);
-            }
+            Log.e("getPreferenceDatabase", e.getMessage());
+            return null;
         }
+
+        int colIndex;
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast())
+        {
+            Preference preference = new Preference();
+
+            colIndex = cursor.getColumnIndex(PreferenceDatabase.COL_2);
+            preference.PreferenceName = cursor.getString(colIndex);
+
+            colIndex = cursor.getColumnIndex(PreferenceDatabase.COL_3);
+            preference.PreferenceInfo = cursor.getString(colIndex);
+
+            colIndex = cursor.getColumnIndex(PreferenceDatabase.COL_4);
+            preference.PreferenceNum = cursor.getInt(colIndex);
+
+            dataArrayList.add(preference);
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+
         return dataArrayList;
     }
 }

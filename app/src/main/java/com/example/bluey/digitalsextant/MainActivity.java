@@ -1,5 +1,7 @@
 package com.example.bluey.digitalsextant;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
@@ -8,18 +10,25 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+
+import java.util.ArrayList;
+import java.util.Timer;
 
 /**
  * Created by robinluna Robin Luna on 8/06/17.
  */
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GPSTimerInterface
 {
     public static Toolbar               toolbar = null; //gets the Toolbar with generalization of action bars
     public static NavigationView        navigationView;//gets the standard navigation menu
     private DrawerLayout                drawerLayout; //lets you be able pull window out from the left side of the activity
     private ActionBarDrawerToggle       drawerToggle;//ties the functionality of DrawerLayout and ActionBar
+    private GPSTimer                    gpsTimer;
+    private Timer                       timer;
+    private GPSTimerInterface           gpsTimerInterface;
 
     /**
      * When the MainActivity is created it does the following
@@ -42,6 +51,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getSupportActionBar().setTitle("Home");//(3)
         initiateNavigationView();//(4)
+
+        resetTimer();
+
+
+    }
+
+    public void resetTimer() {
+        PreferenceDataManager preferenceDataManager = new PreferenceDataManager(getApplicationContext());
+        ArrayList<Preference> arrayList = new ArrayList<>(preferenceDataManager.getPreferenceFromDatabase());
+        //gets the gps information on how often to get the gps updates
+        Preference preference;
+        preference = arrayList.get(0);
+        int update_time = preference.getPreferenceNum();
+
+        if (update_time == 0)
+            update_time = 30;
+
+        if (timer != null) {
+            timer.cancel();
+        }
+
+        timer = new Timer();
+        gpsTimer = new GPSTimer(this);
+
+        timer.schedule(gpsTimer,0,(update_time * 1l* 1000l));
+        Log.d("reset_timer",  String.valueOf(System.currentTimeMillis()));
     }
 
     /**
@@ -164,5 +199,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //(7)
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void timeExpired()
+    {
+
     }
 }

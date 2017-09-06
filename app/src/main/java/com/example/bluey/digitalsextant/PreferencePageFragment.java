@@ -1,8 +1,13 @@
 package com.example.bluey.digitalsextant;
 
 import android.app.Fragment;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.database.DatabaseUtilsCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +28,10 @@ public class PreferencePageFragment extends Fragment
     private ArrayList<Preference>       arrayList;
     public static int                   position;
     private Preference                  preference;
+    private PreferenceDatabase          preferenceDatabase;
+    private SQLiteDatabase              sqLiteDatabase;
+    private static final String         PREFERENCE_QUERY = "SELECT * FROM " + PreferenceDatabase.TABLE_PREFERENCE + " ORDER BY ID ";
+
 
     /**
      * Default Constructor PreferencePageFragment
@@ -113,19 +122,6 @@ public class PreferencePageFragment extends Fragment
         this.list.setAdapter(this.preferenceAdapter);//(3)
     }
 
-    /**
-     * Adds the record to the ListView by the following
-     * (1) Adds the Preference Object to the arrayList
-     * (2) Updates the Database with the added Preference Object
-     * (3) Adds the Preference Object to the ListView
-     * @param preference Preference
-     */
-    public void addPreference(Preference preference)
-    {
-        this.arrayList.add(preference);//(1)
-        this.preferenceDataManager.updatePreferenceDatabase(this.arrayList);//(2)
-        this.list.setAdapter(this.preferenceAdapter);//(3)
-    }
 
     /**
      * shows the dialog from the selected item by the following
@@ -139,4 +135,6 @@ public class PreferencePageFragment extends Fragment
         PreferenceDialog myDialog = new PreferenceDialog(this,preference);//(2)
         myDialog.show(getFragmentManager(), "update_record");//(3)
     }
+
+
 }

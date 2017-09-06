@@ -75,15 +75,15 @@ public class PreferenceDialog extends DialogFragment
                 public void onClick(DialogInterface dialogInterface, int i)
                 {
                     info = gps[i];
-                    if(info == "30 minutes")
+                    if(info.equals( "30 minutes"))
                         num = 30;
-                    else if(info == "45 minutes")
+                    else if(info.equals( "45 minutes"))
                         num = 45;
-                    else if (info == "60 minutes")
+                    else if (info.equals( "60 minutes"))
                         num = 60;
-                    else if (info == "75 minutes")
+                    else if (info.equals( "75 minutes"))
                         num = 75;
-                    else if (info == "90 minutes")
+                    else if (info.equals( "90 minutes"))
                         num = 90;
                 }
             });
@@ -102,15 +102,15 @@ public class PreferenceDialog extends DialogFragment
                 public void onClick(DialogInterface dialogInterface, int i)
                 {
                     info = savedPosition[i];
-                    if (info == "20 positions")
+                    if (info.equals( "20 positions"))
                         num = 20;
-                    else if(info == "30 positions")
+                    else if(info.equals( "30 positions"))
                         num = 30;
-                    else if(info == "40 positions")
+                    else if(info.equals( "40 positions"))
                         num = 40;
-                    else if (info == "50 positions")
+                    else if (info.equals( "50 positions"))
                         num = 50;
-                    else if(info == "60 positions")
+                    else if(info.equals( "60 positions"))
                         num = 60;
                 }
             });
@@ -122,10 +122,21 @@ public class PreferenceDialog extends DialogFragment
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
-                preference.PreferenceInfo = info;
-                preference.PreferenceNum = num;
-                PreferenceDialog.this.prefFragment.updatePreference(preference);
-                Toast.makeText(getActivity(), "PREFERENCES UPDATED",Toast.LENGTH_SHORT).show();
+                if(preference.PreferenceNum != num)
+                {
+
+
+                    preference.PreferenceInfo = info;
+                    preference.PreferenceNum = num;
+
+                    PreferenceDialog.this.prefFragment.updatePreference(preference);
+
+                    Toast.makeText(getActivity(), "PREFERENCES UPDATED",Toast.LENGTH_SHORT).show();
+
+                    if(position == 0)
+                        ((MainActivity)prefFragment.getActivity()).resetTimer();
+                }
+
             }
         });
 

@@ -34,7 +34,7 @@ public class SensorModule implements SensorEventListener
      *
      * @param celestialBody CelestialBodyObservationFragmentActivity
      */
-    public SensorModule(CelestialBodyObservationFragmentActivity celestialBody)
+    public SensorModule(CelestialBodyObservationFragment celestialBody)
     {
         this.sensorChange = (SensorChange)celestialBody;//(1)
         Context context = celestialBody.getActivity();//(2)

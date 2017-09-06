@@ -1,8 +1,6 @@
 package com.example.bluey.digitalsextant;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -109,10 +107,10 @@ public class ObservationListPageFragment extends Fragment
     {
         if (item.getItemId() == R.id.add)
         {
-            CelestialBodyObservationFragmentActivity celestialBodyObservationFragmentActivity =
-                    new CelestialBodyObservationFragmentActivity();
+            CelestialBodyObservationFragment celestialBodyObservationFragment =
+                    new CelestialBodyObservationFragment();
             android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container,celestialBodyObservationFragmentActivity);
+            fragmentTransaction.replace(R.id.fragment_container, celestialBodyObservationFragment);
             fragmentTransaction.commit();
         }
         return super.onOptionsItemSelected(item);

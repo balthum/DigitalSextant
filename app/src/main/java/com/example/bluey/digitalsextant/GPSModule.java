@@ -9,6 +9,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Created by Bluey on 8/23/17.
@@ -16,26 +19,33 @@ import android.support.annotation.Nullable;
 
 public class GPSModule extends Service implements LocationListener
 {
-    private Context context;
-    private boolean isGPSEnabled = false; //flag for GPS status
-    private boolean isNetworkEnabled = false; //flag for network status
-    private boolean canGetLocation = false; //sensor can get Location
-    private Location location; //location
-    private double latitude; //latitude
-    private double longitude; //longitude
-    private long min_time_bw_updates = 1000 * 60; //The minimum time between updates in milliseconds (1 minute)
-    protected LocationManager locationManager; //declaring location manager
+    private Context                     context;
+    private boolean                     isGPSEnabled = false; //flag for GPS status
+    private boolean                     isNetworkEnabled = false; //flag for network status
+    private boolean                     canGetLocation = false; //sensor can get Location
+    private Location                    location; //location
+    private PreferenceDataManager       preferenceDataManager;
+    private PreferenceAdapter           preferenceAdapter;
+    private int                         update_time;
+    private ArrayList<Preference>       arrayList;
+    private double                      latitude; //latitude
+    private double                      longitude; //longitude
+    private long                        min_time_bw_updates = 1000 * 60; //The minimum time between updates in milliseconds (1 minute)
+    private static final long           MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
+    protected LocationManager           locationManager; //declaring location manager
 
 
-    public GPSModule(CelestialBodyObservationFragmentActivity celestialBodyObservationFragmentActivity)
+    public GPSModule(CelestialBodyObservationFragment celestialBodyObservationFragment)
     {
-        this.context = celestialBodyObservationFragmentActivity.getActivity();
+        this.context = celestialBodyObservationFragment.getActivity();
+        getLocation();
 
     }
 
     public GPSModule(HomePageFragment homePageFragment)
     {
         this.context = homePageFragment.getActivity();
+        getLocation();
     }
 
 //    public Preference getGPSUpdates()
@@ -50,8 +60,10 @@ public class GPSModule extends Service implements LocationListener
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-
+    public void onLocationChanged(Location location)
+    {
+        location.getLongitude();
+        location.getLatitude();
     }
 
     @Override
@@ -61,16 +73,56 @@ public class GPSModule extends Service implements LocationListener
 
     @Override
     public void onProviderEnabled(String s) {
-
+        Toast.makeText(GPSModule.this,
+                "Provider enabled by the user. GPS turned on",
+                Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onProviderDisabled(String s) {
+        Toast.makeText(GPSModule.this,
+                "Provider disabled by the user. GPS turned off",
+                Toast.LENGTH_LONG).show();
+
 
     }
 
+    public double getLatitude()
+    {
+        if(location != null)
+            latitude = location.getLatitude();
+
+        return latitude;
+    }
+
+    public double getLongitude()
+    {
+        if(location != null)
+            longitude = location.getLongitude();
+
+        return longitude;
+    }
+
+    public void stopUsingGPS()
+    {
+        if(locationManager != null)
+            locationManager.removeUpdates(GPSModule.this);
+    }
+
+    public boolean canGetLocation() {return this.canGetLocation;}
+
+
     public Location getLocation()
     {
+
+        this.preferenceDataManager = new PreferenceDataManager(getApplicationContext());
+        arrayList = new ArrayList<>(preferenceDataManager.getPreferenceFromDatabase());
+
+        //gets the gps information on how often to get the gps updates
+        Preference preference;
+        preference = arrayList.get(0);
+        update_time = preference.getPreferenceNum();
+
         locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
 
         //getting GPS status
@@ -79,16 +131,54 @@ public class GPSModule extends Service implements LocationListener
         //getting network status
         isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-        //network provider is enabled
-        if(isNetworkEnabled)
+        if(!isGPSEnabled && !isNetworkEnabled)
+        {}
+        else
         {
-            //int d = 0;
-            //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,min_time_bw_updates,d);
+            this.canGetLocation = true;
+
+            //network provider is enabled
+            if(isNetworkEnabled)
+            {
+                locationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER,
+                        min_time_bw_updates,
+                        MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+
+                if (locationManager != null) {
+                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                    if (location != null) {
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                    }
+                }
+            }
+
+            if(isGPSEnabled)
+            {
+                if(location == null)
+                {
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            min_time_bw_updates,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+
+                    if(locationManager != null)
+                    {
+                        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                        if(location != null)
+                        {
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+                        }
+                    }
+                }
+            }
 
         }
-
-        return getLocation();
-
-        //go to https://www.androidhive.info/2012/07/android-gps-location-manager-tutorial/
+        return location;
     }
+
 }
