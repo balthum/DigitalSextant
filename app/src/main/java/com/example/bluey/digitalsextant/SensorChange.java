@@ -8,9 +8,9 @@ public interface SensorChange
     /**
      * gets the direction and azimuth/compass bearing when their is a new reading from the sensor
      * @param direction String
-     * @param azmiuth float
+     * @param azimuth float
      */
-    public void compassUpdate(String direction, float azmiuth);
+    public void compassUpdate(String direction, float azimuth);
 
     /**
      * gets the zenith/observed height when their is a new reading from the sensor

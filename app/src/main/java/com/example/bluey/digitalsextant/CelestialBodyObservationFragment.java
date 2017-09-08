@@ -111,7 +111,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback()
     {
         @Override
-        public void onOpened(CameraDevice camera)
+        public void onOpened(@NonNull CameraDevice camera)
         {
             //This is called when the camera is open
             Log.e(TAGCAM, "onOpened");
@@ -120,12 +120,12 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             createCameraPreview();
         }
         @Override
-        public void onDisconnected(CameraDevice camera)
+        public void onDisconnected(@NonNull CameraDevice camera)
         {
             cameraDevice.close();
         }
         @Override
-        public void onError(CameraDevice camera, int error)
+        public void onError(@NonNull CameraDevice camera, int error)
         {
             cameraDevice.close();
             cameraDevice = null;
@@ -396,10 +396,10 @@ TEst
 
         //**-------------- Square Robot OnCreate additions ------------------------------------**\\
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        camPreviewTextureView = (TextureView)   view.findViewById(R.id.camPreviewTextView);
-        zenithTextView        = (TextView)      view.findViewById(R.id.textView_zenith);     //TODO comment
-        compassTextView       = (TextView)      view.findViewById(R.id.textView_compass);    //TODO comment
-        Spinner celestialBodySpinner = (Spinner) view.findViewById(R.id.starListSpinner);
+        camPreviewTextureView =         view.findViewById(R.id.camPreviewTextView);
+        zenithTextView        =         view.findViewById(R.id.textView_zenith);     //TODO comment
+        compassTextView       =         view.findViewById(R.id.textView_compass);    //TODO comment
+        Spinner celestialBodySpinner =  view.findViewById(R.id.starListSpinner);
 
         populateCelestialBodies();
 
@@ -426,7 +426,7 @@ TEst
         if ( null == camPreviewTextureView) {Log.e(TAGCAM, "Cam Preview Texture is null");}
         else {camPreviewTextureView.setSurfaceTextureListener(camPreviewTextureListener);}
 
-        Button takeFixButton = (Button) view.findViewById(R.id.takeFixButton);
+        Button takeFixButton = view.findViewById(R.id.takeFixButton);
         if ( null == camPreviewTextureView ) {Log.e(TAGCAM, " Cam takeFixButton is null");}
         else {
             takeFixButton.setOnClickListener(new View.OnClickListener() {
@@ -463,7 +463,7 @@ TEst
         ObservationDataManager observationDataManager = new ObservationDataManager(getActivity());
         ArrayList<CelestialBodyObservation> arrayList = new ArrayList<>(observationDataManager.getObservationFromDatabase());
 
-        observation.setTitle("Observation " + (arrayList.size() +1));
+        observation.setTitle("Observation " + (arrayList.size() + 1));
 
         // Get the Star name and add to the observation
         observation.setCelestialBodyName(spinnerPositionName);
@@ -506,10 +506,7 @@ TEst
                 // c.)
                 celestialBodiesSet.add(celestialBody);
             }
-            ;
 
-        } catch (FileNotFoundException e) {
-            Toast.makeText(getActivity().getApplicationContext(), "Unable to load Celestial Bodies", Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             Toast.makeText(getActivity().getApplicationContext(), "Unable to load Celestial Bodies", Toast.LENGTH_LONG).show();
         }
@@ -521,11 +518,8 @@ TEst
         String[] celestialBodyNames = new String[celestialBodiesSet.size()];
         int                       i = 0;
 
-        Iterator<CelestialBody> iterator = celestialBodiesSet.iterator();
-
-        while (iterator.hasNext())
-        {
-            celestialBodyNames[i++] = iterator.next().getCelestialBodyName();
+        for (CelestialBody aCelestialBodiesSet : celestialBodiesSet) {
+            celestialBodyNames[i++] = aCelestialBodiesSet.getCelestialBodyName();
         }
 
         return celestialBodyNames;
@@ -546,17 +540,18 @@ TEst
     }
 
     @Override
-    public void compassUpdate(String direction, float azmiuth)
+    public void compassUpdate(String direction, float azimuth)
     {
-        compassTextView.setText("COMPASS: " + azmiuth + "º " + direction);
-        compassBearing = azmiuth;
+        compassTextView.setText("COMPASS: " + azimuth + "º " + direction);
+        compassBearing = azimuth;
         compassDirection = direction;
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void zenithUpdate(float zenith)
     {
-        zenithTextView.setText("ZENITH: " +zenith + "º" );
+        zenithTextView.setText(String.format("ZENITH: %.1fº", zenith));
         observedHeight = zenith;
     }
 }

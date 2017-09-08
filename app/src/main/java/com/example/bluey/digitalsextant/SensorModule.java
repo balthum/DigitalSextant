@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.provider.Settings;
 
 /**
  * Created by robinluna Robin Luna on 7/25/17.
@@ -90,6 +91,7 @@ public class SensorModule implements SensorEventListener
     @Override
     public void onSensorChanged(SensorEvent sensorEvent)
     {
+
         //(1)
         if(sensorEvent.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
             magnetic = sensorEvent.values.clone();
@@ -105,8 +107,16 @@ public class SensorModule implements SensorEventListener
         setAzimuth((float) ((Math.toDegrees(SensorManager.getOrientation(rotation,orientation)[0])+360)%360));
 
         //(5)
-        setZenith(Math.round(Math.toDegrees(Math.asin(acceleration[1]))));
-        sensorChange.zenithUpdate(getZenith());
+
+        /*System.out.println( "Y Axis: "
+                + Math.round( 90 + Math.toDegrees(
+                        SensorManager.getOrientation(rotation,orientation)[1]
+                              )));
+ */
+        this.zenith = (float) (90 + Math.toDegrees(SensorManager.getOrientation(rotation, orientation)[1] ));
+
+
+        sensorChange.zenithUpdate(this.zenith);
 
         //(6)
         if (getAzimuth() >= 338 || getAzimuth() <= 22)
