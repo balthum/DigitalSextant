@@ -64,31 +64,6 @@ public class PreferencePageFragment extends Fragment
         this.preferenceDataManager = new PreferenceDataManager(getActivity());
         arrayList = new ArrayList<>(preferenceDataManager.getPreferenceFromDatabase());
 
-        //(3)
-        if(arrayList.size() == 0)
-        {
-            //creates the gps preference
-            this.preference = new Preference();
-
-            //sets gps data and adds it to the array list and listview
-            preference.setPreferenceName("GPS");
-            preference.setPreferenceInfo("30 minutes");
-            preference.setPreferenceNum(30);
-            this.arrayList.add(preference);
-
-            //creates the previous positions preference
-            this.preference = new Preference();
-
-            //sets previous position data
-            preference.setPreferenceName("Previous Positions");
-            preference.setPreferenceInfo("30 records");
-            preference.setPreferenceNum(30);
-
-            //adds gps and position data
-            this.arrayList.add(preference);// adds record to ArrayList
-            this.preferenceDataManager.updatePreferenceDatabase(this.arrayList);//updates preferenceDatabase for record added
-        }
-
         //(4)
         this.preferenceAdapter = new PreferenceAdapter(getActivity(),arrayList);
 

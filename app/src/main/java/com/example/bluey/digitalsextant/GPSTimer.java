@@ -16,12 +16,12 @@ public class GPSTimer extends TimerTask
 
 
     private Context context;
-    private GPSModule gpsModule;
+    private double latitude;
+    private double longitude;
 
-
-    public GPSTimer(Context context)
+    public GPSTimer(MainActivity mainActivity)
     {
-        this.context = context;
+        this.context = mainActivity;
     }
     @Override
     public void run()
@@ -29,6 +29,7 @@ public class GPSTimer extends TimerTask
         Log.d("timer",  String.valueOf(System.currentTimeMillis()));
 
     }
+
 
 
 }

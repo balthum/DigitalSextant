@@ -21,7 +21,7 @@ import java.util.Timer;
  * Created by robinluna Robin Luna on 8/06/17.
  */
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GPSTimerInterface
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GPSChange
 {
     public static Toolbar               toolbar = null; //gets the Toolbar with generalization of action bars
     public static NavigationView        navigationView;//gets the standard navigation menu
@@ -29,7 +29,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle       drawerToggle;//ties the functionality of DrawerLayout and ActionBar
     private GPSTimer                    gpsTimer;
     private Timer                       timer;
-    private GPSTimerInterface           gpsTimerInterface;
+    private double                      latitude;
+    private double                      longitude;
+
 
 
     /**
@@ -54,6 +56,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setTitle("Home");//(3)
         initiateNavigationView();//(4)
 
+        getPreferenceData();
+
+        GPSModule gpsModule = new GPSModule(this);
+
         resetTimer();
 
 
@@ -73,20 +79,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
-
-//        if (update_time == 0)
-//            update_time = 30;
-
         if (timer != null) {
             timer.cancel();
         }
 
-        timer = new Timer();
+        this.timer = new Timer();
         gpsTimer = new GPSTimer(this);
 
         timer.schedule(gpsTimer,0,(update_time * 1l* 1000l));
-//        Toast.makeText(this, "Your Location is \nLat: " + gpsTimer.Latitude +"\nLong: " + gpsTimer.Longitude, Toast.LENGTH_LONG).show();
         Log.d("reset_timer",  String.valueOf(System.currentTimeMillis()));
+    }
+
+    public void getPreferenceData()
+    {
+        PreferenceDataManager preferenceDataManager = new PreferenceDataManager(getApplicationContext());
+        ArrayList <Preference> arrayList = new ArrayList<>(preferenceDataManager.getPreferenceFromDatabase());
+
+
+        //creates the gps preference
+        if(arrayList.size() == 0)
+        {
+            Preference preference = new Preference();
+
+            //sets gps data and adds it to the array list and listview
+            preference.setPreferenceName("GPS");
+            preference.setPreferenceInfo("30 minutes");
+            preference.setPreferenceNum(30);
+            arrayList.add(preference);
+
+            //creates the previous positions preference
+            preference = new Preference();
+
+            //sets previous position data
+            preference.setPreferenceName("Previous Positions");
+            preference.setPreferenceInfo("30 records");
+            preference.setPreferenceNum(30);
+
+            //adds gps and position data
+            arrayList.add(preference);// adds record to ArrayList
+            preferenceDataManager.updatePreferenceDatabase(arrayList);//updates preferenceDatabase for record added
+        }
     }
 
     /**
@@ -212,29 +244,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void timeExpired()
+    public void locationUpdate(double latitude, double longitude)
     {
-        //Toast.makeText(this,"timer went off", Toast.LENGTH_SHORT);
-
-
-//        gpsModule =new GPSModule(MainActivity.this);
-//
-//        if(gpsModule.canGetLocation())
-//        {
-//
-//            Toast.makeText(this, "Your Location is \nLat: " + gpsModule.getLatitude() +"\nLong: " + gpsModule.getLongitude(), Toast.LENGTH_LONG).show();
-//            PreviousPosition position = new PreviousPosition();
-//            PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(this);
-//            ArrayList<PreviousPosition> arrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
-//
-//            position.Latitude = gpsModule.getLatitude();
-//            position.Longitude = gpsModule.getLongitude();
-//
-//            //adds gps and position data
-//            arrayList.add(position);// adds record to ArrayList
-//            previousPositionDataManager.updatePositionDatabase(arrayList);//updates preferenceDatabase for record added
-//        }
-
+        Toast.makeText(this,"Latitude; " + latitude +"\nLongitude: " + longitude,Toast.LENGTH_SHORT).show();
 
     }
+
+//    @Override
+//    public void locationUpdate(double latitude, double longitude)
+//    {
+//        Toast.makeText(this, "Latitude: " + latitude + "\nLongitude: " + longitude, Toast.LENGTH_SHORT).show();
+////        PreviousPosition position = new PreviousPosition();
+////        PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(this);
+////        ArrayList<PreviousPosition> arrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
+////
+////        position.Latitude = latitude;
+////        position.Longitude = longitude;
+////
+////            //adds gps and position data
+////        arrayList.add(position);// adds record to ArrayList
+////        previousPositionDataManager.updatePositionDatabase(arrayList);//updates preferenceDatabase for record added
+//    }
+
+
 }
+
+
+

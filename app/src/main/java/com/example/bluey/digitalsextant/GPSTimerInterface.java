@@ -6,5 +6,6 @@ package com.example.bluey.digitalsextant;
 
 public interface GPSTimerInterface
 {
-    public void timeExpired();
+    public void timerUpdate(double latitude, double longitude);
+
 }

@@ -24,26 +24,33 @@ public class GPSModule extends Service implements LocationListener
 {
     private final Context context;
 
-    boolean isGPSEnabled = false;
-    boolean isNetworkEnabled = false;
-    boolean canGetLocation = false;
+    private boolean isGPSEnabled = false;
+    private boolean isNetworkEnabled = false;
+    private boolean canGetLocation = false;
 
-    Location location;
+    private Location location;
 
-    double latitude;
-    double longitude;
+    private double latitude;
+    private double longitude;
+    private GPSChange gpsChange;
 
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 5 * 1;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
+    private static final long MIN_TIME_BW_UPDATES = 1000;
 
-    protected LocationManager locationManager;
+    private LocationManager locationManager;
 
-    public GPSModule(Context context) {
+
+
+    public GPSModule(Context context)
+    {
+        this.gpsChange = (GPSChange)context;
         this.context = context;
         getLocation();
     }
 
-    public Location getLocation() {
+
+    public Location getLocation()
+    {
         try {
             locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
 
@@ -51,7 +58,8 @@ public class GPSModule extends Service implements LocationListener
 
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-            if(!isGPSEnabled && !isNetworkEnabled) {
+            if(!isGPSEnabled && !isNetworkEnabled)
+            {
 
             } else {
                 this.canGetLocation = true;
@@ -130,32 +138,42 @@ public class GPSModule extends Service implements LocationListener
 
 
     @Override
-    public void onLocationChanged(Location arg0) {
-        // TODO Auto-generated method stub
+    public void onLocationChanged(Location arg0)
+    {
+        this.longitude = location.getLongitude();
+        this.latitude = location.getLatitude();
+
+        gpsChange.locationUpdate(latitude,longitude);
 
     }
 
     @Override
     public void onProviderDisabled(String arg0) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void onProviderEnabled(String arg0) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-        // TODO Auto-generated method stub
+    public void onStatusChanged(String arg0, int arg1, Bundle arg2)
+    {
+        this.isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        this.isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
+        if(isGPSEnabled || isNetworkEnabled)
+            getLocation();
+        else
+        {
+            this.canGetLocation = false;
+            stopUsingGPS();
+        }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO Auto-generated method stub
         return null;
     }
 

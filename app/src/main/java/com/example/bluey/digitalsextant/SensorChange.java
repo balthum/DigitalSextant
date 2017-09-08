@@ -18,4 +18,5 @@ public interface SensorChange
      */
     public void zenithUpdate(float zenith);
 
+
 }
