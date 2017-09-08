@@ -19,6 +19,8 @@
     <uses-feature
         android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-feature
+        android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-feature
         android:name="android.permission.INTERNET"/>
 
     <application

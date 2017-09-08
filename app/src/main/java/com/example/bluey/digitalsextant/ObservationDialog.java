@@ -20,6 +20,7 @@ public class ObservationDialog extends DialogFragment
 {
     private int                             num; //the num of the preference num
     private ObservationListPageFragment     obsFragment;//communicates with the ObservationListPageFragment
+    private int                             observationSize;
 
     /**
      * The Default constructor for PreferenceDialog which initializes the following
@@ -27,8 +28,9 @@ public class ObservationDialog extends DialogFragment
      * (1) adds the obsFragment so it can communicate where the info is going
      * @param obsFragment ObservationListPageFragment
      */
-    public ObservationDialog(ObservationListPageFragment obsFragment)
+    public ObservationDialog(ObservationListPageFragment obsFragment, int size)
     {
+        this.observationSize = size;
         this.obsFragment = obsFragment;//(1)
     }
 
@@ -56,7 +58,17 @@ public class ObservationDialog extends DialogFragment
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());//creates the AlertDialog
 
         builder.setTitle("WARNING");//(2)
-        builder.setMessage("Push the ADD ICON to add an observation to the list.");//(3)
+
+
+        if(observationSize == 0)
+        {
+            builder.setMessage("Push the ADD ICON to add an observation to the list.");//(3)
+        }
+        else
+        {
+            builder.setMessage("NOT allowed to ADD any more Observations.");//(3)
+        }
+
         //(4)
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
         {

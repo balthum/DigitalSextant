@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private GPSTimer                    gpsTimer;
     private Timer                       timer;
     private GPSTimerInterface           gpsTimerInterface;
+
 
     /**
      * When the MainActivity is created it does the following
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initiateNavigationView();//(4)
 
         resetTimer();
+
 
 
     }
@@ -81,7 +84,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         timer = new Timer();
         gpsTimer = new GPSTimer(this);
 
-        timer.schedule(gpsTimer,0,(update_time * 60l* 1000l));
+        timer.schedule(gpsTimer,0,(update_time * 1l* 1000l));
+//        Toast.makeText(this, "Your Location is \nLat: " + gpsTimer.Latitude +"\nLong: " + gpsTimer.Longitude, Toast.LENGTH_LONG).show();
         Log.d("reset_timer",  String.valueOf(System.currentTimeMillis()));
     }
 
@@ -210,18 +214,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void timeExpired()
     {
-//        GPSModule gpsModule =new GPSModule(this);
+        //Toast.makeText(this,"timer went off", Toast.LENGTH_SHORT);
+
+
+//        gpsModule =new GPSModule(MainActivity.this);
 //
-//        PreviousPosition position = new PreviousPosition();
-//        PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(this);
-//        ArrayList<PreviousPosition> arrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
+//        if(gpsModule.canGetLocation())
+//        {
 //
-//        position.Latitude = gpsModule.getLatitude();
-//        position.Longitude = gpsModule.getLongitude();
+//            Toast.makeText(this, "Your Location is \nLat: " + gpsModule.getLatitude() +"\nLong: " + gpsModule.getLongitude(), Toast.LENGTH_LONG).show();
+//            PreviousPosition position = new PreviousPosition();
+//            PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(this);
+//            ArrayList<PreviousPosition> arrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
 //
-//        //adds gps and position data
-//        arrayList.add(position);// adds record to ArrayList
-//        previousPositionDataManager.updatePositionDatabase(arrayList);//updates preferenceDatabase for record added
+//            position.Latitude = gpsModule.getLatitude();
+//            position.Longitude = gpsModule.getLongitude();
+//
+//            //adds gps and position data
+//            arrayList.add(position);// adds record to ArrayList
+//            previousPositionDataManager.updatePositionDatabase(arrayList);//updates preferenceDatabase for record added
+//        }
+
 
     }
 }

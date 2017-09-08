@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class ObservationListPageFragment extends Fragment
     private ObservationAdapter                      observationAdapter;
     private ObservationDataManager                  observationDataManager;
     private ArrayList<CelestialBodyObservation>     arrayList;
+    private Button                                  calculateButton;
     private int                                     position; // position of observation
 
     /**
@@ -61,10 +63,29 @@ public class ObservationListPageFragment extends Fragment
         this.listView = (ListView) view.findViewById(R.id.listView_observation);
         this.listView.setAdapter(this.observationAdapter);
 
+        this.calculateButton = (Button) view.findViewById(R.id.calculate_button);
+
+        if(arrayList.size() >= 2)
+        {
+            this.calculateButton.setEnabled(true);
+        }
+        else
+        {
+            this.calculateButton.setEnabled(false);
+        }
+
+        this.calculateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                //getContext().deleteDatabase(ObservationDatabase.DATABASE_OBSERVATION);
+            }
+        });
+
         //creates a warning dialog
         if(arrayList.size() == 0)
         {
-            ObservationDialog myDialog = new ObservationDialog(this);
+            ObservationDialog myDialog = new ObservationDialog(this, arrayList.size());
             myDialog.show(getFragmentManager(), "warning");
         }
 
@@ -81,6 +102,7 @@ public class ObservationListPageFragment extends Fragment
 
         //there is a option menu
         setHasOptionsMenu(true);
+
 
         return view;
     }
@@ -108,11 +130,18 @@ public class ObservationListPageFragment extends Fragment
     {
         if (item.getItemId() == R.id.add)
         {
-            CelestialBodyObservationFragment celestialBodyObservationFragment =
-                    new CelestialBodyObservationFragment();
-            android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, celestialBodyObservationFragment);
-            fragmentTransaction.commit();
+            if(arrayList.size() == 3)
+            {
+                ObservationDialog myDialog = new ObservationDialog(this, arrayList.size());
+                myDialog.show(getFragmentManager(), "warning");
+            }
+            else
+            {
+                CelestialBodyObservationFragment celestialBodyObservationFragment = new CelestialBodyObservationFragment();
+                android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, celestialBodyObservationFragment);
+                fragmentTransaction.commit();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

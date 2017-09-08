@@ -15,16 +15,20 @@ public class GPSTimer extends TimerTask
 {
 
 
-    private GPSTimerInterface gpsTimer;
+    private Context context;
+    private GPSModule gpsModule;
 
-    public GPSTimer(GPSTimerInterface context)
+
+    public GPSTimer(Context context)
     {
-        this.gpsTimer = context;
+        this.context = context;
     }
     @Override
     public void run()
     {
         Log.d("timer",  String.valueOf(System.currentTimeMillis()));
-        gpsTimer.timeExpired();
+
     }
+
+
 }
