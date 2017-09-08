@@ -24,10 +24,6 @@ public class GPSModule extends Service implements LocationListener
     private boolean                     isNetworkEnabled = false; //flag for network status
     private boolean                     canGetLocation = false; //sensor can get Location
     private Location                    location; //location
-    private PreferenceDataManager       preferenceDataManager;
-    private PreferenceAdapter           preferenceAdapter;
-    private int                         update_time;
-    private ArrayList<Preference>       arrayList;
     private double                      latitude; //latitude
     private double                      longitude; //longitude
     private long                        min_time_bw_updates = 1000 * 60; //The minimum time between updates in milliseconds (1 minute)
@@ -35,23 +31,12 @@ public class GPSModule extends Service implements LocationListener
     protected LocationManager           locationManager; //declaring location manager
 
 
-    public GPSModule(CelestialBodyObservationFragment celestialBodyObservationFragment)
+    public GPSModule(Context context)
     {
-        this.context = celestialBodyObservationFragment.getActivity();
-        getLocation();
-
-    }
-
-    public GPSModule(HomePageFragment homePageFragment)
-    {
-        this.context = homePageFragment.getActivity();
+        this.context = context;
         getLocation();
     }
 
-//    public Preference getGPSUpdates()
-//    {
-//
-//    }
 
     @Nullable
     @Override
@@ -114,14 +99,6 @@ public class GPSModule extends Service implements LocationListener
 
     public Location getLocation()
     {
-
-        this.preferenceDataManager = new PreferenceDataManager(getApplicationContext());
-        arrayList = new ArrayList<>(preferenceDataManager.getPreferenceFromDatabase());
-
-        //gets the gps information on how often to get the gps updates
-        Preference preference;
-        preference = arrayList.get(0);
-        update_time = preference.getPreferenceNum();
 
         locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
 

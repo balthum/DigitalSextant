@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <ListView
-        android:id="@+id/listView_prvious_position"
+        android:id="@+id/listView_previous_position"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/text1"

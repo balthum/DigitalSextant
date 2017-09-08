@@ -179,7 +179,20 @@ public class CelestialBodyObservation
      * (2) the time of the position
      ** @return String
      */
-    public String line2() {return "Date: " + this.Month + "/" + this.Day+ "/" + this.Year + "      Time: " + this.Hour + this.Minute;}
+    public String line2()
+    {
+        if(this.Minute < 10 && this.Hour < 10)
+            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: 0" + this.Hour + "0" + this.Minute;
+
+        else if(this.Hour < 10)
+            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: 0" + this.Hour + this.Minute;
+
+        else if(this.Minute < 10)
+            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: " + this.Hour + "0" + this.Minute;
+
+        else
+            return "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: " + this.Hour + this.Minute;
+    }
 
     /**
      * Is the 3rd line of the what is shown for an CelestialBodyObservation object, which contains the following

@@ -65,7 +65,7 @@ public class PreferenceDataManager
             values.put(PreferenceDatabase.COL_2, preference.PreferenceName);
             values.put(PreferenceDatabase.COL_3, preference.PreferenceInfo);
             values.put(PreferenceDatabase.COL_4, preference.PreferenceNum);
-            long insertId = this.sqLiteDatabase.insert(preferenceDatabase.TABLE_PREFERENCE,
+            this.sqLiteDatabase.insert(preferenceDatabase.TABLE_PREFERENCE,
                     null,
                     values);
         }

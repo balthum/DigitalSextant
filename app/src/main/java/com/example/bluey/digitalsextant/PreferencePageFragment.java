@@ -28,9 +28,9 @@ public class PreferencePageFragment extends Fragment
     private ArrayList<Preference>       arrayList;
     public static int                   position;
     private Preference                  preference;
-    private PreferenceDatabase          preferenceDatabase;
-    private SQLiteDatabase              sqLiteDatabase;
-    private static final String         PREFERENCE_QUERY = "SELECT * FROM " + PreferenceDatabase.TABLE_PREFERENCE + " ORDER BY ID ";
+
+
+
 
 
     /**

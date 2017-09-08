@@ -24,12 +24,13 @@ public class ObservationListPageFragment extends Fragment
     private ObservationDataManager                  observationDataManager;
     private ArrayList<CelestialBodyObservation>     arrayList;
     private int                                     position; // position of observation
-    static final String                             PREFS_NAME = "MyPrefsFile1";
 
     /**
      *
      */
     public ObservationListPageFragment() {}
+
+
 
     /**
      *

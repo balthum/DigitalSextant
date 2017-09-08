@@ -53,25 +53,4 @@ public class PreferenceDatabase extends SQLiteOpenHelper
         onCreate(sqLiteDatabase);
     }
 
-//    public boolean insertData(String name, String info, String amount)
-//    {
-//        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put(COL_2,name);
-//        contentValues.put(COL_3,info);
-//        contentValues.put(COL_4,amount);
-//        long result = sqLiteDatabase.insert(TABLE_PREFERENCE, null, contentValues);
-//
-//        if(result == -1)
-//            return false;
-//        else
-//            return true;
-//    }
-//
-//    public Cursor getListContents()
-//    {
-//        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-//        Cursor data = sqLiteDatabase.rawQuery("SELECT * FROM" + TABLE_PREFERENCE, null);
-//        return data;
-//    }
 }

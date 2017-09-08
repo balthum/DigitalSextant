@@ -97,7 +97,6 @@ public class PreviousPositionAdapter extends BaseAdapter
         }
 
         //(2)
-        TextView textPositionTitle = (TextView) view.findViewById(R.id.textViewPositionName);
         TextView textPositionDateTime = (TextView) view.findViewById(R.id.textViewPositionDateTime);
         TextView textPositionLatLong = (TextView) view.findViewById(R.id.textViewPositionLatLong);
 
@@ -107,9 +106,8 @@ public class PreviousPositionAdapter extends BaseAdapter
         //(4)
         if(previousPosition != null)
         {
-            textPositionTitle.setText(previousPosition.line1());
-            textPositionDateTime.setText(previousPosition.line2());
-            textPositionLatLong.setText(previousPosition.line3());
+            textPositionDateTime.setText(previousPosition.line1());
+            textPositionLatLong.setText(previousPosition.line2());
         }
         return view;
     }

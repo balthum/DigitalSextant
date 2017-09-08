@@ -62,11 +62,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ArrayList<Preference> arrayList = new ArrayList<>(preferenceDataManager.getPreferenceFromDatabase());
         //gets the gps information on how often to get the gps updates
         Preference preference;
-        preference = arrayList.get(0);
-        int update_time = preference.getPreferenceNum();
+        int update_time = 30;
+        if(arrayList.size() > 0)
+        {
+            preference = arrayList.get(0);
+            update_time =  preference.getPreferenceNum();
 
-        if (update_time == 0)
-            update_time = 30;
+        }
+
+
+//        if (update_time == 0)
+//            update_time = 30;
 
         if (timer != null) {
             timer.cancel();
@@ -75,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         timer = new Timer();
         gpsTimer = new GPSTimer(this);
 
-        timer.schedule(gpsTimer,0,(update_time * 1l* 1000l));
+        timer.schedule(gpsTimer,0,(update_time * 60l* 1000l));
         Log.d("reset_timer",  String.valueOf(System.currentTimeMillis()));
     }
 
@@ -204,6 +210,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void timeExpired()
     {
+//        GPSModule gpsModule =new GPSModule(this);
+//
+//        PreviousPosition position = new PreviousPosition();
+//        PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(this);
+//        ArrayList<PreviousPosition> arrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
+//
+//        position.Latitude = gpsModule.getLatitude();
+//        position.Longitude = gpsModule.getLongitude();
+//
+//        //adds gps and position data
+//        arrayList.add(position);// adds record to ArrayList
+//        previousPositionDataManager.updatePositionDatabase(arrayList);//updates preferenceDatabase for record added
 
     }
 }

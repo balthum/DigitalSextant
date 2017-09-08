@@ -1,140 +1,67 @@
 package com.example.bluey.digitalsextant;
 
+import android.annotation.SuppressLint;
+
+import java.util.Calendar;
+
 /**
  * Created by robinluna Robin Luna on 8/25/17.
  */
 
 public class PreviousPosition
 {
-    public int      PreviousPositionTitle;//Title of the previous position taken
-    public int      PreviousPositionYear;//Year of the previous position taken
-    public int      PreviousPositionMonth;//Month of the previous position taken
-    public int      PreviousPositionDate;//Date of the previous position taken
-    public int      PreviousPositionHour;//Hour of the previous position taken
-    public int      PreviousPositionMinute;//Minute of the previous position taken
-    public int      PreviousPositionSecond;//Second of the previous position taken
-    public float   PreviousPositionLatitude;//Latitude of the previous position taken
-    public float   PreviousPositionLongitude;//Longitude of the previous position taken
+    public int          Year;//Year of the previous position taken
+    public int          Month;//Month of the previous position taken
+    public int          Date;//Date of the previous position taken
+    public int          Hour;//Hour of the previous position taken
+    public int          Minute;//Minute of the previous position taken
+    public int          Second;//Second of the previous position taken
+    public double       Latitude;//Latitude of the previous position taken
+    public double       Longitude;//Longitude of the previous position taken
 
     /**
      * The Default constructor for PreviousPosition
      */
-    public PreviousPosition() {}
+    public PreviousPosition()
+    {
+        @SuppressLint("SimpleDateFormat")
+        Calendar date = Calendar.getInstance(java.util.TimeZone.getTimeZone("GMT"));
 
-    /**
-     * Sets the Title of the position such as 1, 2, 3, and so on.
-     * @param name int
-     */
-    public void setName(int name) {this.PreviousPositionTitle = name;}
+        //(1)
+        this.Year    = date.get(Calendar.YEAR);
+        this.Month   = date.get(Calendar.MONTH ) + 1;
+        this.Date     = date.get(Calendar.DAY_OF_MONTH);
+        this.Hour    = date.get(Calendar.HOUR_OF_DAY);
+        this.Minute  = date.get(Calendar.MINUTE);
+        this.Second  = date.get(Calendar.SECOND);
 
-    /**
-     * Sets the year of when we got the position
-     * @param year int
-     */
-    public void setYear(int year) {this.PreviousPositionYear = year;}
+    }
 
-    /**
-     * Sets the month of when we got the position.
-     * @param month int
-     */
-    public void setMonth(int month) {this.PreviousPositionMonth = month;}
-
-    /**
-     * Sets the day of when we got the position.
-     * @param date int
-     */
-    public void setDate(int date) {this.PreviousPositionDate = date;}
-
-    /**
-     * Sets the hour of when we got the position.
-     * @param hour int
-     */
-    public void setHour(int hour) {this.PreviousPositionHour = hour;}
-
-    /**
-     * Sets the minute of when we got the position.
-     * @param minute int
-     */
-    public void setMinute(int minute) {this.PreviousPositionMinute = minute;}
-
-    /**
-     * Sets the seconds of when we got the position.
-     * @param second int
-     */
-    public void setSecond(int second) {this.PreviousPositionSecond = second;}
 
     /**
      * Sets the latitude of the position (neg = S and pos = N)
      * @param latitude double
      */
-    public void setLatitude(float latitude) {this.PreviousPositionLatitude = latitude;}
+    public void setLatitude(double latitude) {this.Latitude = latitude;}
 
     /**
      * Sets the longitude of the position (neg = W and pos = E)
      * @param longitude double
      */
-    public void setLongitude(float longitude) {this.PreviousPositionLongitude = longitude;}
-
-    /**
-     * Gets the Title of the position.
-     * @return int
-     */
-    public int getName() {return this.PreviousPositionTitle;}
-
-    /**
-     * Gets the year of when we got the position
-     * @return int
-     */
-    public int getYear() {return this.PreviousPositionYear;}
-
-    /**
-     * Gets the month of when we got the position.
-     * @return int
-     */
-    public int getMonth() {return this.PreviousPositionMonth;}
-
-    /**
-     * Gets the day of when we got the position.
-     * @return int
-     */
-    public int getDate() {return this.PreviousPositionDate;}
-
-    /**
-     * Gets the hour of when we got the position.
-     * @return int
-     */
-    public int getHour() {return this.PreviousPositionHour;}
-
-    /**
-     * Gets the minute of when we got the position.
-     * @return int
-     */
-    public int getMinute() {return this.PreviousPositionMinute;}
-
-    /**
-     * Gets the seconds of when we got the position.
-     * @return int
-     */
-    public int getSecond() {return this.PreviousPositionSecond;}
+    public void setLongitude(double longitude) {this.Longitude = longitude;}
 
     /**
      * Gets the latitude of the position (neg = S and pos = N)
      * @return double
      */
-    public float getLatitude() {return this.PreviousPositionLatitude;}
+    public double getLatitude() {return this.Latitude;}
 
     /**
      * Gets the longitude of the position (neg = W and pos = E)
      * @return double
      */
-    public float getLongitude() {return this.PreviousPositionLongitude;}
+    public double getLongitude() {return this.Longitude;}
 
-    /**
-     * Is the 1st line of the what is shown for an PreviousPosition object, which contains the following
-     * (1) the title of the position
-     * @return String
-     */
-    public String line1() {return "Position " + this.PreviousPositionTitle;}
 
     /**
      * Is the 2nd line of the what is shown for an PreviousPosition object, which contains the following
@@ -142,8 +69,19 @@ public class PreviousPosition
      * (2) the time of the position
      ** @return String
      */
-    public String line2() {return "Date: " + this.PreviousPositionMonth + "/" + this.PreviousPositionDate + "/" + this.PreviousPositionYear +
-            "      Time: " + this.PreviousPositionHour + this.PreviousPositionMinute;}
+    public String line1()
+    {
+        if(this.Minute < 10 && this.Hour < 10)
+            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: 0" + this.Hour + "0" + this.Minute;
+
+        else if(this.Hour < 10)
+            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: 0" + this.Hour + this.Minute;
+
+        else if(this.Minute < 10)
+            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: " + this.Hour + "0" + this.Minute;
+
+        return "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: " + this.Hour + this.Minute;
+    }
 
     /**
      * Is the 3rd line of the what is shown for an PreviousPosition object, which contains the following
@@ -151,6 +89,6 @@ public class PreviousPosition
      * (2) the longitude of the position
      * @return String
      */
-    public String line3()
-    {return "Star Latitude: " + this.PreviousPositionLatitude + "       Longitude: " + this.PreviousPositionLongitude;}
+    public String line2()
+    {return "Star Latitude: " + this.Latitude + "       Longitude: " + this.Longitude;}
 }
