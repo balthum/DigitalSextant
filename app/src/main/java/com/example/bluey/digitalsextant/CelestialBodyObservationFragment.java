@@ -463,7 +463,7 @@ TEst
         ObservationDataManager observationDataManager = new ObservationDataManager(getActivity());
         ArrayList<CelestialBodyObservation> arrayList = new ArrayList<>(observationDataManager.getObservationFromDatabase());
 
-        observation.setTitle("Observation " + (arrayList.size() +1));
+        observation.setTitle("Observation " + (arrayList.size() + 1));
 
         // Get the Star name and add to the observation
         observation.setCelestialBodyName(spinnerPositionName);
@@ -521,11 +521,8 @@ TEst
         String[] celestialBodyNames = new String[celestialBodiesSet.size()];
         int                       i = 0;
 
-        Iterator<CelestialBody> iterator = celestialBodiesSet.iterator();
-
-        while (iterator.hasNext())
-        {
-            celestialBodyNames[i++] = iterator.next().getCelestialBodyName();
+        for (CelestialBody aCelestialBodiesSet : celestialBodiesSet) {
+            celestialBodyNames[i++] = aCelestialBodiesSet.getCelestialBodyName();
         }
 
         return celestialBodyNames;
@@ -546,17 +543,17 @@ TEst
     }
 
     @Override
-    public void compassUpdate(String direction, float azmiuth)
+    public void compassUpdate(String direction, float azimuth)
     {
-        compassTextView.setText("COMPASS: " + azmiuth + "º " + direction);
-        compassBearing = azmiuth;
+        compassTextView.setText("COMPASS: " + azimuth + "º " + direction);
+        compassBearing = azimuth;
         compassDirection = direction;
     }
 
     @Override
     public void zenithUpdate(float zenith)
     {
-        zenithTextView.setText("ZENITH: " +zenith + "º" );
+        zenithTextView.setText("ZENITH: " + String.format("%.1f", zenith) + "º" );
         observedHeight = zenith;
     }
 }
