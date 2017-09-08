@@ -20,7 +20,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.Size;
-import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
@@ -48,37 +47,37 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
 {
     //** -------------------------------------------------------------------------------------**\\
     // Square Robot Code
-    private final static String   TAGCAM = "CAM2_API";          // Used to tag CAM items in the using Log API.
-    private Button takeFixButton;                               // Action button used to capture sensor data.
-    private TextureView camPreviewTextureView;                  // Used display Camera preview.
-    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();  //TODO What is this used for.
-    static
-    {
-        ORIENTATIONS.append(Surface.ROTATION_0, 90);
-        ORIENTATIONS.append(Surface.ROTATION_90, 0);
-        ORIENTATIONS.append(Surface.ROTATION_180, 270);
-        ORIENTATIONS.append(Surface.ROTATION_270, 180);
-    }
-    private   String                    cameraId;                     // The name of Camera 0 on the device.
-    protected CameraDevice              cameraDevice;                 // Used to interact with the camera.
-    protected CameraCaptureSession      cameraCaptureSessions;        // Used to capture the preview from the camera.
-    protected CaptureRequest.Builder    captureRequestBuilder;        //
-    private Size                        imageDimensions;              // Object that has the image size and dimensions.
+    //------------------------------ Used with the camera --------------------------------------\\
+    private final static String         TAGCAM = "CAM2_API";                // Used to tag CAM items in the using Log API.
+    private   TextureView               camPreviewTextureView;              // Used display Camera preview.
+    private   String                    cameraId;                           // The name of Camera 0 on the device.
+    protected CameraDevice              cameraDevice;                       // Used to interact with the camera.
+    protected CameraCaptureSession      cameraCaptureSessions;              // Used to capture the preview from the camera.
+    protected CaptureRequest.Builder    captureRequestBuilder;              //
+    private Size                        imageDimensions;                    // Object that has the image size and dimensions.
     private final static int            REQUEST_CAMERA_PERMISSION = 200;
-    private Handler mBackgroundHandler;
-    private HandlerThread mBackgroundThread;
+    private Handler                     mBackgroundHandler;
+    private HandlerThread               mBackgroundThread;
+    //-------------------------------------------------------------------------------------------//
+
     private SensorModule                sensorModule;
     private TextView                    compassTextView, zenithTextView, picAngleTextView;
-    private Spinner                     celestialBodySpinner;         // Star Dropdown list
     private View                        view;
-    public List<CelestialBody>          celestialBodiesSet;           // Set of celestial bodies
-    private String                      spinnerPositionName;          // The current selected item in the spinner menu
-    private float                      compassBearing;                // Observed compass bearing
-    private String                     compassDirection;
-    private float                      observedHeight;                // Observed Height
+    private String                      spinnerPositionName;                 // The current selected item in the spinner menu
+    private float                       compassBearing;                      // Observed compass bearing
+    private String                      compassDirection;
+    private float                       observedHeight;                      // Observed Height
+
+
+
+    // Database Items \\
+    public List<CelestialBody>          celestialBodiesSet;                  // Set of celestial bodies
+
+
 
     // Listerner's \\
 
+    // Used with displaying the camera
     TextureView.SurfaceTextureListener camPreviewTextureListener    = new TextureView.SurfaceTextureListener()
     {
         @Override
@@ -374,8 +373,8 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
         view = inflater.inflate(R.layout.activity_celestial_body_fix, container, false);
 
         mVisible = true;
-        mControlsView = view.findViewById(R.id.fullscreen_content_controls);
-        mContentView = view.findViewById(R.id.camPreviewtextView);
+        mControlsView       = view.findViewById(R.id.fullscreen_content_controls);
+        mContentView        = view.findViewById(R.id.camPreviewTextView);
 
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener()
@@ -387,6 +386,9 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             }
         });
 
+/*
+TEst
+ */
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
@@ -394,10 +396,10 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
 
         //**-------------- Square Robot OnCreate additions ------------------------------------**\\
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        camPreviewTextureView = (TextureView)   view.findViewById(R.id.camPreviewtextView);
+        camPreviewTextureView = (TextureView)   view.findViewById(R.id.camPreviewTextView);
         zenithTextView        = (TextView)      view.findViewById(R.id.textView_zenith);     //TODO comment
         compassTextView       = (TextView)      view.findViewById(R.id.textView_compass);    //TODO comment
-        celestialBodySpinner  = (Spinner)       view.findViewById(R.id.starListSpinner);     // Dropdown list of stars
+        Spinner celestialBodySpinner = (Spinner) view.findViewById(R.id.starListSpinner);
 
         populateCelestialBodies();
 
@@ -424,7 +426,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
         if ( null == camPreviewTextureView) {Log.e(TAGCAM, "Cam Preview Texture is null");}
         else {camPreviewTextureView.setSurfaceTextureListener(camPreviewTextureListener);}
 
-        takeFixButton = (Button) view.findViewById(R.id.takeFixButton);
+        Button takeFixButton = (Button) view.findViewById(R.id.takeFixButton);
         if ( null == camPreviewTextureView ) {Log.e(TAGCAM, " Cam takeFixButton is null");}
         else {
             takeFixButton.setOnClickListener(new View.OnClickListener() {
