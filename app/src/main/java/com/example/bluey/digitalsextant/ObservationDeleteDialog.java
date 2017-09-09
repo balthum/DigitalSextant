@@ -16,7 +16,7 @@ import android.widget.Toast;
 @SuppressLint("ValidFragment")
 public class ObservationDeleteDialog extends DialogFragment
 {
-    protected ObservationListPageFragment obsFragment;//communicates with the ObservationListPageFragment
+    protected ObservationListPageFragment     obsFragment;//communicates with the ObservationListPageFragment
 
 
     public ObservationDeleteDialog(ObservationListPageFragment frag)

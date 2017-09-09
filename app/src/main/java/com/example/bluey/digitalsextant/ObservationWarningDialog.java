@@ -7,6 +7,9 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
+
+import static com.example.bluey.digitalsextant.PreferencePageFragment.position;
 
 /**
  * Created by Bluey on 9/4/17.
@@ -16,7 +19,7 @@ import android.support.annotation.NonNull;
 public class ObservationWarningDialog extends DialogFragment
 {
     private int                             num; //the num of the preference num
-    protected ObservationListPageFragment obsFragment;//communicates with the ObservationListPageFragment
+    protected ObservationListPageFragment     obsFragment;//communicates with the ObservationListPageFragment
     private int                             observationSize;
 
     /**

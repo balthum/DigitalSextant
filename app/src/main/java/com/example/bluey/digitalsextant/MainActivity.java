@@ -21,7 +21,7 @@ import java.util.Timer;
  * Created by robinluna Robin Luna on 8/06/17.
  */
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GPSChange
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
 {
     public static Toolbar               toolbar = null; //gets the Toolbar with generalization of action bars
     public static NavigationView        navigationView;//gets the standard navigation menu
@@ -29,8 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle       drawerToggle;//ties the functionality of DrawerLayout and ActionBar
     private GPSTimer                    gpsTimer;
     private Timer                       timer;
-    private double                      latitude;
-    private double                      longitude;
+
 
 
 
@@ -83,8 +82,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             timer.cancel();
         }
 
-        this.timer = new Timer();
-        gpsTimer = new GPSTimer(this);
+        this.timer  = new Timer();
+        gpsTimer    = new GPSTimer();
 
         timer.schedule(gpsTimer,0,(update_time * 1l* 1000l));
         Log.d("reset_timer",  String.valueOf(System.currentTimeMillis()));
@@ -243,12 +242,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    @Override
-    public void locationUpdate(double latitude, double longitude)
-    {
-        Toast.makeText(this,"Latitude; " + latitude +"\nLongitude: " + longitude,Toast.LENGTH_SHORT).show();
 
-    }
 
 //    @Override
 //    public void locationUpdate(double latitude, double longitude)

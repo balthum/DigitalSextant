@@ -63,7 +63,22 @@ public class ObservationListPageFragment extends Fragment
         this.listView = (ListView) view.findViewById(R.id.listView_observation);
         this.listView.setAdapter(this.observationAdapter);
 
+        ////when item is selected the item is highlighted
+        this.listView.setSelector(R.color.selection_color);
+
         this.calculateButton = (Button) view.findViewById(R.id.calculate_button);
+
+        //When you select an item from the ListView it sets the item as
+        //selected and gets the current position of the item
+        this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+            {
+                view.setSelected(true);//tells item is selected
+                position = i;//gets position of item
+            }
+        });
 
         if(arrayList.size() >= 2)
         {
@@ -85,7 +100,7 @@ public class ObservationListPageFragment extends Fragment
         //creates a warning dialog
         if(arrayList.size() == 0)
         {
-            ObservationDialog myDialog = new ObservationDialog(this, arrayList.size());
+            ObservationWarningDialog myDialog = new ObservationWarningDialog(this, arrayList.size());
             myDialog.show(getFragmentManager(), "warning");
         }
 
@@ -132,7 +147,7 @@ public class ObservationListPageFragment extends Fragment
         {
             if(arrayList.size() == 3)
             {
-                ObservationDialog myDialog = new ObservationDialog(this, arrayList.size());
+                ObservationWarningDialog myDialog = new ObservationWarningDialog(this, arrayList.size());
                 myDialog.show(getFragmentManager(), "warning");
             }
             else
@@ -143,6 +158,44 @@ public class ObservationListPageFragment extends Fragment
                 fragmentTransaction.commit();
             }
         }
+
+        if(item.getItemId() == R.id.delete)
+        {
+            ObservationDeleteDialog deleteDialog = new ObservationDeleteDialog(this);
+            deleteDialog.show(getFragmentManager(), "delete observation");
+        }
+
+        if(item.getItemId() == R.id.clear_all)
+        {
+
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    //delet observation
+    public void deleteObservation()
+    {
+        int deletePosition = this.position;
+        arrayList.remove(this.position);// removes record from arrayList
+        this.observationDataManager.updateObservationDatabase(this.arrayList);//deletes record from Database
+
+        if(deletePosition > 0)
+        {
+            while(deletePosition <= arrayList.size())
+            {
+                arrayList.get(deletePosition);
+
+                 deletePosition++;
+            }
+        }
+
+        this.listView.setAdapter(this.observationAdapter);//shows the record deleted in the listView
+
+        if(arrayList.size() < 2)
+        {
+            this.calculateButton.setEnabled(false);
+        }
+
     }
 }
