@@ -32,6 +32,7 @@ public class EstimatedPositionModule extends CelestialMath
 
         PreviousPosition assumedPosition = previousPosition.get(0);
 
+        // 3.)
         for ( int i = 0; i < celestialBodyObservations.size(); i++)
         {
             // a.) add correction sextant Height

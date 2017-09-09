@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -20,9 +21,10 @@ public class ObservationListPageFragment extends Fragment
 {
     private View                                    view;
     private ListView                                listView;
-    private ObservationAdapter                      observationAdapter;
-    private ObservationDataManager                  observationDataManager;
+    private ObservationAdapter observationAdapter;
+    private ObservationDataManager observationDataManager;
     private ArrayList<CelestialBodyObservation>     arrayList;
+    private Button                                  calculateButton;
     private int                                     position; // position of observation
 
     /**
@@ -61,10 +63,44 @@ public class ObservationListPageFragment extends Fragment
         this.listView = (ListView) view.findViewById(R.id.listView_observation);
         this.listView.setAdapter(this.observationAdapter);
 
+        ////when item is selected the item is highlighted
+        this.listView.setSelector(R.color.selection_color);
+
+        this.calculateButton = (Button) view.findViewById(R.id.calculate_button);
+
+        //When you select an item from the ListView it sets the item as
+        //selected and gets the current position of the item
+        this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+            {
+                view.setSelected(true);//tells item is selected
+                position = i;//gets position of item
+            }
+        });
+
+        if(arrayList.size() >= 2)
+        {
+            this.calculateButton.setEnabled(true);
+        }
+        else
+        {
+            this.calculateButton.setEnabled(false);
+        }
+
+        this.calculateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                //getContext().deleteDatabase(ObservationDatabase.DATABASE_OBSERVATION);
+            }
+        });
+
         //creates a warning dialog
         if(arrayList.size() == 0)
         {
-            ObservationDialog myDialog = new ObservationDialog(this);
+            ObservationWarningDialog myDialog = new ObservationWarningDialog(this, arrayList.size());
             myDialog.show(getFragmentManager(), "warning");
         }
 
@@ -81,6 +117,7 @@ public class ObservationListPageFragment extends Fragment
 
         //there is a option menu
         setHasOptionsMenu(true);
+
 
         return view;
     }
@@ -108,12 +145,57 @@ public class ObservationListPageFragment extends Fragment
     {
         if (item.getItemId() == R.id.add)
         {
-            CelestialBodyObservationFragment celestialBodyObservationFragment =
-                    new CelestialBodyObservationFragment();
-            android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, celestialBodyObservationFragment);
-            fragmentTransaction.commit();
+            if(arrayList.size() == 3)
+            {
+                ObservationWarningDialog myDialog = new ObservationWarningDialog(this, arrayList.size());
+                myDialog.show(getFragmentManager(), "warning");
+            }
+            else
+            {
+                CelestialBodyObservationFragment celestialBodyObservationFragment = new CelestialBodyObservationFragment();
+                android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, celestialBodyObservationFragment);
+                fragmentTransaction.commit();
+            }
         }
+
+        if(item.getItemId() == R.id.delete)
+        {
+            ObservationDeleteDialog deleteDialog = new ObservationDeleteDialog(this);
+            deleteDialog.show(getFragmentManager(), "delete observation");
+        }
+
+        if(item.getItemId() == R.id.clear_all)
+        {
+
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    //delet observation
+    public void deleteObservation()
+    {
+        int deletePosition = this.position;
+        arrayList.remove(this.position);// removes record from arrayList
+        this.observationDataManager.updateObservationDatabase(this.arrayList);//deletes record from Database
+
+//        if(deletePosition > 0)
+//        {
+//            while(deletePosition <= arrayList.size())
+//            {
+//                arrayList.get(deletePosition);
+//
+//                 deletePosition++;
+//            }
+//        }
+
+        this.listView.setAdapter(this.observationAdapter);//shows the record deleted in the listView
+
+        if(arrayList.size() < 2)
+        {
+            this.calculateButton.setEnabled(false);
+        }
+
     }
 }
