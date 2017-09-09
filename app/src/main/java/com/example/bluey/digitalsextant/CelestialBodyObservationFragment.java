@@ -31,15 +31,12 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -153,19 +150,15 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             // (1)
             SurfaceTexture surfaceTexture = camPreviewTextureView.getSurfaceTexture();
             assert surfaceTexture != null;
-            Log.e(TAGCAM, "createCameraPreview Step: 1");
             // (2)
             surfaceTexture.setDefaultBufferSize(imageDimensions.getWidth(), imageDimensions.getHeight());
-            Log.e(TAGCAM, "createCameraPreview Step: 2");
             // (3)
             Surface surface = new Surface(surfaceTexture);
-            Log.e(TAGCAM, "createCameraPreview Step: 3");
-
             // (4) //TODO Comment capture Request Builder
             captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             captureRequestBuilder.addTarget(surface);
             // (5)
-            cameraDevice.createCaptureSession(Arrays.asList(surface), new CameraCaptureSession.StateCallback()
+            cameraDevice.createCaptureSession(Collections.singletonList(surface), new CameraCaptureSession.StateCallback()
                     {
                         @Override
                         public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession)
@@ -186,14 +179,12 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
                         }
                     }
                     , null);
-
         }
         catch (Exception ee)
         {
             ee.printStackTrace();
             Log.i(TAGCAM, "Issues with Preview Call Back");
         }
-
     }
 
     /**
@@ -205,8 +196,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     protected void updatePreview()
     {
         // (1)
-        if (null == cameraDevice )
-            Log.e(TAGCAM, "update preview, camera device = null, returned");
+        if (null == cameraDevice ) { Log.e(TAGCAM, "update preview, camera device = null, returned"); }
         Log.e(TAGCAM, "UpdatePreview Step: 1");
         // (2)
         captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
@@ -215,10 +205,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             // (3)
             cameraCaptureSessions.setRepeatingRequest(captureRequestBuilder.build(), null, mBackgroundHandler);
         }
-        catch (Exception ee)
-        {
-            ee.printStackTrace();
-        }
+        catch (Exception ee) {   ee.printStackTrace();    }
     }
 
     /**
@@ -273,23 +260,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
 
     //** -------------------------------------------------------------------------------------**\\
 
-    /**
-     * Whether or not the system UI should be auto-hidden after
-     * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
-     */
-    private static final boolean AUTO_HIDE = true;
 
-    /**
-     * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-     * user interaction before hiding the system UI.
-     */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
-
-    /**
-     * Some older devices needs a small delay between UI widget updates
-     * and a change of the status and navigation bar.
-     */
-    private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
     private View mContentView;
     private final Runnable mHidePart2Runnable = new Runnable()
@@ -311,45 +282,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
     };
-    private View mControlsView;
-//    private final Runnable mShowPart2Runnable = new Runnable()
-//    {
-//        @Override
-//        public void run()
-//        {
-//            // Delayed display of UI elements
-//            ActionBar actionBar = getSupportActionBar();
-//            if (actionBar != null) {
-//                actionBar.show();
-//            }
-//            mControlsView.setVisibility(View.VISIBLE);
-//        }
-//    };
-    private boolean mVisible;
-//    private final Runnable mHideRunnable = new Runnable()
-//    {
-//        @Override
-//        public void run()
-//        {
-//            hide();
-//        }
-//    };
-//    /**
-//     * Touch listener to use for in-layout UI controls to delay hiding the
-//     * system UI. This is to prevent the jarring behavior of controls going away
-//     * while interacting with activity UI.
-//     */
-//    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener()
-//    {
-//        @Override
-//        public boolean onTouch(View view, MotionEvent motionEvent)
-//        {
-//            if (AUTO_HIDE) {
-//                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-//            }
-//            return false;
-//        }
-//    };
+
 
     @SuppressLint("ValidFragment")
     public CelestialBodyObservationFragment()
@@ -362,7 +295,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        sensorModule = new SensorModule(this);//TODO Robin Debug Sensor Issues
+        sensorModule = new SensorModule(this);
     }
 
     @Override
@@ -372,9 +305,9 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.activity_celestial_body_fix, container, false);
 
-        mVisible = true;
-        mControlsView       = view.findViewById(R.id.fullscreen_content_controls);
-        mContentView        = view.findViewById(R.id.camPreviewTextView);
+        boolean mVisible = true;
+        View mControlsView = view.findViewById(R.id.fullscreen_content_controls);
+        //mContentView        = view.findViewById(R.id.camPreviewTextView);
 
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener()
@@ -386,9 +319,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             }
         });
 
-/*
-TEst
- */
+
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
@@ -404,8 +335,8 @@ TEst
         populateCelestialBodies();
 
         // Set up Spinner
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
-                (getActivity(), R.layout.spinner_item, celestialBodyNames() ) ;
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>
+                (getActivity(), R.layout.spinner_item, celestialBodyNames()) ;
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         celestialBodySpinner.setAdapter(arrayAdapter);
 
@@ -476,6 +407,18 @@ TEst
         observationDataManager.updateObservationDatabase(arrayList);
     }
 
+    /**
+     *  populate the Celestial Bodies Database
+     *
+     *  1.) Create the celestial Bodies set as any ArrayList.
+     *  2.) Open the celestial_bodies_text_list file as an read buffer.
+     *  3.) read in the file line by line until the end of the file.
+     *      Each line of the file as one entry with each of it fields separated by commas.
+     *      a.) Split the line using comma's as separation for elements into an array.
+     *      b.) Create a new Celestial Body Object. and set the Bodies Name, Sidereal Hour Angle,
+     *          and Declination.
+     *      c.) Add the Celestial body to the set.
+     */
     public void populateCelestialBodies()
     {
         // 1.)

@@ -1,16 +1,13 @@
 package com.example.bluey.digitalsextant;
 
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.Map;
+
 
 /**
  * Created by robinluna Robin Luna on 8/18/2017.
