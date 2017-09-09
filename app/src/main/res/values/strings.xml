@@ -7,6 +7,8 @@
     <string name="app_previous_position_list">Previous Position List</string>
     <string name="app_quit">Quit</string>
     <string name="app_add">Add</string>
+    <string name="app_delete">Delete</string>
+    <string name="app_clear_all">Clear All</string>
 
     <string name="fragment_preferences">This is the PREFERENCES Fragment</string>
     <string name="fragment_manual">This is the MANUAL Fragment</string>

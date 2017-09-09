@@ -33,13 +33,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -60,7 +58,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     private HandlerThread               mBackgroundThread;
     //-------------------------------------------------------------------------------------------//
 
-    private SensorModule                sensorModule;
+    private SensorModule sensorModule;
     private TextView                    compassTextView, zenithTextView, picAngleTextView;
     private View                        view;
     private String                      spinnerPositionName;                 // The current selected item in the spinner menu
@@ -551,7 +549,7 @@ TEst
     @Override
     public void zenithUpdate(float zenith)
     {
-        zenithTextView.setText(String.format("ZENITH: %.1fº", zenith));
+        zenithTextView.setText(String.format("Hs: %.1fº", zenith));
         observedHeight = zenith;
     }
 }

@@ -21,10 +21,10 @@ public class CelestialBody
      * (3)Celestial Body's Sidereal Hour Angle
      * (4)Celestial Body's Declination
      *
-     * @param key int
-     * @param celestialBodyName String
-     * @param siderealHourAngle double
-     * @param declination double
+     * @param key int           Celestial Body's key
+     * @param celestialBodyName String Celestial Body's Name
+     * @param siderealHourAngle double Celestial Body's Sidereal Hour Angle
+     * @param declination       double Celestial Body's Declination
      */
     public CelestialBody(int key, String celestialBodyName, double siderealHourAngle, double declination)
     {
@@ -112,10 +112,10 @@ public class CelestialBody
 
 
     /**
-     * It puts the following Celestial Body's data in a String
-     * (1)Celestial Body's Sidereal Hour Angle
-     * (2)Celestial Body's Declination
-     * (3)Celestial Body's Name
+     * Returns an string with following information from the Celestial Body Object
+     * (1) Celestial Body's Sidereal Hour Angle
+     * (2) Celestial Body's Declination
+     * (3) Celestial Body's Name
      * @return String
      */
     public String toSting()

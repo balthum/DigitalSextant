@@ -177,7 +177,7 @@ public class CelestialMath
         return Math.abs(heightCalculated - heightObserved);
     }
 
-    private double mainCorrection(double heightObserved)
+    public double mainCorrection(double heightObserved)
     {
         Hashtable<Integer, Double> correction = new Hashtable<>();
 
