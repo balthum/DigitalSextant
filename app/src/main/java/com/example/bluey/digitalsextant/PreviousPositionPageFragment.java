@@ -53,19 +53,18 @@ public class PreviousPositionPageFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater,@Nullable ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.page_preference, container, false);//(1)
+        view = inflater.inflate(R.layout.page_previous_position_list, container, false);//(1)
 
-//        //(2)
-//        this.previousPositionDataManager = new PreviousPositionDataManager(getActivity());
-//        arrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
-//
-//
-//        //(4)
-//        this.previousPositionAdapter = new PreviousPositionAdapter(getActivity(), arrayList);
-//
-//        //(5)
-//        this.list = (ListView) view.findViewById(R.id.listView_previous_position);
-//        this.list.setAdapter(this.previousPositionAdapter);
+        //(2)
+        this.previousPositionDataManager = new PreviousPositionDataManager(getActivity());
+        arrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
+
+        //(4)
+        this.previousPositionAdapter = new PreviousPositionAdapter(getActivity(), arrayList);
+
+        //(5)
+        this.list = (ListView) view.findViewById(R.id.listView_previous_position);
+        this.list.setAdapter(this.previousPositionAdapter);
 //
 //        //(6)
 //        this.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

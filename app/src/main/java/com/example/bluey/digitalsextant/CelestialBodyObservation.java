@@ -181,17 +181,28 @@ public class CelestialBodyObservation
      */
     public String line2()
     {
-        if(this.Minute < 10 && this.Hour < 10)
-            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: 0" + this.Hour + "0" + this.Minute;
+        if(this.Minute < 10 && this.Hour < 10 && this.Second < 10)
+            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: 0" + this.Hour + "0" + this.Minute + ".0" + this.Second;
+
+        else if(this.Minute < 10 && this.Hour < 10)
+            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: 0" + this.Hour + "0" + this.Minute + "." + this.Second;
+
+        else if(this.Hour < 10 && this.Second < 10)
+            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: 0" + this.Hour + this.Minute + ".0" + this.Second;
+
+        else if(this.Minute < 10 && this.Second < 10)
+            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: " + this.Hour + "0" + this.Minute + ".0" + this.Second;
 
         else if(this.Hour < 10)
-            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: 0" + this.Hour + this.Minute;
+            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: 0" + this.Hour + this.Minute + "." + this.Second;
 
         else if(this.Minute < 10)
-            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: " + this.Hour + "0" + this.Minute;
+            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: " + this.Hour + "0" + this.Minute + "." + this.Second;
 
-        else
-            return "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: " + this.Hour + this.Minute;
+        else if(this.Second < 10)
+            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: " + this.Hour  + this.Minute + ".0" + this.Second;
+
+        return "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: " + this.Hour + this.Minute+ "." + this.Second;
     }
 
     /**

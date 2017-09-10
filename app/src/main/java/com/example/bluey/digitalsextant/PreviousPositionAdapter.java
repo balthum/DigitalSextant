@@ -90,7 +90,7 @@ public class PreviousPositionAdapter extends BaseAdapter
         //(1)
         if(view == null)
         {
-            view = this.layoutInflater.inflate(R.layout.observation_row_setup, null);
+            view = this.layoutInflater.inflate(R.layout.previous_poisiton_row_setup, null);
 
             if (view == null)
                 return null;

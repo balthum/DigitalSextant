@@ -60,6 +60,7 @@ public class GPSModule extends Service implements LocationListener
 
             if(!isGPSEnabled && !isNetworkEnabled)
             {
+                stopUsingGPS();
 
             } else {
                 this.canGetLocation = true;
@@ -148,12 +149,16 @@ public class GPSModule extends Service implements LocationListener
     }
 
     @Override
-    public void onProviderDisabled(String arg0) {
+    public void onProviderDisabled(String arg0)
+    {
+        stopUsingGPS();
 
     }
 
     @Override
-    public void onProviderEnabled(String arg0) {
+    public void onProviderEnabled(String arg0)
+    {
+        getLocation();
 
     }
 

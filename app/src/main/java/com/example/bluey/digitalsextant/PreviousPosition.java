@@ -71,16 +71,28 @@ public class PreviousPosition
      */
     public String line1()
     {
-        if(this.Minute < 10 && this.Hour < 10)
-            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: 0" + this.Hour + "0" + this.Minute;
+        if(this.Minute < 10 && this.Hour < 10 && this.Second < 10)
+            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: 0" + this.Hour + "0" + this.Minute + ".0" + this.Second;
+
+        else if(this.Minute < 10 && this.Hour < 10)
+            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: 0" + this.Hour + "0" + this.Minute + "." + this.Second;
+
+        else if(this.Hour < 10 && this.Second < 10)
+            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: 0" + this.Hour + this.Minute + ".0" + this.Second;
+
+        else if(this.Minute < 10 && this.Second < 10)
+            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: " + this.Hour + "0" + this.Minute + ".0" + this.Second;
 
         else if(this.Hour < 10)
-            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: 0" + this.Hour + this.Minute;
+            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: 0" + this.Hour + this.Minute + "." + this.Second;
 
         else if(this.Minute < 10)
-            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: " + this.Hour + "0" + this.Minute;
+            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: " + this.Hour + "0" + this.Minute + "." + this.Second;
 
-        return "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: " + this.Hour + this.Minute;
+        else if(this.Second < 10)
+            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: " + this.Hour  + this.Minute + ".0" + this.Second;
+
+        return "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: " + this.Hour + this.Minute+ "." + this.Second;
     }
 
     /**
@@ -90,5 +102,5 @@ public class PreviousPosition
      * @return String
      */
     public String line2()
-    {return "Star Latitude: " + this.Latitude + "       Longitude: " + this.Longitude;}
+    {return "Latitude: " + this.Latitude + "       Longitude: " + this.Longitude;}
 }
