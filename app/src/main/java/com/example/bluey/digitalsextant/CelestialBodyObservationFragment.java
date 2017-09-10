@@ -405,7 +405,6 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 spinnerPositionName = adapterView.getItemAtPosition(i).toString();
-                Toast.makeText(adapterView.getContext(), "Selected : "+ spinnerPositionName, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -430,6 +429,8 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
                     android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_container,observationListFragment);
                     fragmentTransaction.commit();
+
+                    Toast.makeText(getActivity(),"OBSERVATIONS ADDED", Toast.LENGTH_SHORT).show();
 
                     MainActivity.navigationView.setCheckedItem(R.id.observation_list);
 

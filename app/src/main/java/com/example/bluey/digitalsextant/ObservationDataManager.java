@@ -160,4 +160,11 @@ public class ObservationDataManager
 
         return dataArrayList;
     }
+
+    public void deleteDatabase()
+    {
+        //SQLiteDatabase db = this.getWritableDatabase();
+        sqLiteDatabase.delete(observationDatabase.TABLE_OBSERVATION,null,null);
+        sqLiteDatabase.close();
+    }
 }

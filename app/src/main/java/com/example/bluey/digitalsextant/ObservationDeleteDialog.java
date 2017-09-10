@@ -47,7 +47,7 @@ public class ObservationDeleteDialog extends DialogFragment
                 //deletes the record by sending the record to be deleted in the MainFragment
                 ObservationDeleteDialog.this.obsFragment.deleteObservation();
                 //shows a message saying Record was deleted
-                Toast.makeText(getActivity(), "RECORD DELETED", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "OBSERVATION DELETED", Toast.LENGTH_LONG).show();
 
             }
         });
@@ -62,7 +62,7 @@ public class ObservationDeleteDialog extends DialogFragment
             {
 
                 //shows a message saying Record was't deleted
-                Toast.makeText(getActivity(), "NO RECORD DELETED", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "NO OBSERVATION DELETED", Toast.LENGTH_LONG).show();
             }
         });
 

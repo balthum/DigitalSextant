@@ -62,6 +62,5 @@ public class ObservationDatabase extends SQLiteOpenHelper
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+ TABLE_OBSERVATION);
         onCreate(sqLiteDatabase);
     }
-
 }
 

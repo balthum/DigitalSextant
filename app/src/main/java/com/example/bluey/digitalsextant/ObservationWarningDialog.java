@@ -71,6 +71,10 @@ public class ObservationWarningDialog extends DialogFragment
         else if (obsInfo == "delete")
             builder.setMessage("NO observations left to DELETE or NO observations were selected to DELETE.");//(3)
 
+        else if (obsInfo == "clear_all")
+            builder.setMessage("CAN'T CLEAR ALL observations, since there is no Observations.");//(3)
+
+
 
         //(4)
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener()

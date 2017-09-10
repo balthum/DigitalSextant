@@ -1,6 +1,7 @@
 package com.example.bluey.digitalsextant;
 
 import android.app.Fragment;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -175,6 +177,19 @@ public class ObservationListPageFragment extends Fragment
 
         if(item.getItemId() == R.id.clear_all)
         {
+            if(arrayList.size() == 0)
+            {
+                ObservationWarningDialog myDialog = new ObservationWarningDialog(this, "clear_all");
+                myDialog.show(getFragmentManager(), "warning");
+            }
+            else
+            {
+                this.arrayList.clear();
+                this.observationDataManager.deleteDatabase();
+                this.listView.setAdapter(this.observationAdapter);
+                this.calculateButton.setEnabled(false);
+                Toast.makeText(getActivity(),"OBSERVATIONS CLEARED", Toast.LENGTH_SHORT).show();
+            }
 
         }
 

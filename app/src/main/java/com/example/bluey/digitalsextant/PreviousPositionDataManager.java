@@ -19,7 +19,8 @@ public class PreviousPositionDataManager
     private Context                         context;//Interface to global information about an application environment
     private SQLiteDatabase                  sqLiteDatabase;
     private PreviousPositionDatabase        positionDatabase;
-    private static final String             POSITION_QUERY = "SELECT * FROM " + PreviousPositionDatabase.TABLE_POSITION + " ORDER BY ID ";
+    private static final String             POSITION_QUERY = "SELECT * FROM " + PreviousPositionDatabase.TABLE_POSITION + " ORDER BY MONTH, DATE, YEAR, HOUR, MINUTE, SECOND";
+
 
 
     /**
