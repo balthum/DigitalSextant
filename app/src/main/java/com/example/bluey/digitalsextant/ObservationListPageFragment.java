@@ -25,7 +25,7 @@ public class ObservationListPageFragment extends Fragment
     private ObservationDataManager                  observationDataManager;
     private ArrayList<CelestialBodyObservation>     arrayList;
     private Button                                  calculateButton;
-    private int                                     position; // position of observation
+    private int                                     position = -1; // position of observation
 
     /**
      *
@@ -100,7 +100,7 @@ public class ObservationListPageFragment extends Fragment
         //creates a warning dialog
         if(arrayList.size() == 0)
         {
-            ObservationWarningDialog myDialog = new ObservationWarningDialog(this, arrayList.size());
+            ObservationWarningDialog myDialog = new ObservationWarningDialog(this,"firstTime");
             myDialog.show(getFragmentManager(), "warning");
         }
 
@@ -147,7 +147,7 @@ public class ObservationListPageFragment extends Fragment
         {
             if(arrayList.size() == 3)
             {
-                ObservationWarningDialog myDialog = new ObservationWarningDialog(this, arrayList.size());
+                ObservationWarningDialog myDialog = new ObservationWarningDialog(this, "add");
                 myDialog.show(getFragmentManager(), "warning");
             }
             else
@@ -161,8 +161,16 @@ public class ObservationListPageFragment extends Fragment
 
         if(item.getItemId() == R.id.delete)
         {
-            ObservationDeleteDialog deleteDialog = new ObservationDeleteDialog(this);
-            deleteDialog.show(getFragmentManager(), "delete observation");
+            if (position != -1)
+            {
+                ObservationDeleteDialog deleteDialog = new ObservationDeleteDialog(this);
+                deleteDialog.show(getFragmentManager(), "delete observation");
+            }
+            else
+            {
+                ObservationWarningDialog myDialog = new ObservationWarningDialog(this, "delete");
+                myDialog.show(getFragmentManager(), "warning");
+            }
         }
 
         if(item.getItemId() == R.id.clear_all)
@@ -200,6 +208,7 @@ public class ObservationListPageFragment extends Fragment
         {
             this.calculateButton.setEnabled(false);
         }
+         this.position = -1;
 
     }
 }

@@ -20,7 +20,7 @@ public class ObservationWarningDialog extends DialogFragment
 {
     private int                             num; //the num of the preference num
     protected ObservationListPageFragment     obsFragment;//communicates with the ObservationListPageFragment
-    private int                             observationSize;
+    private String                            obsInfo;
 
     /**
      * The Default constructor for PreferenceDialog which initializes the following
@@ -28,9 +28,9 @@ public class ObservationWarningDialog extends DialogFragment
      * (1) adds the obsFragment so it can communicate where the info is going
      * @param obsFragment ObservationListPageFragment
      */
-    public ObservationWarningDialog(ObservationListPageFragment obsFragment, int size)
+    public ObservationWarningDialog(ObservationListPageFragment obsFragment, String info)
     {
-        this.observationSize = size;
+        this.obsInfo = info;
         this.obsFragment = obsFragment;//(1)
     }
 
@@ -58,16 +58,19 @@ public class ObservationWarningDialog extends DialogFragment
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());//creates the AlertDialog
 
         builder.setTitle("WARNING");//(2)
+        //builder.setIcon(getResources().getDrawable(android.R.drawable.ic_dialog_alert));
+        builder.setIcon(R.drawable.ic_warning);
 
 
-        if(observationSize == 0)
-        {
+        if(obsInfo == "firstTime")
             builder.setMessage("Push the ADD ICON to add an observation to the list.");//(3)
-        }
-        else
-        {
+
+        else if (obsInfo == "add")
             builder.setMessage("NOT allowed to ADD any more Observations.");//(3)
-        }
+
+        else if (obsInfo == "delete")
+            builder.setMessage("NO observations left to DELETE or NO observations were selected to DELETE.");//(3)
+
 
         //(4)
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
@@ -75,11 +78,7 @@ public class ObservationWarningDialog extends DialogFragment
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {}
         });
-        //(5)
-        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {}
-        });
+
         return builder.create();//(6)
     }
 }
