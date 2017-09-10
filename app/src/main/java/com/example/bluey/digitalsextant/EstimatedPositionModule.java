@@ -11,32 +11,84 @@ import java.util.ArrayList;
 public class EstimatedPositionModule extends CelestialMath
 {
     private Context                             context                   = null;           // Application Context
+    private ArrayList<CelestialBodyObservation> celestialBodyObservations = null;           // Array List of Celestial Observations
+    private PreviousPosition                    assumedPosition           = null;           // Assumed Position
 
     public EstimatedPositionModule(Context context)
     {
         this.context = context;
-        calculateEstimatedPosition();
+        celestialBodyObservations = getCelestialObservations();
+        assumedPosition = getLastKnowPosition();
+
+        //calculateEstimatedPosition();
     }
 
     private void calculateEstimatedPosition()
     {
         Double sextantHeight = 0.0;
 
-        // 1.)
-        ObservationDataManager observationDataManager = new ObservationDataManager(context);
-        ArrayList<CelestialBodyObservation> celestialBodyObservations = new ArrayList<>(observationDataManager.getObservationFromDatabase());
-
-        // 2.)
-        PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(context);
-        ArrayList<PreviousPosition> previousPosition = previousPositionDataManager.getPositionFromDatabase();
-
-        PreviousPosition assumedPosition = previousPosition.get(0);
-
-        // 3.)
+        // .)
         for ( int i = 0; i < celestialBodyObservations.size(); i++)
         {
             // a.) add correction sextant Height
             sextantHeight = mainCorrection(celestialBodyObservations.get(i).getHeightObserver()) + sextantHeight;
         }
     }
+
+    private PreviousPosition caclculateEsstimatedPositionThreeCircle()
+    {
+        // 1.)
+        CelestialBodyDatabaseManager        celestialBodyDatabaseManager = new CelestialBodyDatabaseManager(context);
+        PreviousPosition                    currentPosition              = new PreviousPosition();
+        CelestialBody                       celestialBody                = null;
+        ArrayList<CircleOfEqualAltitude>    circleOfEqualAltitudes       = new ArrayList<>();
+
+        // 2.)
+        for ( int i = 0; i < celestialBodyObservations.size(); i++)
+        {
+            // a.)
+            CircleOfEqualAltitude  circleOfEqualAltitude = new CircleOfEqualAltitude();
+            // b.)
+            circleOfEqualAltitude.setName( celestialBodyObservations.get(i).CelestialBodyName );
+            // c.)
+            celestialBody = celestialBodyDatabaseManager
+                    .getCelestialBody( circleOfEqualAltitude.getName() );
+            // d.)
+            circleOfEqualAltitude.setLatitude(  celestialBody.getDeclination() );
+            circleOfEqualAltitude.setLongitude( ghaStar( celestialBody.getSiderealHourAngle(),
+                    celestialBodyObservations.get(i) ));
+            // e.) TODO Get the Radius of the circle of Equal Altitude
+            // f.)
+            circleOfEqualAltitudes.add(circleOfEqualAltitude);
+        }
+        // 3.)
+
+        return new PreviousPosition();
+    }
+
+    /*  Supporting Methods */
+
+    /**
+     *  Get an Array List of the Celestial Body Observation Objects
+     * @return ArrayList of CelestialBodyObservation
+     */
+    private ArrayList<CelestialBodyObservation> getCelestialObservations()
+    {
+        ObservationDataManager observationDataManager = new ObservationDataManager(context);
+        return observationDataManager.getObservationFromDatabase();
+    }
+
+    /**
+     *
+     *  Get the last know position from Past Position Database
+     *
+     * @return PreviousPosition Object
+     */
+    private PreviousPosition getLastKnowPosition()
+    {
+        PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(context);
+        ArrayList<PreviousPosition> previousPosition = previousPositionDataManager.getPositionFromDatabase();
+        return previousPosition.get(0);
+    }
+
 }

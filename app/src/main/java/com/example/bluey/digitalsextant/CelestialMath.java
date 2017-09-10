@@ -13,7 +13,7 @@ public class CelestialMath
 
     /**
      *
-     * Calculate the Julian Date using a Celestial Body Observation
+     * Calculate the Julian Day using a Celestial Body Observation
      *
      * @param celestialBodyObservation Celestial Body Observation Object
      * @return Double
@@ -52,15 +52,56 @@ public class CelestialMath
      *
      * Calculate the Greenwich Hour Angle (GHA) of Aries using the Julian Date and Julian Century
      *
-     * @param julianDate    Double
+     * @param julianDay     Double
      * @param julianCentury Double
      * @return              Double
      *
      */
-    public double ghaAreis (double julianDate, double julianCentury)
+    public double ghaAries (double julianDay, double julianCentury)
     {
-        return (280.46061837 + 360.98564736629 * (julianDate - 2451545)
+        return (280.46061837 + 360.98564736629 * (julianDay - 2451545)
                 + (0.000387933 * Math.pow(julianCentury, 2)) -  Math.pow(julianCentury, 3) / 38710000) % 360;
+    }
+
+    /**
+     *
+     * Calculate the Greenwich Hour Angle (GHA) of Aries using a Celestial Body Observation Object
+     *
+     * @param celestialBodyObservation Celestial Body Observation Object
+     * @return                         double
+     */
+    public double ghaAries (CelestialBodyObservation celestialBodyObservation)
+    {
+        double julianDay = julianDay(celestialBodyObservation);
+        double julianCentury = julianCentury(julianDay);
+
+        return ghaAries(julianDay, julianCentury);
+    }
+
+    /**
+     *
+     *  Calculate the Greenwich Hour Angle (GHA) of a Celestial Body.
+     *
+     * @param shaStar   double Sidereal Hour Angle (SHA) of the Celestial Body
+     * @param ghaAries  double Greenwich Hour Angle (GHA) of Aeries
+     * @return          double Greenwich Hour Angle (GHA) of the Celestial Body
+     */
+    public double ghaStar (double shaStar, double ghaAries )
+    {
+        return shaStar + ghaAries;
+    }
+
+    /**
+     *
+     * Calculate the Greenwich Hour Angle (GHA) of a Celestial Body.
+     *
+     * @param shaStar                   double Sidereal Hour Angle (SHA) of the Celestial Body
+     * @param celestialBodyObservation  Celestial Body Observation Object of the Celestial Body
+     * @return                          double Greenwich Hour Angle (GHA) of the Celestial Body
+     */
+    public double ghaStar (double shaStar, CelestialBodyObservation celestialBodyObservation)
+    {
+        return shaStar + ghaAries(celestialBodyObservation);
     }
 
     /**
