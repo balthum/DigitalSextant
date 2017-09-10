@@ -27,7 +27,7 @@ public class EstimatedPositionModule extends CelestialMath
     {
         Double sextantHeight = 0.0;
 
-        // 3.)
+        // .)
         for ( int i = 0; i < celestialBodyObservations.size(); i++)
         {
             // a.) add correction sextant Height
@@ -37,6 +37,32 @@ public class EstimatedPositionModule extends CelestialMath
 
     private PreviousPosition caclculateEsstimatedPositionThreeCircle()
     {
+        // 1.)
+        CelestialBodyDatabaseManager        celestialBodyDatabaseManager = new CelestialBodyDatabaseManager(context);
+        PreviousPosition                    currentPosition              = new PreviousPosition();
+        CelestialBody                       celestialBody                = null;
+        ArrayList<CircleOfEqualAltitude>    circleOfEqualAltitudes       = new ArrayList<>();
+
+        // 2.)
+        for ( int i = 0; i < celestialBodyObservations.size(); i++)
+        {
+            // a.)
+            CircleOfEqualAltitude  circleOfEqualAltitude = new CircleOfEqualAltitude();
+            // b.)
+            circleOfEqualAltitude.setName( celestialBodyObservations.get(i).CelestialBodyName );
+            // c.)
+            celestialBody = celestialBodyDatabaseManager
+                    .getCelestialBody( circleOfEqualAltitude.getName() );
+            // d.)
+            circleOfEqualAltitude.setLatitude(  celestialBody.getDeclination() );
+            circleOfEqualAltitude.setLongitude( ghaStar( celestialBody.getSiderealHourAngle(),
+                    celestialBodyObservations.get(i) ));
+            // e.) TODO Get the Radius of the circle of Equal Altitude
+            // f.)
+            circleOfEqualAltitudes.add(circleOfEqualAltitude);
+        }
+        // 3.)
+
         return new PreviousPosition();
     }
 
@@ -52,6 +78,12 @@ public class EstimatedPositionModule extends CelestialMath
         return observationDataManager.getObservationFromDatabase();
     }
 
+    /**
+     *
+     *  Get the last know position from Past Position Database
+     *
+     * @return PreviousPosition Object
+     */
     private PreviousPosition getLastKnowPosition()
     {
         PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(context);
