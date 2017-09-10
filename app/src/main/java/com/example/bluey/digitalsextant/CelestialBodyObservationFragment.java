@@ -68,11 +68,6 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
 
 
 
-    // Database Items \\
-    public List<CelestialBody>          celestialBodiesSet;                  // Set of celestial bodies
-
-
-
     // Listerner's \\
 
     // Used with displaying the camera
@@ -384,9 +379,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             }
         });
 
-/*
-TEst
- */
+
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
@@ -399,11 +392,12 @@ TEst
         compassTextView       =         view.findViewById(R.id.textView_compass);    //TODO comment
         Spinner celestialBodySpinner =  view.findViewById(R.id.starListSpinner);
 
-        populateCelestialBodies();
+        CelestialBodyDatabaseManager celestialBodyDatabaseManager = new CelestialBodyDatabaseManager(getActivity());
 
         // Set up Spinner
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
-                (getActivity(), R.layout.spinner_item, celestialBodyNames() ) ;
+                ( getActivity(), R.layout.spinner_item,
+                  celestialBodyDatabaseManager.getCelestialBodyNames() );
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         celestialBodySpinner.setAdapter(arrayAdapter);
 
@@ -474,54 +468,9 @@ TEst
         observationDataManager.updateObservationDatabase(arrayList);
     }
 
-    public void populateCelestialBodies()
-    {
-        // 1.)
-        celestialBodiesSet = new ArrayList<>();
-        String fileLine;
-        int i = 0;
 
-        try {
-            // 2.)
-            InputStream inputStream = getActivity().getResources().openRawResource(R.raw.celestial_bodies_text_list);
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-            // 3.)
-            while ((fileLine = bufferedReader.readLine()) != null) {
-                // a.)
 
-                String[] celestialBodyList = fileLine.split(",");
-
-                // b.)
-                CelestialBody celestialBody = new CelestialBody();
-
-                celestialBody.setKey(i++);
-                celestialBody.setCelestialBodyName(celestialBodyList[0]);
-                celestialBody.setSiderealHourAngle(Double.parseDouble(celestialBodyList[1]));
-                celestialBody.setDeclination(Double.parseDouble(celestialBodyList[2]));
-
-                // c.)
-                celestialBodiesSet.add(celestialBody);
-            }
-
-        } catch (IOException e) {
-            Toast.makeText(getActivity().getApplicationContext(), "Unable to load Celestial Bodies", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public String[] celestialBodyNames()
-    {
-        // 1.)
-        String[] celestialBodyNames = new String[celestialBodiesSet.size()];
-        int                       i = 0;
-
-        for (CelestialBody aCelestialBodiesSet : celestialBodiesSet) {
-            celestialBodyNames[i++] = aCelestialBodiesSet.getCelestialBodyName();
-        }
-
-        return celestialBodyNames;
-    }
 
     @Override
     public void onPause()
