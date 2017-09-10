@@ -177,17 +177,21 @@ public class ObservationListPageFragment extends Fragment
     public void deleteObservation()
     {
         int deletePosition = this.position;
+        int oldArraySize = this.arrayList.size();
         arrayList.remove(this.position);// removes record from arrayList
         this.observationDataManager.updateObservationDatabase(this.arrayList);//deletes record from Database
 
-        if(deletePosition > 0)
+        if(deletePosition != (oldArraySize -1))
         {
-            while(deletePosition <= arrayList.size())
+            while(deletePosition < this.arrayList.size())
             {
-                arrayList.get(deletePosition);
+                CelestialBodyObservation celestialBodyObservation = this.arrayList.get(deletePosition);
+                celestialBodyObservation.setTitle("Observation " + (deletePosition + 1));
+                this.arrayList.set(deletePosition, celestialBodyObservation);
 
                  deletePosition++;
             }
+            this.observationDataManager.updateObservationDatabase(this.arrayList);
         }
 
         this.listView.setAdapter(this.observationAdapter);//shows the record deleted in the listView
