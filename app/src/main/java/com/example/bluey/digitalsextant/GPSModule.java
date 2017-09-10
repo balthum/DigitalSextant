@@ -144,7 +144,7 @@ public class GPSModule extends Service implements LocationListener
         this.longitude = location.getLongitude();
         this.latitude = location.getLatitude();
 
-        gpsChange.locationUpdate(latitude,longitude);
+        //gpsChange.locationUpdate(latitude,longitude);
 
     }
 

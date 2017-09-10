@@ -13,7 +13,7 @@ public class CelestialMath
 
     /**
      *
-     * Calculate the Julian Date using a Celestial Body Observation
+     * Calculate the Julian Day using a Celestial Body Observation
      *
      * @param celestialBodyObservation Celestial Body Observation Object
      * @return Double
@@ -52,14 +52,30 @@ public class CelestialMath
      *
      * Calculate the Greenwich Hour Angle (GHA) of Aries using the Julian Date and Julian Century
      *
-     * @param julianDate    Double
+     * @param julianDay     Double
      * @param julianCentury Double
      * @return              Double
      *
      */
-    public double ghaAreis (double julianDate, double julianCentury)
+    public double ghaAreis (double julianDay, double julianCentury)
     {
-        return (280.46061837 + 360.98564736629 * (julianDate - 2451545)
+        return (280.46061837 + 360.98564736629 * (julianDay - 2451545)
+                + (0.000387933 * Math.pow(julianCentury, 2)) -  Math.pow(julianCentury, 3) / 38710000) % 360;
+    }
+
+    /**
+     *
+     * Calculate the Greenwich Hour Angle (GHA) of Aries using a Celestial Body Observation Object
+     *
+     * @param celestialBodyObservation Celestial Body Observation Object
+     * @return                         double
+     */
+    public double ghaAreis (CelestialBodyObservation celestialBodyObservation)
+    {
+        double julianDay = julianDay(celestialBodyObservation);
+        double julianCentury = julianCentury(julianDay);
+
+        return (280.46061837 + 360.98564736629 * (julianDay - 2451545)
                 + (0.000387933 * Math.pow(julianCentury, 2)) -  Math.pow(julianCentury, 3) / 38710000) % 360;
     }
 

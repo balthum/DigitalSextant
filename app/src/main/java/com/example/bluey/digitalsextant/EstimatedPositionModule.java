@@ -11,26 +11,21 @@ import java.util.ArrayList;
 public class EstimatedPositionModule extends CelestialMath
 {
     private Context                             context                   = null;           // Application Context
+    private ArrayList<CelestialBodyObservation> celestialBodyObservations = null;           // Array List of Celestial Observations
+    private PreviousPosition                    assumedPosition           = null;           // Assumed Position
 
     public EstimatedPositionModule(Context context)
     {
         this.context = context;
-        calculateEstimatedPosition();
+        celestialBodyObservations = getCelestialObservations();
+        assumedPosition = getLastKnowPosition();
+
+        //calculateEstimatedPosition();
     }
 
     private void calculateEstimatedPosition()
     {
         Double sextantHeight = 0.0;
-
-        // 1.)
-        ObservationDataManager observationDataManager = new ObservationDataManager(context);
-        ArrayList<CelestialBodyObservation> celestialBodyObservations = new ArrayList<>(observationDataManager.getObservationFromDatabase());
-
-        // 2.)
-        PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(context);
-        ArrayList<PreviousPosition> previousPosition = previousPositionDataManager.getPositionFromDatabase();
-
-        PreviousPosition assumedPosition = previousPosition.get(0);
 
         // 3.)
         for ( int i = 0; i < celestialBodyObservations.size(); i++)
@@ -39,4 +34,29 @@ public class EstimatedPositionModule extends CelestialMath
             sextantHeight = mainCorrection(celestialBodyObservations.get(i).getHeightObserver()) + sextantHeight;
         }
     }
+
+    private PreviousPosition caclculateEsstimatedPositionThreeCircle()
+    {
+        return new PreviousPosition();
+    }
+
+    /*  Supporting Methods */
+
+    /**
+     *  Get an Array List of the Celestial Body Observation Objects
+     * @return ArrayList of CelestialBodyObservation
+     */
+    private ArrayList<CelestialBodyObservation> getCelestialObservations()
+    {
+        ObservationDataManager observationDataManager = new ObservationDataManager(context);
+        return observationDataManager.getObservationFromDatabase();
+    }
+
+    private PreviousPosition getLastKnowPosition()
+    {
+        PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(context);
+        ArrayList<PreviousPosition> previousPosition = previousPositionDataManager.getPositionFromDatabase();
+        return previousPosition.get(0);
+    }
+
 }
