@@ -19,7 +19,7 @@ public class PreviousPositionDataManager
     private Context                         context;//Interface to global information about an application environment
     private SQLiteDatabase                  sqLiteDatabase;
     private PreviousPositionDatabase        positionDatabase;
-    private static final String             POSITION_QUERY = "SELECT * FROM " + PreviousPositionDatabase.TABLE_POSITION + " ORDER BY MONTH, DATE, YEAR, HOUR, MINUTE, SECOND";
+    private static final String             POSITION_QUERY = "SELECT * FROM " + PreviousPositionDatabase.TABLE_POSITION + " ORDER BY DATE_TIME";
 
 
 
@@ -62,6 +62,7 @@ public class PreviousPositionDataManager
         for (int i = 0; i < dataArrayList.size(); i++) {
             PreviousPosition position = dataArrayList.get(i);
             ContentValues values = new ContentValues();
+            values.put(PreviousPositionDatabase.COL1_DATE_TIME, position.DateTime);
             values.put(PreviousPositionDatabase.COL2_YEAR, position.Year);
             values.put(PreviousPositionDatabase.COL3_MONTH, position.Month);
             values.put(PreviousPositionDatabase.COL4_DATE, position.Date);
@@ -113,6 +114,9 @@ public class PreviousPositionDataManager
         while (!cursor.isAfterLast())
         {
             PreviousPosition position = new PreviousPosition();
+
+            colIndex = cursor.getColumnIndex(PreviousPositionDatabase.COL1_DATE_TIME);
+            position.DateTime = cursor.getString(colIndex);
 
             colIndex = cursor.getColumnIndex(PreviousPositionDatabase.COL2_YEAR);
             position.Year = cursor.getInt(colIndex);

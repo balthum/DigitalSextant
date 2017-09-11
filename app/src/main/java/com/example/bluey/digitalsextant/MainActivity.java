@@ -16,21 +16,22 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by robinluna Robin Luna on 8/06/17.
  */
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GPSChange, GPSTimerInterface
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GPSChange
 {
     public static Toolbar               toolbar = null; //gets the Toolbar with generalization of action bars
     public static NavigationView        navigationView;//gets the standard navigation menu
     private DrawerLayout                drawerLayout; //lets you be able pull window out from the left side of the activity
     private ActionBarDrawerToggle       drawerToggle;//ties the functionality of DrawerLayout and ActionBar
-    private GPSTimer                    gpsTimer;
     private Timer                       timer;
     private double                      latitude;
     private double                      longitude;
+    private GPSModule                   gpsModule;
 
 
 
@@ -59,44 +60,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getPreferenceData();
 
+        gpsModule = new GPSModule(this);
+
         resetTimer();
-
     }
-
-    Runnable gpsRunnable = new Runnable()
-{
-    @Override
-    public void run()
-    {
-        GPSModule gpsModule = new GPSModule(getApplicationContext());
-        //gpsModule.
-
-    }
-};
 
     public void resetTimer() {
         PreferenceDataManager preferenceDataManager = new PreferenceDataManager(getApplicationContext());
         ArrayList<Preference> arrayList = new ArrayList<>(preferenceDataManager.getPreferenceFromDatabase());
         //gets the gps information on how often to get the gps updates
         Preference preference;
-        int update_time = 30;
-        if(arrayList.size() > 0)
-        {
-            preference = arrayList.get(0);
-            update_time =  preference.getPreferenceNum();
 
-        }
+        preference = arrayList.get(0);
+        int update_time =  preference.getPreferenceNum();
+
 
         if (timer != null) {
             timer.cancel();
         }
 
         this.timer  = new Timer();
-        gpsTimer    = new GPSTimer();
 
-        timer.schedule(gpsTimer,0,(update_time * 1l* 1000l));
-        Log.d("reset_timer",  String.valueOf(System.currentTimeMillis()));
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run()
+            {
+                timerOff();
+            }
+        }, 0, (update_time * 1l * 1000l));
     }
+
+    public void timerOff()
+    {
+        //This method is called directly by the timer and runs in the same thread as the timer thread.
+
+        //We call the method that will work with the UI through the runOnUiThread method
+        this.runOnUiThread(runnable);
+    }
+
+    public Runnable runnable = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            //this method runs in the same thread as the UI.
+            //Do something to the UI thread here
+
+            if(gpsModule.canGetLocation())
+            {
+                PreviousPosition previousPosition = new PreviousPosition();
+
+                PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(getApplication());
+                ArrayList<PreviousPosition> arrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
+
+                previousPosition.setLatitude(latitude);
+                previousPosition.setLongitude(longitude);
+                arrayList.add(previousPosition);// adds record to ArrayList
+                previousPositionDataManager.updatePositionDatabase(arrayList);//updates Previous position database for record added
+
+                Toast.makeText(MainActivity.this,previousPosition.line1() + "\n" + previousPosition.line2(), Toast.LENGTH_LONG).show();
+            }
+
+        }
+    };
+
 
     public void getPreferenceData()
     {
@@ -257,39 +284,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.latitude = latitude;
         this.longitude = longitude;
     }
-
-    @Override
-    public void timerOff()
-    {
-        PreviousPosition previousPosition = new PreviousPosition();
-
-        PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(this);
-        ArrayList<PreviousPosition> arrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
-
-        previousPosition.setLatitude(latitude);
-        previousPosition.setLongitude(longitude);
-
-        arrayList.add(previousPosition);// adds record to ArrayList
-        previousPositionDataManager.updatePositionDatabase(arrayList);//updates Previous position database for record added
-    }
-
-
-//    @Override
-//    public void locationUpdate(double latitude, double longitude)
-//    {
-//        Toast.makeText(this, "Latitude: " + latitude + "\nLongitude: " + longitude, Toast.LENGTH_SHORT).show();
-////        PreviousPosition position = new PreviousPosition();
-////        PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(this);
-////        ArrayList<PreviousPosition> arrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
-////
-////        position.Latitude = latitude;
-////        position.Longitude = longitude;
-////
-////            //adds gps and position data
-////        arrayList.add(position);// adds record to ArrayList
-////        previousPositionDataManager.updatePositionDatabase(arrayList);//updates preferenceDatabase for record added
-//    }
-
 
 }
 

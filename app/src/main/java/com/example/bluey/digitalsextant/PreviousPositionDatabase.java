@@ -14,7 +14,7 @@ public class PreviousPositionDatabase extends SQLiteOpenHelper
 {
     public static final String          DATABASE_POSITION = "Position.db";
     public static final String          TABLE_POSITION = "position_table";
-    public static final String          COL1_ID = "ID";
+    public static final String          COL1_DATE_TIME = "DATE_TIME";
     public static final String          COL2_YEAR = "YEAR";
     public static final String          COL3_MONTH = "MONTH";
     public static final String          COL4_DATE = "DATE";
@@ -26,7 +26,7 @@ public class PreviousPositionDatabase extends SQLiteOpenHelper
 
     private static final String DATABASE_CREATE =
             "create table " + TABLE_POSITION + "("
-                    + COL1_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + COL1_DATE_TIME + " TEXT PRIMARY KEY, "
                     + COL2_YEAR + " INTEGER, "
                     + COL3_MONTH + " INTEGER, "
                     + COL4_DATE + " INTEGER, "

@@ -10,6 +10,7 @@ import java.util.Calendar;
 
 public class PreviousPosition
 {
+    public String       DateTime;
     public int          Year;//Year of the previous position taken
     public int          Month;//Month of the previous position taken
     public int          Date;//Date of the previous position taken
@@ -34,6 +35,9 @@ public class PreviousPosition
         this.Hour    = date.get(Calendar.HOUR_OF_DAY);
         this.Minute  = date.get(Calendar.MINUTE);
         this.Second  = date.get(Calendar.SECOND);
+
+        this.DateTime = this.Year + "-" + this.Month + "-" + this.Date
+                + " " + this.Hour + ":" + this.Minute + ":" + this.Second;
 
     }
 
@@ -61,6 +65,8 @@ public class PreviousPosition
      * @return double
      */
     public double getLongitude() {return this.Longitude;}
+
+    public String getDateTime(){return this.DateTime;}
 
 
     /**
