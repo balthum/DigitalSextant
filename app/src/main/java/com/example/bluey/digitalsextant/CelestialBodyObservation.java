@@ -214,5 +214,6 @@ public class CelestialBodyObservation
      * @return String
      */
     public String line3()
-    {return "Star Name: " + this.CelestialBodyName + "       OBSh: " + this.HeightObserver + "       Az: " + this.CompassHeading + " " + this.CompassDirection;}
+    { // return String.format("Star Name: + %s     OBsh: %.1f      Az: %.1f %s", this.CelestialBodyName, this.HeightObserver, this.CompassDirection, this.CompassDirection); }
+        return "Star Name: " + this.CelestialBodyName + "       OBSh: " + this.HeightObserver + "       Az: " + this.CompassHeading + " " + this.CompassDirection;}
 }

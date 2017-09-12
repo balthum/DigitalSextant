@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_observation"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_observation">
+    android:background="@color/icon_backgrond">
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+        android:layout_height="?attr/actionBarSize"/>
 
     <Button
         android:id="@+id/calculate_button"
@@ -16,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Calculate" />
+        android:text="Calculate"/>
 
     <ListView
         android:id="@+id/listView_observation"

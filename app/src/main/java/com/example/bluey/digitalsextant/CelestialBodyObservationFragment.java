@@ -490,7 +490,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     @Override
     public void compassUpdate(String direction, float azimuth)
     {
-        compassTextView.setText("COMPASS: " + azimuth + "º " + direction);
+        compassTextView.setText( String.format("Compass: %.1fº %s", azimuth, direction ));
         compassBearing = azimuth;
         compassDirection = direction;
     }
