@@ -1,9 +1,6 @@
 package com.example.bluey.digitalsextant;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -85,7 +81,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void run()
             {
-                timerOff();
+                try {
+                    timerOff();
+                } catch (Exception e) {
+                    Log.d("shutup", e.getMessage());
+                }
+
             }
         }, 0, (update_time * 1l * 1000l));
     }

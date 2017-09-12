@@ -39,7 +39,6 @@ public class EstimatedPositionModule extends CelestialMath
     {
         // 1.)
         CelestialBodyDatabaseManager        celestialBodyDatabaseManager = new CelestialBodyDatabaseManager(context);
-        PreviousPosition                    currentPosition              = new PreviousPosition();
         CelestialBody                       celestialBody                = null;
         ArrayList<CircleOfEqualAltitude>    circleOfEqualAltitudes       = new ArrayList<>();
 
