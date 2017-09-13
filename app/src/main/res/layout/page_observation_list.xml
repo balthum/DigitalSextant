@@ -15,17 +15,40 @@
         android:id="@+id/calculate_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Calculate"
+        android:textStyle="bold"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Calculate"/>
+        android:layout_centerHorizontal="true" />
 
     <ListView
         android:id="@+id/listView_observation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/calculate_button"
-        android:layout_below="@+id/textView1"
         android:choiceMode="singleChoice"
-        android:listSelector="@drawable/selector"/>
+        android:listSelector="@drawable/selector"
+        android:layout_below="@+id/textView1"
+        android:layout_above="@+id/calculate_button"/>
+
+    <TextView
+        android:id="@+id/textViewAZ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/textViewObsh"
+        android:text="Az = Compass Heading"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="11sp"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/textViewObsh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textViewAZ"
+        android:layout_alignParentEnd="true"
+        android:text="OBSh = Observation Height"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="11sp"
+        android:textStyle="bold|italic" />
 
 </RelativeLayout>

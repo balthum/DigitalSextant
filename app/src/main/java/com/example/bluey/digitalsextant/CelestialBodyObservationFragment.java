@@ -59,7 +59,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     //-------------------------------------------------------------------------------------------//
 
     private SensorModule sensorModule;
-    private TextView                    compassTextView, zenithTextView, picAngleTextView;
+    private TextView                    compassTextView, ObshTextView;
     private View                        view;
     private String                      spinnerPositionName;                 // The current selected item in the spinner menu
     private float                       compassBearing;                      // Observed compass bearing
@@ -388,7 +388,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
         //**-------------- Square Robot OnCreate additions ------------------------------------**\\
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         camPreviewTextureView =         view.findViewById(R.id.camPreviewTextView);
-        zenithTextView        =         view.findViewById(R.id.textView_zenith);     //TODO comment
+        ObshTextView        =         view.findViewById(R.id.textView_observedHeight);     //TODO comment
         compassTextView       =         view.findViewById(R.id.textView_compass);    //TODO comment
         Spinner celestialBodySpinner =  view.findViewById(R.id.starListSpinner);
 
@@ -497,9 +497,9 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
 
     @SuppressLint("DefaultLocale")
     @Override
-    public void zenithUpdate(float zenith)
+    public void observedHeightUpdate(float observedHeight)
     {
-        zenithTextView.setText(String.format("Hs: %.1fº", zenith));
-        observedHeight = zenith;
+        ObshTextView.setText(String.format("OBSh: %.1fº", observedHeight));
+        this.observedHeight = observedHeight;
     }
 }

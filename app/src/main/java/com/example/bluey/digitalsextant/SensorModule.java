@@ -15,7 +15,7 @@ public class SensorModule implements SensorEventListener
     private SensorManager       sensorManager;//device sensor manager
     private String              direction = "N";//gets the compass direction
     private float               azimuth;// get your azimuth/height value
-    private float               zenith; //get your accelerometer/compass bearing value
+    private float               observedHeight; //get your accelerometer/compass bearing value
     private Sensor              magnetometerSensor, accelerometerSensor;//the sensor types in your device
     private float               acceleration[] = new float[3]; //gravity rotational data
     private float               magnetic[] = new float[3]; //magnetic rotational data
@@ -113,10 +113,10 @@ public class SensorModule implements SensorEventListener
                         SensorManager.getOrientation(rotation,orientation)[1]
                               )));
  */
-        this.zenith = (float) (90 + Math.toDegrees(SensorManager.getOrientation(rotation, orientation)[1] ));
+        this.observedHeight = (float) (90 + Math.toDegrees(SensorManager.getOrientation(rotation, orientation)[1] ));
 
 
-        sensorChange.zenithUpdate(this.zenith);
+        sensorChange.observedHeightUpdate(this.observedHeight);
 
         //(6)
         if (getAzimuth() >= 338 || getAzimuth() <= 22)
@@ -165,7 +165,7 @@ public class SensorModule implements SensorEventListener
      * gets the zenith/observed height
      * @return float
      */
-    public float getZenith(){return zenith;}
+    public float getObservedHeight(){return observedHeight;}
 
     /**
      * sets the azimuth/compass bearing
@@ -181,9 +181,9 @@ public class SensorModule implements SensorEventListener
 
     /**
      * gsets the zenith/observed height
-     * @param zen float
+     * @param observedHeight float
      */
-    public void setZenith(float zen) {zenith = zen;}
+    public void setObservedHeight(float observedHeight) {this.observedHeight = observedHeight;}
 
 
 }

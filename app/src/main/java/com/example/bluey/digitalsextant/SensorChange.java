@@ -14,9 +14,9 @@ public interface SensorChange
 
     /**
      * gets the zenith/observed height when their is a new reading from the sensor
-     * @param zenith float
+     * @param observedHeight float
      */
-    public void zenithUpdate(float zenith);
+    public void observedHeightUpdate(float observedHeight);
 
 
 }
