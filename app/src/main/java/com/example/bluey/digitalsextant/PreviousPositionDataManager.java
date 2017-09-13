@@ -16,50 +16,49 @@ import java.util.ArrayList;
 
 public class PreviousPositionDataManager
 {
-    private Context                         context;//Interface to global information about an application environment
-    private SQLiteDatabase                  sqLiteDatabase;
-    private PreviousPositionDatabase        positionDatabase;
-    private static final String             POSITION_QUERY = "SELECT * FROM " + PreviousPositionDatabase.TABLE_POSITION + " ORDER BY DATE_TIME DESC";
+    private Context                         context;//Interface to global information about an application environment.
+    private SQLiteDatabase                  sqLiteDatabase;//SQLiteDatabase which has methods to create, delete, execute SQL commands, and perform other common database management tasks.
+    private PreviousPositionDatabase        positionDatabase;//The Database where all the Positions are stored.
+    private static final String             POSITION_QUERY = "SELECT * FROM " + PreviousPositionDatabase.TABLE_POSITION + " ORDER BY DATE_TIME DESC";//How the database is in order.
 
 
 
     /**
-     * The Default constructor for PreferenceDataManager which initializes the following
-     * (1)Interface to global information about an application environment
+     * The Default constructor for PreferenceDataManager which initializes the following:<br/><br/>
+     *
+     * (1)Interface to global information about an application environment.<br/>
+     * (2)Creates a new Position Database.<br/>
+     * (3)Sets the SQLiteDatabase null which has methods to create, delete, execute SQL commands, and perform other common database management tasks.<br/>
      * @param context Context
      */
     public PreviousPositionDataManager(Context context)
     {
         this.context = context;//(1)
-        this.positionDatabase = new PreviousPositionDatabase(context);
-        this.sqLiteDatabase = null;
+        this.positionDatabase = new PreviousPositionDatabase(context);//(2)
+        this.sqLiteDatabase = null;//(3)
     }
 
     /**
-     * Updates the SharedPreference Database by the following
+     * Updates the SQLite Position Database by the following:<br/><br/>
      *
-     * (1) Initializes the keyName for the SharedPreference database and the Preference object
-     * (2) Initializes Editor to modifying values in a SharedPreference object and remove all values from the preferences
-     * (3) Put the PreferenceItemCount equal to the size of the ArrayList
-     * (4) Puts the data from the ArrayList into the SharedPreference database for all the Preference objects in the ArrayList
-     *      (a) Gets the Preference object from a certain position in the ArrayList
-     *      (b) Sets the key, then puts the preference name in the key from the Preference object to the SharedPreference database
-     *      (c) Sets the key, then puts the preference info in the key from the Preference object to the SharedPreference database
-     *      (d) Sets the key, then puts the preference num in the key from the Preference object to the SharedPreference database
-     * (5) Commit your preferences and changes back from this Editor to the SharedPreferences object it is editing
+     * (1) If the SQLiteDatabase is null it create or open a database that will be used for reading and writing info to database.<br/>
+     * (2) Deletes the table of the position from the database.<br/>
+     * (3) Puts each Position from the arraylist into the Position Database.<br/>
+     *
      * @param dataArrayList ArrayList<PreviousPosition>
      */
     public void updatePositionDatabase(ArrayList<PreviousPosition> dataArrayList)
     {
+        //(1)
         if (null == this.sqLiteDatabase)
             this.sqLiteDatabase = this.positionDatabase.getWritableDatabase();
-        try {
-            this.sqLiteDatabase.execSQL(String.format("DELETE FROM %s", positionDatabase.TABLE_POSITION));
-        } catch (SQLException e) {
-            Log.e("updatePositionDatabase", e.getMessage());
-        }
 
-        for (int i = 0; i < dataArrayList.size(); i++) {
+        //(2)
+        this.sqLiteDatabase.execSQL(String.format("DELETE FROM %s", positionDatabase.TABLE_POSITION));
+
+        //(3)
+        for (int i = 0; i < dataArrayList.size(); i++)
+        {
             PreviousPosition position = dataArrayList.get(i);
             ContentValues values = new ContentValues();
             values.put(PreviousPositionDatabase.COL1_DATE_TIME, position.DateTime);
@@ -79,29 +78,31 @@ public class PreviousPositionDataManager
     }
 
     /**
-     * Gets the SharedPreference Database by the following
+     * Gets the SQLite Position Database by the following:<br/><br/>
      *
-     * (1) Initializes the ArrayList that has a Preference object, the itemCount for the ArrayList,
-     *     the Preference Object, and the keyName for the SharedPreference database.
-     * (2) If their is a PreferenceItemCount in the SharedPreference you get the Preference objects in the database
-     *     otherwise, you return a null ArrayList.
-     *      (a) Sets the itemCount to how many items are in the database by what is stored in PreferenceItemCount
-     *          and then gets each PreviousPosition Object in the database
-     *          (a1) If the keyName exist set the Preference Object name from the keyName in the SharedPreference database
-     *          (a2) If the keyName exist set the Preference Object info from the keyName in the SharedPreference database
-     *          (a3) If the keyName exist set the Preference Object num from the keyName in the SharedPreference database
-     *          (a4) Adds the Preference Object to the ArrayList
+     * (1) Initializes the ArrayList for a Position object.<br/>
+     * (2) If the SQLiteDatabase is null it create or open a database that will be used for reading and writing info to database.<br/>
+     * (3) Initializes the Cursor to null.<br/>
+     * (4) Runs the provided SQL and returns a Cursor over the result set in the order of Position_QUERY .<br/>
+     * (5) Initializes the column index and determines if the cursor can move to the first row.<br/>
+     * (6) If cursor is not pointing to the position after the last row then the cursor gets all the information in the current position and put it
+     * into the arrayList and do the same thing until no more positions.<br/>
+     *
      * @return ArrayList<PreviousPosition>
      */
     public ArrayList<PreviousPosition> getPositionFromDatabase()
     {
+        //(1)
         ArrayList<PreviousPosition> dataArrayList = new ArrayList<PreviousPosition>();
 
+        //(2)
         if (null == this.sqLiteDatabase)
             this.sqLiteDatabase = this.positionDatabase.getWritableDatabase();
 
+        //(3)
         Cursor cursor = null;
 
+        //(4)
         try {
             cursor = this.sqLiteDatabase.rawQuery(POSITION_QUERY, null);
         } catch (Exception e)
@@ -110,8 +111,11 @@ public class PreviousPositionDataManager
             return null;
         }
 
+        //(5)
         int colIndex;
         cursor.moveToFirst();
+
+        //(6)
         while (!cursor.isAfterLast())
         {
             PreviousPosition position = new PreviousPosition();
