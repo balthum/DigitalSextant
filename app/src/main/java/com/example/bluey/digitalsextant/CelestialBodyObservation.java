@@ -180,30 +180,7 @@ public class CelestialBodyObservation
      ** @return String
      */
     public String line2()
-    {
-        if(this.Minute < 10 && this.Hour < 10 && this.Second < 10)
-            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: 0" + this.Hour + "0" + this.Minute + ".0" + this.Second;
-
-        else if(this.Minute < 10 && this.Hour < 10)
-            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: 0" + this.Hour + "0" + this.Minute + "." + this.Second;
-
-        else if(this.Hour < 10 && this.Second < 10)
-            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: 0" + this.Hour + this.Minute + ".0" + this.Second;
-
-        else if(this.Minute < 10 && this.Second < 10)
-            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: " + this.Hour + "0" + this.Minute + ".0" + this.Second;
-
-        else if(this.Hour < 10)
-            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: 0" + this.Hour + this.Minute + "." + this.Second;
-
-        else if(this.Minute < 10)
-            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: " + this.Hour + "0" + this.Minute + "." + this.Second;
-
-        else if(this.Second < 10)
-            return  "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: " + this.Hour  + this.Minute + ".0" + this.Second;
-
-        return "Date: " + this.Month + "/" + this.Day + "/" + this.Year + "      Time: " + this.Hour + this.Minute+ "." + this.Second;
-    }
+    {return  String.format("Date: %02d/%02d/%d %10s %02d%02d:%02d Zulu",  this.Month, this.Day, this.Year, " ", this.Hour, this.Minute, this.Second);}
 
     /**
      * Is the 3rd line of the what is shown for an CelestialBodyObservation object, which contains the following
@@ -214,6 +191,5 @@ public class CelestialBodyObservation
      * @return String
      */
     public String line3()
-    { // return String.format("Star Name: + %s     OBsh: %.1f      Az: %.1f %s", this.CelestialBodyName, this.HeightObserver, this.CompassDirection, this.CompassDirection); }
-        return "Star Name: " + this.CelestialBodyName + "       OBSh: " + this.HeightObserver + "       Az: " + this.CompassHeading + " " + this.CompassDirection;}
+    {return String.format("Star Name: %-20sOBSh: %.1f\u00b0 \t\t\tAz: %.1f %s", this.CelestialBodyName, this.HeightObserver, this.CompassHeading, this.CompassDirection);}
 }
