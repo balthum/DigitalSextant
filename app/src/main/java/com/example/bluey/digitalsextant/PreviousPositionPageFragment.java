@@ -4,13 +4,17 @@ import android.app.Fragment;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by robinluna RobinLuna on 8/26/17.
@@ -22,8 +26,9 @@ public class PreviousPositionPageFragment extends Fragment
     private ListView                            list;
     private PreviousPositionDataManager         previousPositionDataManager;
     private PreviousPositionAdapter             previousPositionAdapter;
-    private ArrayList<PreviousPosition>         arrayList;
+    private ArrayList<PreviousPosition>         positionArrayList;
     public static int                           position;
+    private Timer                               positionTimer;
     private PreviousPosition                    previousPosition;
 
 
@@ -57,22 +62,43 @@ public class PreviousPositionPageFragment extends Fragment
 
         //(2)
         this.previousPositionDataManager = new PreviousPositionDataManager(getActivity());
-        arrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
+        positionArrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
 
         //(4)
-        this.previousPositionAdapter = new PreviousPositionAdapter(getActivity(), arrayList);
+        this.previousPositionAdapter = new PreviousPositionAdapter(getActivity(), positionArrayList);
 
         //(5)
         this.list = (ListView) view.findViewById(R.id.listView_previous_position);
         this.list.setAdapter(this.previousPositionAdapter);
-//
-//        //(6)
-//        this.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View v, int i, long l) {
-//                position = i; //gets the position of the preferences
-//            }
-//        });
+
+        updatePositions();
+
         return view;
+    }
+
+    public void updatePositions()
+    {
+        PreferenceDataManager preferenceDataManager = new PreferenceDataManager(getActivity());
+        ArrayList<Preference> preferenceArrayList = new ArrayList<>(preferenceDataManager.getPreferenceFromDatabase());
+        //gets the gps information on how often to get the gps updates
+        Preference preference;
+
+        preference = preferenceArrayList.get(1);
+        int numPreference = preference.getPreferenceNum();
+
+        positionArrayList = previousPositionDataManager.getPositionFromDatabase();
+        int numPosition = positionArrayList.size();
+
+        if(numPosition > numPreference)
+        {
+            while(numPreference <= numPosition)
+            {
+                positionArrayList.remove((positionArrayList.size()) - 1);
+                numPosition--;
+            }
+
+            previousPositionDataManager.updatePositionDatabase(positionArrayList);
+            list.setAdapter(previousPositionAdapter);
+        }
     }
 }

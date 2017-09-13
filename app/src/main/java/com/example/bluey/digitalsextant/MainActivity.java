@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private double                      latitude;
     private double                      longitude;
     private GPSModule                   gpsModule;
-    private boolean                     firstTimer = true;
 
 
 
@@ -78,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         this.timer  = new Timer();
 
-        this.firstTimer = false;
-
         timer.schedule(new TimerTask() {
             @Override
             public void run()
@@ -91,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
             }
-        }, 10000, (update_time * 1l * 1000l));
+        }, 20000, (update_time * 1l * 1000l));
     }
 
     public void timerOff()
@@ -119,10 +116,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 previousPosition.setLatitude(latitude);
                 previousPosition.setLongitude(longitude);
+                previousPosition.setTitle(1);
                 arrayList.add(previousPosition);// adds record to ArrayList
+
+
+                if(arrayList.size() > 1)
+                {
+                    int size = 1;
+                    while(size < arrayList.size())
+                    {
+                        previousPosition = arrayList.get(size - 1);
+                        previousPosition.setTitle(size + 1);
+                        arrayList.set(size - 1,previousPosition);
+                        size++;
+                    }
+                }
+
                 previousPositionDataManager.updatePositionDatabase(arrayList);//updates Previous position database for record added
 
-                Toast.makeText(MainActivity.this,previousPosition.line1() + "\n" + previousPosition.line2(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this,previousPosition.line2() + "\n" + previousPosition.line3(), Toast.LENGTH_LONG).show();
             }
 
         }
