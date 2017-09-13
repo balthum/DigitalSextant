@@ -180,7 +180,7 @@ public class CelestialBodyObservation
      ** @return String
      */
     public String line2()
-    {return  String.format("Date: %02d/%02d/%d %10s %02d%02d:%02d Zulu",  this.Month, this.Day, this.Year, " ", this.Hour, this.Minute, this.Second);}
+    {return  String.format("Date: %02d/%02d/%d %10s Time: %02d%02d:%02d",  this.Month, this.Day, this.Year, " ", this.Hour, this.Minute, this.Second);}
 
     /**
      * Is the 3rd line of the what is shown for an CelestialBodyObservation object, which contains the following
