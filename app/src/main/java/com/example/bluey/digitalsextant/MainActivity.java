@@ -1,6 +1,7 @@
 package com.example.bluey.digitalsextant;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private double                      latitude;
     private double                      longitude;
     private GPSModule                   gpsModule;
+    private boolean                     firstTimer = true;
 
 
 
@@ -70,12 +72,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         preference = arrayList.get(0);
         int update_time =  preference.getPreferenceNum();
 
-
         if (timer != null) {
             timer.cancel();
         }
 
         this.timer  = new Timer();
+
+        this.firstTimer = false;
 
         timer.schedule(new TimerTask() {
             @Override
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
             }
-        }, 0, (update_time * 1l * 1000l));
+        }, 10000, (update_time * 1l * 1000l));
     }
 
     public void timerOff()
