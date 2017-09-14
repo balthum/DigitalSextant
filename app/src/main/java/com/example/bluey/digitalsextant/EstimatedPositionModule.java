@@ -35,12 +35,13 @@ public class EstimatedPositionModule extends CelestialMath
         }
     }
 
-    private PreviousPosition caclculateEsstimatedPositionThreeCircle()
+    private PreviousPosition caclculateEsstimatedPositionCircle()
     {
         // 1.)
         CelestialBodyDatabaseManager        celestialBodyDatabaseManager = new CelestialBodyDatabaseManager(context);
         CelestialBody                       celestialBody                = null;
         ArrayList<CircleOfEqualAltitude>    circleOfEqualAltitudes       = new ArrayList<>();
+        PreviousPosition                    assumedPosition              =  getLastKnowPosition();
 
         // 2.)
         for ( int i = 0; i < celestialBodyObservations.size(); i++)
@@ -53,10 +54,11 @@ public class EstimatedPositionModule extends CelestialMath
             celestialBody = celestialBodyDatabaseManager
                     .getCelestialBody( circleOfEqualAltitude.getName() );
             // d.)
-            circleOfEqualAltitude.setLatitude(  celestialBody.getDeclination() );
+            circleOfEqualAltitude.setLatitude (  celestialBody.getDeclination() );
             circleOfEqualAltitude.setLongitude( ghaStar( celestialBody.getSiderealHourAngle(),
                     celestialBodyObservations.get(i) ));
-            // e.) TODO Get the Radius of the circle of Equal Altitude
+            // e.)
+            circleOfEqualAltitude.setRadius( 60 * starZenith(assumedPosition.Latitude, celestialBodyObservations.get(i), celestialBody) );
             // f.)
             circleOfEqualAltitudes.add(circleOfEqualAltitude);
         }
@@ -89,5 +91,7 @@ public class EstimatedPositionModule extends CelestialMath
         ArrayList<PreviousPosition> previousPosition = previousPositionDataManager.getPositionFromDatabase();
         return previousPosition.get(0);
     }
+
+
 
 }

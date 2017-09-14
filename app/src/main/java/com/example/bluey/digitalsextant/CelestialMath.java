@@ -144,13 +144,13 @@ public class CelestialMath
      *  Calculate the Local Hour Angle (LHA) using Greenwich Hour Angle and longitude.
      *  Note: Longitude should be in decimal notation.
      *
-     * @param gha        Double Greenwich Hour Angle (GHA)
-     * @param longitude  Double Longitude in decimal notation where (-) is West and (+) is East
-     * @return           Double
+     * @param gha                   Double Greenwich Hour Angle (GHA)
+     * @param observationLongitude  Double Longitude in decimal notation where (-) is West and (+) is East
+     * @return                      Double
      */
-    public double lha(double gha, double longitude)
+    public double lha(double gha, double observationLongitude)
     {
-        return (longitude > 0 ? ( gha + longitude ) : (gha - longitude ) );
+        return (observationLongitude > 0 ? ( gha + observationLongitude ) : (gha - observationLongitude ) );
     }
 
 
@@ -188,7 +188,7 @@ public class CelestialMath
      *
      * Calculate the zenith using declination, latitude, Local Hour Angle (LHA), and Calculated Height (Hc).
      * @param declination       Double star's declination ( Celestial Database ).
-     * @param latitude          Double Double Longitude in decimal notation where (-) is West and (+) is East
+     * @param latitude          Double Latitude in decimal notation where (-) is South and (+) is North
      * @param lha               Double Local Hour Angle (LHA)
      * @param heightCalculated  Double calculated Height (Hc)
      * @return                  Double
@@ -204,6 +204,39 @@ public class CelestialMath
         );
     }
 
+    /**
+     *
+     *  Calculate the Celestial Body Zenith
+     *
+     * @param assumedLatitude    Double Latitude in decimal notation where (-) is South and (+) is North
+     * @param starDeclination    Double Declination of the Celestial BOdy
+     * @param localHourAngle     Double Local Hour Angle (LHA)
+     * @return                   Double
+     */
+    public double starZenith(double assumedLatitude, double starDeclination, double localHourAngle )
+    {
+        return Math.acos(assumedLatitude) * Math.sin(starDeclination) * Math.cos(assumedLatitude)
+                * Math.cos(assumedLatitude) * Math.cos(localHourAngle);
+    }
+
+    /**
+     *
+     * Calculate the Celestial Body Zenith
+     *
+     * @param assumedLatitude           Double Latitude in decimal notation where (-) is South and (+) is North
+     * @param celestialBodyObservation  CelestialBodyObservation Object
+     * @param celestialBody             CelestialBody Object
+     * @return
+     */
+    public double starZenith(double assumedLatitude, CelestialBodyObservation celestialBodyObservation, CelestialBody celestialBody)
+    {
+        double ghaAries = ghaAries( celestialBodyObservation );
+        double gha      = gha(ghaAries, celestialBody.getSiderealHourAngle());
+        double lha      = lha(gha, assumedLatitude);
+
+        return Math.acos(assumedLatitude) * Math.sin(celestialBody.getDeclination()) * Math.cos(assumedLatitude)
+                * Math.cos(assumedLatitude) * Math.cos(lha);
+    }
 
     /**
      *
@@ -218,6 +251,32 @@ public class CelestialMath
         return Math.abs(heightCalculated - heightObserved);
     }
 
+    /**
+     *
+     *  Calculate the distance between to latitude and longitude points in Nautical Miles.
+     *
+     * @param latitudePointA    Double Latitude in decimal notation where (-) is South and (+) is North
+     * @param longitudePointA   Double Longitude in decimal notation where (-) is West and (+) is South
+     * @param latitudePointB    Double Latitude in decimal notation where (-) is South and (+) is North
+     * @param longitudePointB   Double Longitude in decimal notation where (-) is West and (+) is South
+     * @return                  Double Nautical Miles
+     */
+    public double distanceBetweenTwoLatitudeAndLongitude(double latitudePointA, double longitudePointA,double latitudePointB, double longitudePointB )
+    {
+        return Math.acos(
+                            60 * Math.sin(latitudePointA) * Math.sin(latitudePointB)
+                               + Math.cos(latitudePointA) * Math.cos(latitudePointB)
+                               * Math.cos(longitudePointB - longitudePointA        )
+                        );
+    }
+
+    /**
+     *
+     *  Main correction for Sextant Observation
+     *
+     * @param heightObserved    Double Sextant Height
+     * @return                  Double
+     */
     public double mainCorrection(double heightObserved)
     {
         Hashtable<Integer, Double> correction = new Hashtable<>();
