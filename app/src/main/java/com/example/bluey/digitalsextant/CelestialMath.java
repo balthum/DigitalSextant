@@ -1,5 +1,6 @@
 package com.example.bluey.digitalsextant;
 
+import java.util.Calendar;
 import java.util.Hashtable;
 
 /**
@@ -27,6 +28,16 @@ public class CelestialMath
         int minute  = celestialBodyObservation.getMinute();
         int second  = celestialBodyObservation.getSecond();
 
+        double JD = (( 367 * year - ( Math.floor( 7 * ( year + Math.floor(( month + 9) / 12 )) / 4 )
+                - Math.floor( 3 * (Math.floor(( year + ( month - 9 ) / 7)/100 + 1) / 4)
+                + Math.floor( 275 * month / 9 ) + day + 1721028.5 )))
+                + ( hour + minute / 60 + second / 3600 ) / 24 ) - 30.5;
+
+        return JD;
+    }
+
+    public double julianDay (int year, int month, int day, int hour, int minute, int second)
+    {
         double JD = (( 367 * year - ( Math.floor( 7 * ( year + Math.floor(( month + 9) / 12 )) / 4 )
                 - Math.floor( 3 * (Math.floor(( year + ( month - 9 ) / 7)/100 + 1) / 4)
                 + Math.floor( 275 * month / 9 ) + day + 1721028.5 )))
@@ -213,7 +224,7 @@ public class CelestialMath
      * @param localHourAngle     Double Local Hour Angle (LHA)
      * @return                   Double
      */
-    public double starZenith(double assumedLatitude, double starDeclination, double localHourAngle )
+    public double starZenith( double assumedLatitude, double starDeclination, double localHourAngle )
     {
         return Math.acos(assumedLatitude) * Math.sin(starDeclination) * Math.cos(assumedLatitude)
                 * Math.cos(assumedLatitude) * Math.cos(localHourAngle);
@@ -249,6 +260,32 @@ public class CelestialMath
     public double azimuth(double heightCalculated, double heightObserved)
     {
         return Math.abs(heightCalculated - heightObserved);
+    }
+
+    public double starBearingFromAssumedPosition(double lha, double starDeclination, double assumedLatitude)
+    {
+        return Math.atan(
+
+                Math.sin(lha) /
+                (Math.sin(assumedLatitude) * Math.cos(lha) - Math.tan(starDeclination) * Math.cos(assumedLatitude))
+        );
+    }
+
+    public void starBearingFromAssumedPosition(Calendar calendar, double starDeclination, double assumedLatitude)
+    {
+/*        double ghaAries = ghaAries(
+                julianDay(calendar.getTime().getYear(),
+                        calendar.getTime().getMonth(),
+                        calendar.getTime().getDay(),
+                        calendar.getTime().getHours(),
+                        calendar.getTime().getMinutes(),
+                        calendar.getTime().getSeconds()
+                ), );
+        return Math.atan(
+
+                Math.sin(lha) /
+                        (Math.sin(assumedLatitude) * Math.cos(lha) - Math.tan(starDeclination) * Math.cos(assumedLatitude))
+        );*/
     }
 
     /**

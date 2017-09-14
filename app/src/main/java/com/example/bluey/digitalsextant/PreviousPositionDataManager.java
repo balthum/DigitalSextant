@@ -78,9 +78,9 @@ public class PreviousPositionDataManager
     }
 
     /**
-     * Gets the SQLite Position Database by the following:<br/><br/>
+     * Gets the SQLite Position Database by the following:<br><br>
      *
-     * (1) Initializes the ArrayList for a Position object.<br/>
+     * (1) Initializes the ArrayList for a Position object.<br>
      * (2) If the SQLiteDatabase is null it create or open a database that will be used for reading and writing info to database.<br/>
      * (3) Initializes the Cursor to null.<br/>
      * (4) Runs the provided SQL and returns a Cursor over the result set in the order of Position_QUERY .<br/>

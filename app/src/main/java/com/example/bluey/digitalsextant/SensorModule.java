@@ -105,6 +105,7 @@ public class SensorModule implements SensorEventListener
 
         //(4)
         setAzimuth((float) ((Math.toDegrees(SensorManager.getOrientation(rotation,orientation)[0])+360)%360));
+        //setAzimuth((float)(Math.toDegrees(orientation[2])+360)%360);
 
         //(5)
         this.observedHeight = (float) (90 + Math.toDegrees(SensorManager.getOrientation(rotation, orientation)[1] ));

@@ -87,28 +87,7 @@ public class PreviousPosition
      */
     public String line2()
     {
-        if(this.Minute < 10 && this.Hour < 10 && this.Second < 10)
-            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: 0" + this.Hour + "0" + this.Minute + ".0" + this.Second;
-
-        else if(this.Minute < 10 && this.Hour < 10)
-            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: 0" + this.Hour + "0" + this.Minute + "." + this.Second;
-
-        else if(this.Hour < 10 && this.Second < 10)
-            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: 0" + this.Hour + this.Minute + ".0" + this.Second;
-
-        else if(this.Minute < 10 && this.Second < 10)
-            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: " + this.Hour + "0" + this.Minute + ".0" + this.Second;
-
-        else if(this.Hour < 10)
-            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: 0" + this.Hour + this.Minute + "." + this.Second;
-
-        else if(this.Minute < 10)
-            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: " + this.Hour + "0" + this.Minute + "." + this.Second;
-
-        else if(this.Second < 10)
-            return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: " + this.Hour  + this.Minute + ".0" + this.Second;
-
-        return "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: " + this.Hour + this.Minute+ "." + this.Second;
+       return String.format("Date: %02d/%02d/%d %10s Time: %02d%02d:%02d",  this.Month, this.Date, this.Year, " ", this.Hour, this.Minute, this.Second);
     }
 
     /**
