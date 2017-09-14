@@ -1,6 +1,7 @@
 package com.example.bluey.digitalsextant;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -70,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         preference = arrayList.get(0);
         int update_time =  preference.getPreferenceNum();
 
-
         if (timer != null) {
             timer.cancel();
         }
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
             }
-        }, 0, (update_time * 1l * 1000l));
+        }, 20000, (update_time * 1l * 1000l));
     }
 
     public void timerOff()
@@ -116,10 +116,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 previousPosition.setLatitude(latitude);
                 previousPosition.setLongitude(longitude);
+                previousPosition.setTitle(1);
                 arrayList.add(previousPosition);// adds record to ArrayList
+
+
+                if(arrayList.size() > 1)
+                {
+                    int size = 1;
+                    while(size < arrayList.size())
+                    {
+                        previousPosition = arrayList.get(size - 1);
+                        previousPosition.setTitle(size + 1);
+                        arrayList.set(size - 1,previousPosition);
+                        size++;
+                    }
+                }
+
                 previousPositionDataManager.updatePositionDatabase(arrayList);//updates Previous position database for record added
 
-                Toast.makeText(MainActivity.this,previousPosition.line1() + "\n" + previousPosition.line2(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this,previousPosition.line2() + "\n" + previousPosition.line3(), Toast.LENGTH_LONG).show();
             }
 
         }

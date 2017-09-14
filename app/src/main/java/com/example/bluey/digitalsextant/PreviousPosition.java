@@ -10,6 +10,7 @@ import java.util.Calendar;
 
 public class PreviousPosition
 {
+    public int       Title;
     public String       DateTime;
     public int          Year;//Year of the previous position taken
     public int          Month;//Month of the previous position taken
@@ -41,6 +42,7 @@ public class PreviousPosition
 
     }
 
+    public void setTitle(int title){this.Title = title;}
 
     /**
      * Sets the latitude of the position (neg = S and pos = N)
@@ -68,6 +70,14 @@ public class PreviousPosition
 
     public String getDateTime(){return this.DateTime;}
 
+    public int getTitle(){return this.Title;}
+
+
+    public String line1()
+    {
+        return "Position " + Title;
+    }
+
 
     /**
      * Is the 2nd line of the what is shown for an PreviousPosition object, which contains the following
@@ -75,7 +85,7 @@ public class PreviousPosition
      * (2) the time of the position
      ** @return String
      */
-    public String line1()
+    public String line2()
     {
         if(this.Minute < 10 && this.Hour < 10 && this.Second < 10)
             return  "Date: " + this.Month + "/" + this.Date + "/" + this.Year + "      Time: 0" + this.Hour + "0" + this.Minute + ".0" + this.Second;
@@ -107,6 +117,6 @@ public class PreviousPosition
      * (2) the longitude of the position
      * @return String
      */
-    public String line2()
+    public String line3()
     {return "Latitude: " + this.Latitude + "       Longitude: " + this.Longitude;}
 }

@@ -224,6 +224,5 @@ public class ObservationListPageFragment extends Fragment
             this.calculateButton.setEnabled(false);
         }
          this.position = -1;
-
     }
 }

@@ -6,17 +6,17 @@ package com.example.bluey.digitalsextant;
 public interface SensorChange
 {
     /**
-     * gets the direction and azimuth/compass bearing when their is a new reading from the sensor
+     * Gets the direction and azimuth/compass bearing when their is a new reading from the sensor.
      * @param direction String
      * @param azimuth float
      */
     public void compassUpdate(String direction, float azimuth);
 
     /**
-     * gets the zenith/observed height when their is a new reading from the sensor
-     * @param zenith float
+     * Gets the zenith/observed height when their is a new reading from the sensor.
+     * @param observedHeight float
      */
-    public void zenithUpdate(float zenith);
+    public void observedHeightUpdate(float observedHeight);
 
 
 }

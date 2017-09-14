@@ -15,7 +15,7 @@ public class SensorModule implements SensorEventListener
     private SensorManager       sensorManager;//device sensor manager
     private String              direction = "N";//gets the compass direction
     private float               azimuth;// get your azimuth/height value
-    private float               zenith; //get your accelerometer/compass bearing value
+    private float               observedHeight; //get your accelerometer/compass bearing value
     private Sensor              magnetometerSensor, accelerometerSensor;//the sensor types in your device
     private float               acceleration[] = new float[3]; //gravity rotational data
     private float               magnetic[] = new float[3]; //magnetic rotational data
@@ -24,14 +24,14 @@ public class SensorModule implements SensorEventListener
     private SensorChange        sensorChange;//sets the interface
 
     /**
-     *  Create an instance of the SensorModule.
+     * Create an instance of the SensorModule.<br/>
+     * When the SensorModule is constructed the following will be recorded:<br/><br/>
      *
-     * When the SensorModule is constructed the following will be recorded
-     * (1)The SensorChanged interface is set
-     * (2)The Context is set
-     * (3)The sensorManger initializes your android device sensor capabilities
-     * (4)Sets the MagneticField sensor
-     * (5)Sets the accelerometer sensor
+     * (1)The SensorChanged interface is set.<br/>
+     * (2)The Context is set.<br/>
+     * (3)The sensorManger initializes your android device sensor capabilities.<br/>
+     * (4)Sets the MagneticField sensor.<br/>
+     * (5)Sets the accelerometer sensor.<br/>
      *
      * @param celestialBody CelestialBodyObservationFragmentActivity
      */
@@ -57,7 +57,7 @@ public class SensorModule implements SensorEventListener
     }
 
     /**
-     * When the phone is on pause the accelerometer and magnetic field sensors are unregistered from the SensorEventListener
+     * When the phone is on pause the accelerometer and magnetic field sensors are unregistered from the SensorEventListener.
      */
     public void onPause()
     {
@@ -66,7 +66,7 @@ public class SensorModule implements SensorEventListener
     }
 
     /**
-     * When the phone starts resumes the accelerometer and magnetic field sensors are registered for the SensorEventListener
+     * When the phone starts resumes the accelerometer and magnetic field sensors are registered for the SensorEventListener.
      */
     public void onResume()
     {
@@ -76,16 +76,16 @@ public class SensorModule implements SensorEventListener
     }
 
     /**
-     * is a sensorEventListener requirement
-     * is called when their is a new reading from the sensors which does the following
+     * Is a sensorEventListener requirement.<br/>
+     * Is called when their is a new reading from the sensors which does the following:<br/><br/>
      *
-     * (1)checks if the sensor is a magnetic field and if so it clones all values in array
-     * (2)checks if the sensor is a accelerometer and if so it clones all values in array
-     * (3)Computes the inclination and the rotation vector from the device so we can use the rotation to get the orientation
-     * (4)sets the azimuth/compass bearing value where values[0] gets your azimuth angle around z-axis
-     * (5)sets the zenith/height observed value and sets it with the interface
-     * (6)gets the direction for the compass
-     * (7)sets the compass bearing and direction with the interface
+     * (1)Checks if the sensor is a magnetic field and if so it clones all values in array.<br/>
+     * (2)Checks if the sensor is a accelerometer and if so it clones all values in array.<br/>
+     * (3)Computes the inclination and the rotation vector from the device so we can use the rotation to get the orientation.<br/>
+     * (4)Sets the azimuth/compass bearing value where values[0] gets your azimuth angle around z-axis.<br/>
+     * (5)Sets the height observed value and sets it with the interface.<br/>
+     * (6)Gets the direction for the compass.<br/>
+     * (7)Sets the compass bearing and direction with the interface.<br/>
      * @param sensorEvent SensorEvent
      */
     @Override
@@ -107,16 +107,8 @@ public class SensorModule implements SensorEventListener
         setAzimuth((float) ((Math.toDegrees(SensorManager.getOrientation(rotation,orientation)[0])+360)%360));
 
         //(5)
-
-        /*System.out.println( "Y Axis: "
-                + Math.round( 90 + Math.toDegrees(
-                        SensorManager.getOrientation(rotation,orientation)[1]
-                              )));
- */
-        this.zenith = (float) (90 + Math.toDegrees(SensorManager.getOrientation(rotation, orientation)[1] ));
-
-
-        sensorChange.zenithUpdate(this.zenith);
+        this.observedHeight = (float) (90 + Math.toDegrees(SensorManager.getOrientation(rotation, orientation)[1] ));
+        sensorChange.observedHeightUpdate(this.observedHeight);
 
         //(6)
         if (getAzimuth() >= 338 || getAzimuth() <= 22)
@@ -141,8 +133,8 @@ public class SensorModule implements SensorEventListener
     }
 
     /**
-     * Is a SensorEventListener requirement
-     * Is called when the accuracy of the registered sensor has changed
+     * Is a SensorEventListener requirement.<br/>
+     * Is called when the accuracy of the registered sensor has changed.
      * @param sensor Sensor
      * @param i int
      */
@@ -150,40 +142,40 @@ public class SensorModule implements SensorEventListener
     public void onAccuracyChanged(Sensor sensor, int i) {}
 
     /**
-     * gets the azimuth/compass bearing
+     * Gets the azimuth/compass bearing
      * @return float
      */
     public float getAzimuth() {return azimuth;}
 
     /**
-     * gets the compass Direction (N,S,W,E)
+     * Gets the compass Direction (N,S,W,E)
      * @return String
      */
     public String getDirection(){return direction;}
 
     /**
-     * gets the zenith/observed height
+     * Gets the observed height.
      * @return float
      */
-    public float getZenith(){return zenith;}
+    public float getObservedHeight(){return observedHeight;}
 
     /**
-     * sets the azimuth/compass bearing
+     * Sets the azimuth/compass bearing.
      * @param az float
      */
     public void setAzimuth(float az) {azimuth = az;}
 
     /**
-     * sets the compass Direction (N,S,W,E)
+     * Sets the compass Direction (N,S,W,E).
      * @param dir String
      */
     public void setDirection(String dir) {direction = dir;}
 
     /**
-     * gsets the zenith/observed height
-     * @param zen float
+     * Sets the observed height.
+     * @param observedHeight float
      */
-    public void setZenith(float zen) {zenith = zen;}
+    public void setObservedHeight(float observedHeight) {this.observedHeight = observedHeight;}
 
 
 }

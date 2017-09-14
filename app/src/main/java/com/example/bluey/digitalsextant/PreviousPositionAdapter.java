@@ -31,6 +31,9 @@ public class PreviousPositionAdapter extends BaseAdapter
         this.layoutInflater = LayoutInflater.from(context);//(2)
     }
 
+    public void setArrayList(ArrayList<PreviousPosition> arrayList)
+    {this.arrayList = arrayList;}
+
     /**
      * //Gets the size of the ArrayList
      * @return int
@@ -97,6 +100,7 @@ public class PreviousPositionAdapter extends BaseAdapter
         }
 
         //(2)
+        TextView textPositionTitle = (TextView) view.findViewById(R.id.textViewPositionTitle);
         TextView textPositionDateTime = (TextView) view.findViewById(R.id.textViewPositionDateTime);
         TextView textPositionLatLong = (TextView) view.findViewById(R.id.textViewPositionLatLong);
 
@@ -106,8 +110,9 @@ public class PreviousPositionAdapter extends BaseAdapter
         //(4)
         if(previousPosition != null)
         {
-            textPositionDateTime.setText(previousPosition.line1());
-            textPositionLatLong.setText(previousPosition.line2());
+            textPositionTitle.setText(previousPosition.line1());
+            textPositionDateTime.setText(previousPosition.line2());
+            textPositionLatLong.setText(previousPosition.line3());
         }
         return view;
     }
