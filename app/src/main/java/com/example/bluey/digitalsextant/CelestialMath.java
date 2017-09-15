@@ -262,30 +262,39 @@ public class CelestialMath
         return Math.abs(heightCalculated - heightObserved);
     }
 
-    public double starBearingFromAssumedPosition(double lha, double starDeclination, double assumedLatitude)
+    /**
+     *
+     *  Calculate A celestial bodies compass bearing from your assumed position.
+     *
+     * @param starDeclination   Double Celestial Bodies declination.
+     * @param starSHA           Double Celestial Bodies Sidereal Hour Angle (SHA).
+     * @param assumedLatitude   Double Latitude in decimal notation where (-) is South and (+) is North
+     * @return                  Double Compass Bearing to the Celestial Body from the assumed position.
+     */
+    public double starBearingFromAssumedPosition( double starDeclination, double starSHA, double assumedLatitude)
     {
+        Calendar date = Calendar.getInstance(java.util.TimeZone.getTimeZone("GMT"));
+
+        //(1)
+        int year                = date.get(Calendar.YEAR);
+        int month               = date.get(Calendar.MONTH ) + 1;
+        int day                 = date.get(Calendar.DAY_OF_MONTH);
+        int hour                = date.get(Calendar.HOUR_OF_DAY);
+        int minute              = date.get(Calendar.MINUTE);
+        int second              = date.get(Calendar.SECOND);
+        double julianDay        = julianDay(year, month, day, hour, minute, second);
+        double julianCentury    = julianCentury(julianDay);
+
+        double ghaAries         = ghaAries(julianDay, julianCentury);
+
+        double lha              = lha( gha(ghaAries, starSHA), assumedLatitude);
+
         return Math.atan(
 
                 Math.sin(lha) /
-                (Math.sin(assumedLatitude) * Math.cos(lha) - Math.tan(starDeclination) * Math.cos(assumedLatitude))
-        );
-    }
+                        ( Math.sin(assumedLatitude) * Math.cos(lha) - Math.tan(starDeclination) * Math.cos(assumedLatitude) )
 
-    public void starBearingFromAssumedPosition(Calendar calendar, double starDeclination, double assumedLatitude)
-    {
-/*        double ghaAries = ghaAries(
-                julianDay(calendar.getTime().getYear(),
-                        calendar.getTime().getMonth(),
-                        calendar.getTime().getDay(),
-                        calendar.getTime().getHours(),
-                        calendar.getTime().getMinutes(),
-                        calendar.getTime().getSeconds()
-                ), );
-        return Math.atan(
-
-                Math.sin(lha) /
-                        (Math.sin(assumedLatitude) * Math.cos(lha) - Math.tan(starDeclination) * Math.cos(assumedLatitude))
-        );*/
+                        );
     }
 
     /**
