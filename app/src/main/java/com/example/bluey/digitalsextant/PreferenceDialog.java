@@ -19,6 +19,7 @@ public class PreferenceDialog extends DialogFragment
 {
     private String                      info;//the info of the preference info
     private int                         num; //the num of the preference num
+    private int                         oldPosition;
     private Preference                  preference;//So the records can be updated
     private PreferencePageFragment      prefFragment;//communicates with the PreferencePageFragment
 
@@ -68,9 +69,21 @@ public class PreferenceDialog extends DialogFragment
             //(a)
             builder.setTitle("GPS SENSOR UPDATES");//sets title to dialog
 
+            if(preference.PreferenceNum == 30)
+                oldPosition = 0;
+            if(preference.PreferenceNum == 45)
+                oldPosition = 1;
+            if(preference.PreferenceNum == 60)
+                oldPosition = 2;
+            if(preference.PreferenceNum == 75)
+                oldPosition = 3;
+            if(preference.PreferenceNum == 90)
+                oldPosition = 4;
+
+
             //(b)
             final String[] gps =getResources().getStringArray(R.array.gps_radioButton);
-            builder.setSingleChoiceItems(R.array.gps_radioButton, -1, new DialogInterface.OnClickListener() {
+            builder.setSingleChoiceItems(R.array.gps_radioButton, oldPosition, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i)
                 {
@@ -95,9 +108,20 @@ public class PreferenceDialog extends DialogFragment
             //(a)
             builder.setTitle("TOTAL PREVIOUS POSITIONS");
 
+            if(preference.PreferenceNum == 20)
+                oldPosition = 0;
+            if(preference.PreferenceNum == 30)
+                oldPosition = 1;
+            if(preference.PreferenceNum == 40)
+                oldPosition = 2;
+            if(preference.PreferenceNum == 50)
+                oldPosition = 3;
+            if(preference.PreferenceNum == 60)
+                oldPosition = 4;
+
             //(b)
             final String[] savedPosition =getResources().getStringArray(R.array.position_raidoButton);
-            builder.setSingleChoiceItems(R.array.position_raidoButton, -1, new DialogInterface.OnClickListener() {
+            builder.setSingleChoiceItems(R.array.position_raidoButton, oldPosition, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i)
                 {
