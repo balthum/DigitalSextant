@@ -117,6 +117,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 previousPosition.setLatitude(latitude);
                 previousPosition.setLongitude(longitude);
                 previousPosition.setTitle(1);
+                previousPosition.setLongitudeDirection();
+                previousPosition.setLatitudeDirection();
                 arrayList.add(previousPosition);// adds record to ArrayList
 
 

@@ -24,6 +24,9 @@ public class PreviousPositionDatabase extends SQLiteOpenHelper
     public static final String          COL8_LATITUDE = "LATITUDE";
     public static final String          COL9_LONGITUDE = "LONGITUDE";
     public static final String          COL10_TITLE = "TITLE";
+    public static final String          COL11_LONGITUDE_DIRECTION = "LONGITUDE_DIRECTION";
+    public static final String          COL12_LATITUDE_DIRECTION = "LATITUDE_DIRECTION";
+
 
     private static final String DATABASE_CREATE =
             "create table " + TABLE_POSITION + "("
@@ -36,7 +39,9 @@ public class PreviousPositionDatabase extends SQLiteOpenHelper
                     + COL7_SECOND + " INTEGER, "
                     + COL8_LATITUDE + " REAL, "
                     + COL9_LONGITUDE + " REAL, "
-                    + COL10_TITLE + " INTEGER)";
+                    + COL10_TITLE + " INTEGER, "
+                    + COL11_LONGITUDE_DIRECTION + " TEXT, "
+                    + COL12_LATITUDE_DIRECTION + " TEXT)";
 
 
 

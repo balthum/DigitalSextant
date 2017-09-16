@@ -20,6 +20,8 @@ public class PreviousPosition
     public int          Second;//Second of the previous position taken
     public double       Latitude;//Latitude of the previous position taken
     public double       Longitude;//Longitude of the previous position taken
+    public String       LatitudeDirection;
+    public String       LongitudeDirection;
 
     /**
      * The Default constructor for PreviousPosition
@@ -76,6 +78,44 @@ public class PreviousPosition
     public String line1()
     {
         return "Position " + Title;
+    }
+
+    public void setLatitudeDirection()
+    {
+        if(this.Latitude < 0)
+            this.LatitudeDirection = "S";
+        else if(this.Latitude > 0)
+            this.LatitudeDirection = "N";
+        else
+            this.LatitudeDirection = " ";
+    }
+
+    public void setLongitudeDirection()
+    {
+        if(this.Longitude < 0)
+            this.LongitudeDirection = "W";
+        else if(this.Longitude > 0)
+            this.LongitudeDirection = "E";
+        else
+            this.LongitudeDirection = " ";
+    }
+
+
+
+    public String getLatitudeString()
+    {
+        int degree = Math.abs((int)this.Latitude);
+        double decimalMinute = ((Math.abs(this.Latitude) - degree) * 60);
+
+        return String.format("%dº %.4f' %s",degree, decimalMinute, this.LatitudeDirection);
+    }
+
+    public String getLongitudeString()
+    {
+        int degree = Math.abs((int)this.Longitude);
+        double decimalMinute = ((Math.abs(this.Longitude) - degree) * 60);
+
+        return String.format("%dº %.4f' %s",degree, decimalMinute, this.LongitudeDirection);
     }
 
 

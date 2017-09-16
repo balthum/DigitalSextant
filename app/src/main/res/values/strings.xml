@@ -19,6 +19,10 @@
     <string name="close">Close</string>
     <string name="dummy_button">Take Celestial Body Fix</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="last_known_positon">Your last known position via GPS</string>
+    <string name="current_positon">Your current estimated position</string>
+    <string name="underline">                               </string>
+
 
     <string name="gps_message">Select how often you want to update the GPS position from GPS sensor.</string>
 
