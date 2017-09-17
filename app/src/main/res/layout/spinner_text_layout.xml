@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/spinner_format"
+    style="?android:attr/spinnerItemStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="@dimen/textViewDimen"
+    android:drawableRight="@drawable/spinner_arrow_drop_down"
+    android:textColor="@android:color/holo_orange_light">
+
+</TextView>

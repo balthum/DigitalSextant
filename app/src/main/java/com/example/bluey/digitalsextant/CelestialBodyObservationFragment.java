@@ -396,7 +396,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
 
         // Set up Spinner
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
-                ( getActivity(), R.layout.spinner_item,
+                ( getActivity(), R.layout.spinner_text_layout,
                   celestialBodyDatabaseManager.getCelestialBodyNames() );
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         celestialBodySpinner.setAdapter(arrayAdapter);
