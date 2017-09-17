@@ -34,13 +34,20 @@
     <Button
         android:id="@+id/takeFixButton"
         style="?metaButtonBarButtonStyle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/imageView2"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
         android:layout_weight="1"
-        android:text="@string/dummy_button"/>
+        android:text="@string/dummy_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/compassButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take Compass Reading"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -93,8 +100,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_above="@+id/takeFixButton"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/textView_observedHeight"
+        android:layout_alignStart="@+id/textView_observedHeight" />
 
     <TextView
         android:id="@+id/textView_observedHeight"
@@ -103,8 +110,8 @@
         android:text="Angle"
         android:textSize="@dimen/textViewDimen"
         android:textColor="@android:color/holo_orange_light"
-        android:layout_above="@+id/textView_compass"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/imageView_rightArrow" />
 
 
     <Spinner

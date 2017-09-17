@@ -17,7 +17,7 @@
     <string name="header">Digital Sextant Menu</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="dummy_button">Take Celestial Body Fix</string>
+    <string name="dummy_button">Take Celestial Body</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="last_known_positon">Your last known position via GPS</string>
     <string name="current_positon">Your current estimated position</string>

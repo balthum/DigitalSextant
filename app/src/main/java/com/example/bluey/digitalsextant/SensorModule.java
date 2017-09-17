@@ -45,7 +45,7 @@ public class SensorModule implements SensorEventListener
         //All values are in micro-Tesla (uT) and measure the ambient magnetic field
         // values[0] = X axis
         // values[1] = Y axis
-        // values[3] = Z axis
+        // values[2] = Z axis
        magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         //(5)
@@ -103,12 +103,18 @@ public class SensorModule implements SensorEventListener
         //(3)
         SensorManager.getRotationMatrix(rotation, null, acceleration,magnetic);
 
-        //(4)
-        setAzimuth((float) ((Math.toDegrees(SensorManager.getOrientation(rotation,orientation)[0])+360)%360));
-        //setAzimuth((float)(Math.toDegrees(orientation[2])+360)%360);
+
+        float xAxis = ((float)(Math.toDegrees(orientation[1])+360)%360);// around the x axis
+
+        if(xAxis >= 270 && xAxis <= 275)
+        {
+            //(4)
+            setAzimuth((float) ((Math.toDegrees(SensorManager.getOrientation(rotation,orientation)[0])+360)%360));//around the z axis
+        }
 
         //(5)
         this.observedHeight = (float) (90 + Math.toDegrees(SensorManager.getOrientation(rotation, orientation)[1] ));
+
         sensorChange.observedHeightUpdate(this.observedHeight);
 
         //(6)
