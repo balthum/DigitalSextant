@@ -206,7 +206,7 @@ public class CelestialMath
      *
      */
 
-    public double zenith(double declination, double latitude, double lha, double heightCalculated)
+    public double azimuth(double declination, double latitude, double lha, double heightCalculated)
     {
         return Math.asin(
                 (Math.sin(declination) * Math.cos(latitude)
@@ -251,13 +251,13 @@ public class CelestialMath
 
     /**
      *
-     * Calculate the Azimuth
+     * Calculate the ITC
      *
      * @param heightCalculated  Double Calculated height (Hc)
      * @param heightObserved    Double Observed height (Ho)
      * @return                  Double
      */
-    public double azimuth(double heightCalculated, double heightObserved)
+    public double intercept(double heightCalculated, double heightObserved)
     {
         return Math.abs(heightCalculated - heightObserved);
     }
@@ -314,6 +314,33 @@ public class CelestialMath
                                + Math.cos(latitudePointA) * Math.cos(latitudePointB)
                                * Math.cos(longitudePointB - longitudePointA        )
                         );
+    }
+
+
+    public double Zn(double assumedLatitude, double lhaStar, double azimuth )
+    {
+        if ( 0 < assumedLatitude )
+        {
+            if (180 < lhaStar )
+            {
+                return azimuth;
+            }
+
+            else
+            {
+                return 360 - azimuth;
+            }
+        }
+        else {
+            if (180 < lhaStar)
+            {
+                return 180 - azimuth;
+            }
+            else
+            {
+                return 180 + azimuth;
+            }
+        }
     }
 
     /**

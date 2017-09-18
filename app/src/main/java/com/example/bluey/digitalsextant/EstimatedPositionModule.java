@@ -25,15 +25,39 @@ public class EstimatedPositionModule extends CelestialMath
 
     private void calculateEstimatedPosition()
     {
-        Double sextantHeight = 0.0;
 
-        // .)
         for ( int i = 0; i < celestialBodyObservations.size(); i++)
         {
-            // a.) add correction sextant Height
-            sextantHeight = mainCorrection(celestialBodyObservations.get(i).getHeightObserver()) + sextantHeight;
-        }
-    }
+            // a.) Get the assumed position for the Previous Position Database.
+            PreviousPosition                  assumedPosition = getLastKnowPosition();
+            // b.) Get the observation for the Celestial Body observed.
+            CelestialBodyObservation celestialBodyObservation = celestialBodyObservations.get(i);
+            // c.) Get the almanac information for the Celestial Body
+            CelestialBody                       celestialBody = new CelestialBodyDatabaseManager(context)
+                    .getCelestialBody( celestialBodyObservation.CelestialBodyName);
+            // d.) Make correction the Sextant Height
+            double Ho  = heighObserved( celestialBodyObservation.getHeightObserver() );
+
+
+            // e.) Calculate azimuth
+            double ghaAries = ghaAries(celestialBodyObservation);
+            double ghaStar  = gha(ghaAries, celestialBody.getSiderealHourAngle());
+
+            double lhaStar  = lha( ghaStar,assumedPosition.getLongitude() );
+
+            double hcStar   = heightCalculated(
+                    celestialBody.getDeclination(), assumedPosition.getLatitude(), lhaStar );
+            double azimuth  = azimuth(
+                    celestialBody.getDeclination(), assumedPosition.getLatitude(),lhaStar, hcStar
+                    );
+            // f.) Calculate the intercept distance
+            double ITC = intercept(hcStar, Ho);
+            // g.) Calculate Zn
+            double Zn  = Zn(assumedPosition.getLatitude(), lhaStar, azimuth);
+
+            }
+        }  //END for Loop
+
 
     private PreviousPosition caclculateEsstimatedPositionCircle()
     {
