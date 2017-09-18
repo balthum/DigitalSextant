@@ -77,6 +77,7 @@ public class CelestialBodyDatabaseManager
         }
     }
 
+
     /**
      *  Get an Array of Celestial Body Names as Strings.
      *
@@ -102,6 +103,12 @@ public class CelestialBodyDatabaseManager
 
         // 4.)
         return celestialBodyNames;
+    }
+
+    public double getCelestialBodyDeclination(int position)
+    {
+        CelestialBody celestialBody = celestialBodiesSet.get(position);
+        return celestialBody.getDeclination();
     }
 
     /**

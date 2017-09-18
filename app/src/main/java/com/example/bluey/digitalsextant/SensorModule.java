@@ -106,7 +106,7 @@ public class SensorModule implements SensorEventListener
 
         float xAxis = ((float)(Math.toDegrees(orientation[1])+360)%360);// around the x axis
 
-        if(xAxis >= 270 && xAxis <= 275)
+        if(xAxis >= 268 && xAxis <= 272)
         {
             //(4)
             setAzimuth((float) ((Math.toDegrees(SensorManager.getOrientation(rotation,orientation)[0])+360)%360));//around the z axis
