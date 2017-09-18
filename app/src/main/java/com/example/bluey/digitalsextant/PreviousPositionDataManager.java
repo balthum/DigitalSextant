@@ -71,6 +71,8 @@ public class PreviousPositionDataManager
             values.put(PreviousPositionDatabase.COL8_LATITUDE, position.Latitude);
             values.put(PreviousPositionDatabase.COL9_LONGITUDE, position.Longitude);
             values.put(PreviousPositionDatabase.COL10_TITLE, position.Title);
+            values.put(PreviousPositionDatabase.COL11_LONGITUDE_DIRECTION, position.LongitudeDirection);
+            values.put(PreviousPositionDatabase.COL12_LATITUDE_DIRECTION, position.LatitudeDirection);
             this.sqLiteDatabase.insert(positionDatabase.TABLE_POSITION,
                     null,
                     values);
@@ -149,6 +151,12 @@ public class PreviousPositionDataManager
 
             colIndex = cursor.getColumnIndex(PreviousPositionDatabase.COL10_TITLE);
             position.Title = cursor.getInt(colIndex);
+
+            colIndex = cursor.getColumnIndex(PreviousPositionDatabase.COL11_LONGITUDE_DIRECTION);
+            position.LongitudeDirection = cursor.getString(colIndex);
+
+            colIndex = cursor.getColumnIndex(PreviousPositionDatabase.COL12_LATITUDE_DIRECTION);
+            position.LatitudeDirection= cursor.getString(colIndex);
 
             dataArrayList.add(position);
 

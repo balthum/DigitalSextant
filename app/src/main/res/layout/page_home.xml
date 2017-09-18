@@ -6,29 +6,107 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-
     <Button
         android:id="@+id/cesBodyCamViewButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get Your Position"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="FIND ME!"
         android:textSize="22dp"
         tools:layout_editor_absoluteX="136dp"
-        tools:layout_editor_absoluteY="16dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        tools:layout_editor_absoluteY="16dp" />
 
     <ImageView
         android:id="@+id/imageViewHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/where_am_i"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/editTextLongitude"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textView3"/>
+        app:srcCompat="@drawable/star" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+        android:layout_height="?attr/actionBarSize"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="36dp" />
+
+    <TextView
+        android:id="@+id/textViewGPS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/last_known_positon"
+        android:textSize="20dp"
+        android:layout_below="@+id/textView3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp" />
+
+
+    <EditText
+        android:id="@+id/editTextLatitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewGPS"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:enabled="false"
+        android:focusable="false"
+        android:text="                                               "
+        android:textColor="@android:color/black"
+        android:textSize="24dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextLongitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextLatitude"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:enabled="false"
+        android:focusable="false"
+        android:text="                                               "
+        android:textColor="@android:color/black"
+        android:textSize="24dp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/textViewPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageViewHome"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/current_positon"
+        android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/editTextPositionLat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewPosition"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:enabled="false"
+        android:focusable="false"
+        android:text="                                               "
+        android:textColor="@android:color/black"
+        android:textSize="24dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextPositionLong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextPositionLat"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:enabled="false"
+        android:focusable="false"
+        android:text="                                               "
+        android:textColor="@android:color/black"
+        android:textSize="24dp"
+        android:textStyle="bold" />
 </RelativeLayout>

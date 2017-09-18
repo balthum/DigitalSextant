@@ -16,7 +16,9 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.transition.Visibility;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.Size;
@@ -28,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,10 +64,15 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     private SensorModule sensorModule;
     private TextView                    compassTextView, ObshTextView;
     private View                        view;
-    private String                      spinnerPositionName;                 // The current selected item in the spinner menu
+    private String                      spinnerPositionName;                 // The current selected star in the spinner menu
+    private double                      spinnerDeclination = 55.870000;                  //
     private float                       compassBearing;                      // Observed compass bearing
     private String                      compassDirection;
     private float                       observedHeight;                      // Observed Height
+    private boolean                     isCompassButtonSelected = false;     //determines if compass button is selected
+    private Spinner                     celestialBodySpinner;
+    private ImageView                   upArrowImage, downArrowImage;
+    private ImageView                   leftArrowImage, rightArrowImage;
 
 
 
@@ -390,14 +398,41 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
         camPreviewTextureView =         view.findViewById(R.id.camPreviewTextView);
         ObshTextView        =         view.findViewById(R.id.textView_observedHeight);     //TODO comment
         compassTextView       =         view.findViewById(R.id.textView_compass);    //TODO comment
-        Spinner celestialBodySpinner =  view.findViewById(R.id.starListSpinner);
+        celestialBodySpinner =  view.findViewById(R.id.starListSpinner);
 
-        CelestialBodyDatabaseManager celestialBodyDatabaseManager = new CelestialBodyDatabaseManager(getActivity());
+        leftArrowImage = view.findViewById(R.id.imageView_leftArrow);
+        rightArrowImage = view.findViewById(R.id.imageView_rightArrow);
+        upArrowImage = view.findViewById(R.id.imageView_upArrow);
+        downArrowImage = view.findViewById(R.id.imageView_downArrow);
+
+        leftArrowImage.setVisibility(View.INVISIBLE);
+        rightArrowImage.setVisibility(View.INVISIBLE);
+        upArrowImage.setVisibility(View.INVISIBLE);
+        downArrowImage.setVisibility(View.INVISIBLE);
+
+
+        getSpinner();
+
+        if ( null == camPreviewTextureView) {Log.e(TAGCAM, "Cam Preview Texture is null");}
+        else {camPreviewTextureView.setSurfaceTextureListener(camPreviewTextureListener);}
+
+
+        pushedCelestialBodyButton();
+
+        MainActivity.toolbar.setVisibility(View.GONE);
+
+
+        return view;
+    }
+
+    public void getSpinner()
+    {
+        final CelestialBodyDatabaseManager celestialBodyDatabaseManager = new CelestialBodyDatabaseManager(getActivity());
 
         // Set up Spinner
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
-                ( getActivity(), R.layout.spinner_item,
-                  celestialBodyDatabaseManager.getCelestialBodyNames() );
+                ( getActivity(), R.layout.spinner_text_layout,
+                        celestialBodyDatabaseManager.getCelestialBodyNames() );
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         celestialBodySpinner.setAdapter(arrayAdapter);
 
@@ -405,6 +440,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 spinnerPositionName = adapterView.getItemAtPosition(i).toString();
+                spinnerDeclination = celestialBodyDatabaseManager.getCelestialBodyDeclination(i);
             }
 
             @Override
@@ -412,11 +448,10 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
 
             }
         });
+    }
 
-
-        if ( null == camPreviewTextureView) {Log.e(TAGCAM, "Cam Preview Texture is null");}
-        else {camPreviewTextureView.setSurfaceTextureListener(camPreviewTextureListener);}
-
+    public void pushedCelestialBodyButton()
+    {
         Button takeFixButton = view.findViewById(R.id.takeFixButton);
         if ( null == camPreviewTextureView ) {Log.e(TAGCAM, " Cam takeFixButton is null");}
         else {
@@ -441,16 +476,9 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
                 }
             });
         }
-
-
-
-        MainActivity.toolbar.setVisibility(View.GONE);
-
-
-        return view;
     }
 
-        private void getSensorData()
+    private void getSensorData()
     {
         CelestialBodyObservation observation = new CelestialBodyObservation();
         ObservationDataManager observationDataManager = new ObservationDataManager(getActivity());
@@ -467,6 +495,26 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
 
         arrayList.add(observation);
         observationDataManager.updateObservationDatabase(arrayList);
+    }
+
+
+
+    public void pushCompassButton()
+    {
+
+        Button compassButton = view.findViewById(R.id.compassButton);
+
+        compassButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                if(leftArrowImage.equals(View.INVISIBLE) && rightArrowImage.equals(View.INVISIBLE))
+                {
+
+                }
+            }
+        });
+
     }
 
 
@@ -490,9 +538,42 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     @Override
     public void compassUpdate(String direction, float azimuth)
     {
+
         compassTextView.setText( String.format("Compass: %.1fº %s", azimuth, direction ));
         compassBearing = azimuth;
         compassDirection = direction;
+
+        if(this.compassBearing > this.spinnerDeclination + 2)
+        {
+            if(this.compassBearing <= 180)
+            {
+                rightArrowImage.setVisibility(View.INVISIBLE);
+                leftArrowImage.setVisibility(View.VISIBLE);
+
+            }
+            else if (this.compassBearing >= this.spinnerDeclination && this.compassBearing -180 <= this.spinnerDeclination)
+            {
+                rightArrowImage.setVisibility(View.INVISIBLE);
+                leftArrowImage.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                leftArrowImage.setVisibility(View.INVISIBLE);
+                rightArrowImage.setVisibility(View.VISIBLE);
+            }
+        }
+
+        else if(this.compassBearing < this.spinnerDeclination - 2)
+        {
+            leftArrowImage.setVisibility(View.INVISIBLE);
+            rightArrowImage.setVisibility(View.VISIBLE);
+        }
+
+        else if((this.spinnerDeclination - 2) <= this.compassBearing && (this.spinnerDeclination + 2) >= this.compassBearing)
+        {
+            leftArrowImage.setVisibility(View.INVISIBLE);
+            rightArrowImage.setVisibility(View.INVISIBLE);
+        }
     }
 
     @SuppressLint("DefaultLocale")

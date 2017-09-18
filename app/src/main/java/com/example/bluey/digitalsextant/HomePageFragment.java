@@ -1,12 +1,20 @@
 package com.example.bluey.digitalsextant;
 
 import android.app.Fragment;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Created by robinluna Robin Luna on 8/06/17.
@@ -15,8 +23,12 @@ import android.widget.Button;
 public class HomePageFragment extends Fragment
 {
 
-    private Button              observationButton;// Display the ObservationListPageFragment to get observations
-    private View                myView;//the View of the Fragment
+    private Button                          observationButton;// Display the ObservationListPageFragment to get observations
+    private View                            myView;//the View of the Fragment
+    private EditText                        lastLatitude, lastLongitude, currentLatitude, currentLongitude;
+    private PreviousPosition                position;
+    private PreviousPositionDataManager     previousPositionDataManager;
+    private ArrayList<PreviousPosition>     arrayList;
 
     /**
      * Default Constructor HomePageFragment
@@ -39,8 +51,58 @@ public class HomePageFragment extends Fragment
                              Bundle savedInstanceState)
     {
         myView = inflater.inflate(R.layout.page_home, container, false);//(1)
+
+        lastLatitude = (EditText) myView.findViewById(R.id.editTextLatitude);
+        lastLongitude = (EditText) myView.findViewById(R.id.editTextLongitude);
+        currentLatitude = (EditText) myView.findViewById(R.id.editTextPositionLat);
+        currentLongitude = (EditText) myView.findViewById(R.id.editTextPositionLong);
+
+        lastPosition();
+
         initiateButton();//(2)
         return myView;
+    }
+
+    public void lastPosition()
+    {
+        this.previousPositionDataManager = new PreviousPositionDataManager(getActivity());
+        this.arrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
+
+        if (arrayList.size() != 0)
+        {
+            this.position = arrayList.get(0);
+
+            lastLatitude.setBackgroundColor(Color.TRANSPARENT);
+            lastLongitude.setBackgroundColor(Color.TRANSPARENT);
+
+            lastLatitude.setText(position.getLatitudeString());
+            lastLongitude.setText(position.getLongitudeString());
+        }
+        else
+        {
+//            CountDownTimer timer = new CountDownTimer(40000, 10000) {
+//                @Override
+//                public void onTick(long l) {
+//
+//                    Toast.makeText(getActivity(), (40000 - l) + " left", Toast.LENGTH_SHORT).show();
+//
+//                }
+//
+//                @Override
+//                public void onFinish() {
+//
+//                    arrayList = previousPositionDataManager.getPositionFromDatabase();
+//                    position = arrayList.get(0);
+//
+//                    lastLatitude.setBackgroundColor(Color.TRANSPARENT);
+//                    lastLongitude.setBackgroundColor(Color.TRANSPARENT);
+//
+//                    lastLatitude.setText(position.getLatitudeString());
+//                    lastLongitude.setText(position.getLongitudeString());
+//                }
+//            };
+        }
+
     }
 
     /**
