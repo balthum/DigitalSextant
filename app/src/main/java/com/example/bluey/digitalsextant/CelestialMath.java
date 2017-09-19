@@ -165,17 +165,7 @@ public class CelestialMath
     }
 
 
-    /**
-     *
-     *  Calculate the Observed Height
-     *
-     * @param heightSextant double height of the sextant observation
-     * @return              double
-     */
-    public double heighObserved(double heightSextant)
-    {
-        return heightSextant + mainCorrection(heightSextant);
-    }
+
 
     /**
      *  Calculate the height using declination, latitude, and Local Hour Angle
@@ -341,6 +331,18 @@ public class CelestialMath
                 return 180 + azimuth;
             }
         }
+    }
+
+    /**
+     *
+     *  Calculate the Observed Height
+     *
+     * @param sextantHeight double height of the sextant observation
+     * @return              double
+     */
+    public double observedHeight(double sextantHeight)
+    {
+        return ( 0.96  / Math.tan(sextantHeight ) + sextantHeight );
     }
 
     /**

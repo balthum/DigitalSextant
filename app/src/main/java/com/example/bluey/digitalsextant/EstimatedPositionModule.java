@@ -25,7 +25,7 @@ public class EstimatedPositionModule extends CelestialMath
 
     private void calculateEstimatedPosition()
     {
-
+        LineOfPositon[] lineOfPositons = new LineOfPositon[celestialBodyObservations.size()];
         for ( int i = 0; i < celestialBodyObservations.size(); i++)
         {
             // a.) Get the assumed position for the Previous Position Database.
@@ -36,7 +36,7 @@ public class EstimatedPositionModule extends CelestialMath
             CelestialBody                       celestialBody = new CelestialBodyDatabaseManager(context)
                     .getCelestialBody( celestialBodyObservation.CelestialBodyName);
             // d.) Make correction the Sextant Height
-            double Ho  = heighObserved( celestialBodyObservation.getHeightObserver() );
+            double Ho  = observedHeight( celestialBodyObservation.getHeightObserver() );
 
 
             // e.) Calculate azimuth
@@ -55,8 +55,13 @@ public class EstimatedPositionModule extends CelestialMath
             // g.) Calculate Zn
             double Zn  = Zn(assumedPosition.getLatitude(), lhaStar, azimuth);
 
-            }
-        }  //END for Loop
+            GeoPosition geoPosition = newGeraphicPosition(ITC, Zn, assumedPosition.getLatitude(), assumedPosition.getLongitude());
+
+            lineOfPositons[i] = new LineOfPositon(geoPosition.getLatitude(), geoPosition.getLongitude(), ITC, Zn);
+            } //END for Loop
+
+
+        }
 
 
     private PreviousPosition caclculateEsstimatedPositionCircle()
@@ -116,6 +121,26 @@ public class EstimatedPositionModule extends CelestialMath
         return previousPosition.get(0);
     }
 
+    private GeoPosition newGeraphicPosition(double nauticalMiles, double bearing, double latitude, double longitude)
+    {
+        GeoPosition geoPosition = new GeoPosition(0.0, 0.0);
 
+        double dist         = nauticalMiles / 3440;
+        double brng         = Math.toRadians(bearing);
+        double lat1         = Math.toRadians(latitude);
+        double lon1         = Math.toRadians(longitude);
 
+        double lat2 = Math.asin( Math.sin(lat1) * Math.cos(dist) + Math.cos(lat1) * Math.sin(dist) * Math.cos(brng) );
+        double a = Math.atan2(Math.sin(brng) * Math.sin(dist) * Math.cos(lat1), Math.cos(dist) - Math.sin(lat1) * Math.sin(lat2));
+
+        System.out.println("a = " +  a);
+        double lon2 = lon1 + a;
+
+        lon2 = (lon2 + 3 * Math.PI ) % ( 2 * Math.PI ) - Math.PI;
+
+        geoPosition.setLatitude(lat2);
+        geoPosition.setLongitude(lon2);
+
+        return geoPosition;
+    }
 }
