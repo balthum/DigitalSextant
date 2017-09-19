@@ -25,7 +25,7 @@ public class EstimatedPositionModule extends CelestialMath
 
     private void calculateEstimatedPosition()
     {
-        LineOfPositon[] lineOfPositons = new LineOfPositon[celestialBodyObservations.size()];
+        LineOfPosition[] lineOfPositions = new LineOfPosition[celestialBodyObservations.size()];
         for ( int i = 0; i < celestialBodyObservations.size(); i++)
         {
             // a.) Get the assumed position for the Previous Position Database.
@@ -55,13 +55,20 @@ public class EstimatedPositionModule extends CelestialMath
             // g.) Calculate Zn
             double Zn  = Zn(assumedPosition.getLatitude(), lhaStar, azimuth);
 
-            GeoPosition geoPosition = newGeraphicPosition(ITC, Zn, assumedPosition.getLatitude(), assumedPosition.getLongitude());
+            lineOfPositions[i].setAssumedLocationPosition(
+                    new GeoPosition( assumedPosition.getLatitude(), assumedPosition.getLongitude() )
+            );
 
-            lineOfPositons[i] = new LineOfPositon(geoPosition.getLatitude(), geoPosition.getLongitude(), ITC, Zn);
-            } //END for Loop
+            lineOfPositions[i].setBearingToLOP( Zn );
+            lineOfPositions[i].setInterceptDistanceNauticalMiles( ITC );
+            lineOfPositions[i].setLopLocationPosition(
+                    newGeographicPosition(ITC, Zn, assumedPosition.getLatitude(), assumedPosition.getLongitude() )
+            );
+
+        } //END for Loop
 
 
-        }
+    }
 
 
     private PreviousPosition caclculateEsstimatedPositionCircle()
@@ -121,7 +128,7 @@ public class EstimatedPositionModule extends CelestialMath
         return previousPosition.get(0);
     }
 
-    private GeoPosition newGeraphicPosition(double nauticalMiles, double bearing, double latitude, double longitude)
+    private GeoPosition newGeographicPosition(double nauticalMiles, double bearing, double latitude, double longitude)
     {
         GeoPosition geoPosition = new GeoPosition(0.0, 0.0);
 
