@@ -64,12 +64,12 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     private SensorModule sensorModule;
     private TextView                    compassTextView, ObshTextView;
     private View                        view;
-    private String                      spinnerPositionName;                 // The current selected star in the spinner menu
-    private double                      spinnerDeclination = 55.870000;                  //
+    private String                      spinnerCelestialBodyName;                 // The current selected star in the spinner menu
+    private double                      spinnerDeclination;                  //
+    private double                      spinnerSHA;
     private float                       compassBearing;                      // Observed compass bearing
     private String                      compassDirection;
     private float                       observedHeight;                      // Observed Height
-    private boolean                     isCompassButtonSelected = false;     //determines if compass button is selected
     private Spinner                     celestialBodySpinner;
     private ImageView                   upArrowImage, downArrowImage;
     private ImageView                   leftArrowImage, rightArrowImage;
@@ -439,8 +439,9 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
         celestialBodySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                spinnerPositionName = adapterView.getItemAtPosition(i).toString();
+                spinnerCelestialBodyName = adapterView.getItemAtPosition(i).toString();
                 spinnerDeclination = celestialBodyDatabaseManager.getCelestialBodyDeclination(i);
+                spinnerSHA = celestialBodyDatabaseManager.getCelestialBodySiderealHourAngle(i);
             }
 
             @Override
@@ -487,7 +488,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
         observation.setTitle("Observation " + (arrayList.size() + 1));
 
         // Get the Star name and add to the observation
-        observation.setCelestialBodyName(spinnerPositionName);
+        observation.setCelestialBodyName(spinnerCelestialBodyName);
 
         observation.setCompassHeading(compassBearing);
         observation.setHeightObserver(observedHeight);
@@ -535,15 +536,32 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
         sensorModule.onResume();
     }
 
+    public double getFutureCompassBearing()
+    {
+        CelestialMath celestialMath = new CelestialMath();
+
+        PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(getActivity());
+        ArrayList<PreviousPosition> positionArrayList = new ArrayList<>(previousPositionDataManager.getPositionFromDatabase());
+
+        PreviousPosition position = positionArrayList.get(0);
+
+        return celestialMath.starBearingFromAssumedPosition(spinnerDeclination,spinnerSHA,position.getLatitude());
+    }
+
     @Override
     public void compassUpdate(String direction, float azimuth)
     {
 
-        compassTextView.setText( String.format("Compass: %.1fº %s", azimuth, direction ));
+        double futureCompassBearing = getFutureCompassBearing();
+
+        int roundCompass = (int) azimuth;
+        roundCompass = Math.round(azimuth);
+        compassTextView.setText( String.format("Compass: %dº %s", roundCompass, direction ));
         compassBearing = azimuth;
         compassDirection = direction;
 
-        if(this.compassBearing > this.spinnerDeclination + 2)
+
+        if(this.compassBearing > futureCompassBearing + 2)
         {
             if(this.compassBearing <= 180)
             {
@@ -551,7 +569,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
                 leftArrowImage.setVisibility(View.VISIBLE);
 
             }
-            else if (this.compassBearing >= this.spinnerDeclination && this.compassBearing -180 <= this.spinnerDeclination)
+            else if (this.compassBearing >= futureCompassBearing && this.compassBearing -180 <= futureCompassBearing)
             {
                 rightArrowImage.setVisibility(View.INVISIBLE);
                 leftArrowImage.setVisibility(View.VISIBLE);
@@ -563,13 +581,13 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             }
         }
 
-        else if(this.compassBearing < this.spinnerDeclination - 2)
+        else if(this.compassBearing < futureCompassBearing - 2)
         {
             leftArrowImage.setVisibility(View.INVISIBLE);
             rightArrowImage.setVisibility(View.VISIBLE);
         }
 
-        else if((this.spinnerDeclination - 2) <= this.compassBearing && (this.spinnerDeclination + 2) >= this.compassBearing)
+        else if((futureCompassBearing - 2) <= this.compassBearing && (futureCompassBearing + 2) >= this.compassBearing)
         {
             leftArrowImage.setVisibility(View.INVISIBLE);
             rightArrowImage.setVisibility(View.INVISIBLE);

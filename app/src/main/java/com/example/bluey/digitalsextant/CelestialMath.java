@@ -172,7 +172,7 @@ public class CelestialMath
      * @param heightSextant double height of the sextant observation
      * @return              double
      */
-    public double heighObserved(double heightSextant)
+    public double heightObserved(double heightSextant)
     {
         return heightSextant + mainCorrection(heightSextant);
     }

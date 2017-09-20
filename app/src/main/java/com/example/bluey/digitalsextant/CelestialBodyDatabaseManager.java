@@ -111,6 +111,12 @@ public class CelestialBodyDatabaseManager
         return celestialBody.getDeclination();
     }
 
+    public double getCelestialBodySiderealHourAngle(int position)
+    {
+        CelestialBody celestialBody = celestialBodiesSet.get(position);
+        return celestialBody.getSiderealHourAngle();
+    }
+
     /**
      *
      *  Get a Celestial Body Object by searching for it name.
