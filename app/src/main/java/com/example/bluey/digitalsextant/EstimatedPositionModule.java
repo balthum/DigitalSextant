@@ -25,15 +25,51 @@ public class EstimatedPositionModule extends CelestialMath
 
     private void calculateEstimatedPosition()
     {
-        Double sextantHeight = 0.0;
-
-        // .)
+        LineOfPosition[] lineOfPositions = new LineOfPosition[celestialBodyObservations.size()];
         for ( int i = 0; i < celestialBodyObservations.size(); i++)
         {
-            // a.) add correction sextant Height
-            sextantHeight = mainCorrection(celestialBodyObservations.get(i).getHeightObserver()) + sextantHeight;
-        }
+            // a.) Get the assumed position for the Previous Position Database.
+            PreviousPosition                  assumedPosition = getLastKnowPosition();
+            // b.) Get the observation for the Celestial Body observed.
+            CelestialBodyObservation celestialBodyObservation = celestialBodyObservations.get(i);
+            // c.) Get the almanac information for the Celestial Body
+            CelestialBody                       celestialBody = new CelestialBodyDatabaseManager(context)
+                    .getCelestialBody( celestialBodyObservation.CelestialBodyName);
+            // d.) Make correction the Sextant Height
+            double Ho  = observedHeight( celestialBodyObservation.getHeightObserver() );
+
+
+            // e.) Calculate azimuth
+            double ghaAries = ghaAries(celestialBodyObservation);
+            double ghaStar  = gha(ghaAries, celestialBody.getSiderealHourAngle());
+
+            double lhaStar  = lha( ghaStar,assumedPosition.getLongitude() );
+
+            double hcStar   = heightCalculated(
+                    celestialBody.getDeclination(), assumedPosition.getLatitude(), lhaStar );
+            double azimuth  = azimuth(
+                    celestialBody.getDeclination(), assumedPosition.getLatitude(),lhaStar, hcStar
+                    );
+            // f.) Calculate the intercept distance
+            double ITC = intercept(hcStar, Ho);
+            // g.) Calculate Zn
+            double Zn  = Zn(assumedPosition.getLatitude(), lhaStar, azimuth);
+
+            lineOfPositions[i].setAssumedLocationPosition(
+                    new GeoPosition( assumedPosition.getLatitude(), assumedPosition.getLongitude() )
+            );
+
+            lineOfPositions[i].setBearingToLOP( Zn );
+            lineOfPositions[i].setInterceptDistanceNauticalMiles( ITC );
+            lineOfPositions[i].setLopLocationPosition(
+                    newGeographicPosition(ITC, Zn, assumedPosition.getLatitude(), assumedPosition.getLongitude() )
+            );
+
+        } //END for Loop
+
+
     }
+
 
     private PreviousPosition caclculateEsstimatedPositionCircle()
     {
@@ -92,6 +128,26 @@ public class EstimatedPositionModule extends CelestialMath
         return previousPosition.get(0);
     }
 
+    private GeoPosition newGeographicPosition(double nauticalMiles, double bearing, double latitude, double longitude)
+    {
+        GeoPosition geoPosition = new GeoPosition(0.0, 0.0);
 
+        double dist         = nauticalMiles / 3440;
+        double brng         = Math.toRadians(bearing);
+        double lat1         = Math.toRadians(latitude);
+        double lon1         = Math.toRadians(longitude);
 
+        double lat2 = Math.asin( Math.sin(lat1) * Math.cos(dist) + Math.cos(lat1) * Math.sin(dist) * Math.cos(brng) );
+        double a = Math.atan2(Math.sin(brng) * Math.sin(dist) * Math.cos(lat1), Math.cos(dist) - Math.sin(lat1) * Math.sin(lat2));
+
+        System.out.println("a = " +  a);
+        double lon2 = lon1 + a;
+
+        lon2 = (lon2 + 3 * Math.PI ) % ( 2 * Math.PI ) - Math.PI;
+
+        geoPosition.setLatitude(lat2);
+        geoPosition.setLongitude(lon2);
+
+        return geoPosition;
+    }
 }

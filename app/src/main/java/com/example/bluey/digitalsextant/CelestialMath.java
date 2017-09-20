@@ -165,17 +165,7 @@ public class CelestialMath
     }
 
 
-    /**
-     *
-     *  Calculate the Observed Height
-     *
-     * @param heightSextant double height of the sextant observation
-     * @return              double
-     */
-    public double heightObserved(double heightSextant)
-    {
-        return heightSextant + mainCorrection(heightSextant);
-    }
+
 
     /**
      *  Calculate the height using declination, latitude, and Local Hour Angle
@@ -206,7 +196,7 @@ public class CelestialMath
      *
      */
 
-    public double zenith(double declination, double latitude, double lha, double heightCalculated)
+    public double azimuth(double declination, double latitude, double lha, double heightCalculated)
     {
         return Math.asin(
                 (Math.sin(declination) * Math.cos(latitude)
@@ -251,13 +241,13 @@ public class CelestialMath
 
     /**
      *
-     * Calculate the Azimuth
+     * Calculate the ITC
      *
      * @param heightCalculated  Double Calculated height (Hc)
      * @param heightObserved    Double Observed height (Ho)
      * @return                  Double
      */
-    public double azimuth(double heightCalculated, double heightObserved)
+    public double intercept(double heightCalculated, double heightObserved)
     {
         return Math.abs(heightCalculated - heightObserved);
     }
@@ -314,6 +304,45 @@ public class CelestialMath
                                + Math.cos(latitudePointA) * Math.cos(latitudePointB)
                                * Math.cos(longitudePointB - longitudePointA        )
                         );
+    }
+
+
+    public double Zn(double assumedLatitude, double lhaStar, double azimuth )
+    {
+        if ( 0 < assumedLatitude )
+        {
+            if (180 < lhaStar )
+            {
+                return azimuth;
+            }
+
+            else
+            {
+                return 360 - azimuth;
+            }
+        }
+        else {
+            if (180 < lhaStar)
+            {
+                return 180 - azimuth;
+            }
+            else
+            {
+                return 180 + azimuth;
+            }
+        }
+    }
+
+    /**
+     *
+     *  Calculate the Observed Height
+     *
+     * @param sextantHeight double height of the sextant observation
+     * @return              double
+     */
+    public double observedHeight(double sextantHeight)
+    {
+        return ( 0.96  / Math.tan(sextantHeight ) + sextantHeight );
     }
 
     /**
