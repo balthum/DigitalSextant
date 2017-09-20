@@ -459,14 +459,24 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             takeFixButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    getSensorData();
+
+                    if(downArrowImage.getVisibility() == View.INVISIBLE && upArrowImage.getVisibility() == View.INVISIBLE)
+                    {
+                        getSensorData();
+                        Toast.makeText(getActivity(),"OBSERVATIONS ADDED", Toast.LENGTH_SHORT).show();
+                    }
+
+                    else
+                    {
+                        Toast.makeText(getActivity(), "OBSERVATIONS NOT ADDED, star isn't in the green box", Toast.LENGTH_LONG).show();
+                    }
+
 
                     ObservationListPageFragment observationListFragment = new ObservationListPageFragment();
                     android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_container,observationListFragment);
                     fragmentTransaction.commit();
 
-                    Toast.makeText(getActivity(),"OBSERVATIONS ADDED", Toast.LENGTH_SHORT).show();
 
                     MainActivity.navigationView.setCheckedItem(R.id.observation_list);
 
@@ -567,7 +577,6 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             {
                 rightArrowImage.setVisibility(View.INVISIBLE);
                 leftArrowImage.setVisibility(View.VISIBLE);
-
             }
             else if (this.compassBearing >= futureCompassBearing && this.compassBearing -180 <= futureCompassBearing)
             {
@@ -599,6 +608,24 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     public void observedHeightUpdate(float observedHeight)
     {
         ObshTextView.setText(String.format("OBSh: %.1fº", observedHeight));
-        this.observedHeight = observedHeight;
+
+        if(spinnerDeclination > observedHeight)
+        {
+            downArrowImage.setVisibility(View.INVISIBLE);
+            upArrowImage.setVisibility(View.VISIBLE);
+        }
+
+        if(spinnerDeclination < observedHeight)
+        {
+            upArrowImage.setVisibility(View.INVISIBLE);
+            downArrowImage.setVisibility(View.VISIBLE);
+        }
+
+        if(spinnerDeclination + 1 >= observedHeight && spinnerDeclination - 1 <= observedHeight)
+        {
+            upArrowImage.setVisibility(View.INVISIBLE);
+            downArrowImage.setVisibility(View.INVISIBLE);
+            this.observedHeight = observedHeight;
+        }
     }
 }
