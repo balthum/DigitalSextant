@@ -73,6 +73,9 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     private Spinner                     celestialBodySpinner;
     private ImageView                   upArrowImage, downArrowImage;
     private ImageView                   leftArrowImage, rightArrowImage;
+    private Button                      takeFixButton, compassButton;
+    private boolean                     isCompassButtonpushed = false;
+    private boolean                     isupwards = false;
 
 
 
@@ -419,6 +422,8 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
 
         pushedCelestialBodyButton();
 
+        pushCompassButton();
+
         MainActivity.toolbar.setVisibility(View.GONE);
 
 
@@ -453,7 +458,9 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
 
     public void pushedCelestialBodyButton()
     {
-        Button takeFixButton = view.findViewById(R.id.takeFixButton);
+        this.takeFixButton = view.findViewById(R.id.takeFixButton);
+        this.takeFixButton.setEnabled(false);
+
         if ( null == camPreviewTextureView ) {Log.e(TAGCAM, " Cam takeFixButton is null");}
         else {
             takeFixButton.setOnClickListener(new View.OnClickListener() {
@@ -464,26 +471,29 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
                     {
                         getSensorData();
                         Toast.makeText(getActivity(),"OBSERVATIONS ADDED", Toast.LENGTH_SHORT).show();
+
+
+                        ObservationListPageFragment observationListFragment = new ObservationListPageFragment();
+                        android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.fragment_container,observationListFragment);
+                        fragmentTransaction.commit();
+
+
+                        MainActivity.navigationView.setCheckedItem(R.id.observation_list);
+
+                        MainActivity.toolbar.setVisibility(View.VISIBLE);
+
+                        //set the title of the toolbar to Observation List
+                        MainActivity.toolbar.setTitle("Observation List");
                     }
 
                     else
                     {
-                        Toast.makeText(getActivity(), "OBSERVATIONS NOT ADDED, star isn't in the green box", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "OBSERVATIONS NOT ADDED, follow the arrows", Toast.LENGTH_LONG).show();
                     }
 
 
-                    ObservationListPageFragment observationListFragment = new ObservationListPageFragment();
-                    android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_container,observationListFragment);
-                    fragmentTransaction.commit();
 
-
-                    MainActivity.navigationView.setCheckedItem(R.id.observation_list);
-
-                    MainActivity.toolbar.setVisibility(View.VISIBLE);
-
-                    //set the title of the toolbar to Observation List
-                    MainActivity.toolbar.setTitle("Observation List");
                 }
             });
         }
@@ -513,23 +523,26 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     public void pushCompassButton()
     {
 
-        Button compassButton = view.findViewById(R.id.compassButton);
+        compassButton = view.findViewById(R.id.compassButton);
 
         compassButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
-                if(leftArrowImage.equals(View.INVISIBLE) && rightArrowImage.equals(View.INVISIBLE))
+                if(leftArrowImage.getVisibility() == View.INVISIBLE && rightArrowImage.getVisibility() == View.INVISIBLE)
                 {
-
+                    takeFixButton.setEnabled(true);
+                    compassButton.setEnabled(false);
+                    isCompassButtonpushed = true;
+                }
+                else
+                {
+                    Toast.makeText(getActivity(), "COMPASS BEARING NOT taken, make sure to follow the arrows", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
     }
-
-
-
 
 
     @Override
@@ -559,48 +572,67 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     }
 
     @Override
-    public void compassUpdate(String direction, float azimuth)
-    {
+    public void compassUpdate(String direction, float azimuth) {
 
         double futureCompassBearing = getFutureCompassBearing();
 
         int roundCompass = (int) azimuth;
         roundCompass = Math.round(azimuth);
-        compassTextView.setText( String.format("Compass: %dº %s", roundCompass, direction ));
-        compassBearing = azimuth;
-        compassDirection = direction;
+        compassTextView.setText(String.format("Compass: %dº %s", roundCompass, direction));
 
-
-        if(this.compassBearing > futureCompassBearing + 2)
+        if (isCompassButtonpushed)
+        {}
+        else
         {
-            if(this.compassBearing <= 180)
+            compassBearing = azimuth;
+            compassDirection = direction;
+
+            if (futureCompassBearing + 1 >= azimuth && futureCompassBearing - 1 <= azimuth)
             {
                 rightArrowImage.setVisibility(View.INVISIBLE);
-                leftArrowImage.setVisibility(View.VISIBLE);
-            }
-            else if (this.compassBearing >= futureCompassBearing && this.compassBearing -180 <= futureCompassBearing)
-            {
-                rightArrowImage.setVisibility(View.INVISIBLE);
-                leftArrowImage.setVisibility(View.VISIBLE);
+                leftArrowImage.setVisibility(View.INVISIBLE);
             }
             else
             {
-                leftArrowImage.setVisibility(View.INVISIBLE);
-                rightArrowImage.setVisibility(View.VISIBLE);
+                if (futureCompassBearing > 180)
+                {
+                    if (futureCompassBearing > azimuth && (futureCompassBearing - azimuth) <= 180)
+                    {
+                        leftArrowImage.setVisibility(View.INVISIBLE);
+                        rightArrowImage.setVisibility(View.VISIBLE);
+                    }
+                    else if (futureCompassBearing > azimuth && (futureCompassBearing - azimuth) > 180)
+                    {
+                        rightArrowImage.setVisibility(View.INVISIBLE);
+                        leftArrowImage.setVisibility(View.VISIBLE);
+                    }
+                    else if (futureCompassBearing < azimuth)
+                    {
+                        rightArrowImage.setVisibility(View.INVISIBLE);
+                        leftArrowImage.setVisibility(View.VISIBLE);
+                    }
+                }
+                else
+                {
+                    if (futureCompassBearing < azimuth && (azimuth - futureCompassBearing) <= 180)
+                    {
+                        rightArrowImage.setVisibility(View.INVISIBLE);
+                        leftArrowImage.setVisibility(View.VISIBLE);
+                    }
+                    else if (futureCompassBearing < azimuth && (azimuth - futureCompassBearing) > 180)
+                    {
+                        leftArrowImage.setVisibility(View.INVISIBLE);
+                        rightArrowImage.setVisibility(View.VISIBLE);
+                    }
+                    else if (futureCompassBearing > azimuth)
+                    {
+                        leftArrowImage.setVisibility(View.INVISIBLE);
+                        rightArrowImage.setVisibility(View.VISIBLE);
+                    }
+                }
             }
         }
 
-        else if(this.compassBearing < futureCompassBearing - 2)
-        {
-            leftArrowImage.setVisibility(View.INVISIBLE);
-            rightArrowImage.setVisibility(View.VISIBLE);
-        }
-
-        else if((futureCompassBearing - 2) <= this.compassBearing && (futureCompassBearing + 2) >= this.compassBearing)
-        {
-            leftArrowImage.setVisibility(View.INVISIBLE);
-            rightArrowImage.setVisibility(View.INVISIBLE);
-        }
     }
 
     @SuppressLint("DefaultLocale")
@@ -608,24 +640,41 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
     public void observedHeightUpdate(float observedHeight)
     {
         ObshTextView.setText(String.format("OBSh: %.1fº", observedHeight));
+        this.observedHeight = observedHeight;
 
-        if(spinnerDeclination > observedHeight)
+        if(isCompassButtonpushed)
         {
-            downArrowImage.setVisibility(View.INVISIBLE);
-            upArrowImage.setVisibility(View.VISIBLE);
-        }
+            if(isupwards)
+            {
+                if(spinnerDeclination > observedHeight)
+                {
+                    downArrowImage.setVisibility(View.INVISIBLE);
+                    upArrowImage.setVisibility(View.VISIBLE);
+                }
 
-        if(spinnerDeclination < observedHeight)
-        {
-            upArrowImage.setVisibility(View.INVISIBLE);
-            downArrowImage.setVisibility(View.VISIBLE);
-        }
-
-        if(spinnerDeclination + 1 >= observedHeight && spinnerDeclination - 1 <= observedHeight)
-        {
-            upArrowImage.setVisibility(View.INVISIBLE);
-            downArrowImage.setVisibility(View.INVISIBLE);
-            this.observedHeight = observedHeight;
+                else if(spinnerDeclination < observedHeight)
+                {
+                    upArrowImage.setVisibility(View.INVISIBLE);
+                    downArrowImage.setVisibility(View.VISIBLE);
+                }
+                else if(spinnerDeclination + 1 >= observedHeight && spinnerDeclination - 1 <= observedHeight)
+                {
+                    upArrowImage.setVisibility(View.INVISIBLE);
+                    downArrowImage.setVisibility(View.INVISIBLE);
+                }
+            }
+            else
+            {
+                if (Math.round((double)observedHeight) == 1)
+                {
+                    isupwards = true;
+                }
+                else
+                {
+                    downArrowImage.setVisibility(View.INVISIBLE);
+                    upArrowImage.setVisibility(View.VISIBLE);
+                }
+            }
         }
     }
 }

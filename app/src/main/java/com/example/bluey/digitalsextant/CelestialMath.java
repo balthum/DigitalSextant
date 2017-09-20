@@ -279,12 +279,13 @@ public class CelestialMath
 
         double lha              = lha( gha(ghaAries, starSHA), assumedLatitude);
 
-        return Math.atan(
+        double h = Math.atan(
 
                 Math.sin(lha) /
                         ( Math.sin(assumedLatitude) * Math.cos(lha) - Math.tan(starDeclination) * Math.cos(assumedLatitude) )
 
                         );
+        return (Math.toDegrees(h+360)%360);
     }
 
     /**
