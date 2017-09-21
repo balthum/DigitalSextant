@@ -467,32 +467,23 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
                 @Override
                 public void onClick(View view) {
 
-                    if(downArrowImage.getVisibility() == View.INVISIBLE && upArrowImage.getVisibility() == View.INVISIBLE)
-                    {
-                        getSensorData();
-                        Toast.makeText(getActivity(),"OBSERVATIONS ADDED", Toast.LENGTH_SHORT).show();
+
+                    getSensorData();
+                    Toast.makeText(getActivity(),"OBSERVATIONS ADDED", Toast.LENGTH_SHORT).show();
 
 
-                        ObservationListPageFragment observationListFragment = new ObservationListPageFragment();
-                        android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.fragment_container,observationListFragment);
-                        fragmentTransaction.commit();
+                    ObservationListPageFragment observationListFragment = new ObservationListPageFragment();
+                    android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container,observationListFragment);
+                    fragmentTransaction.commit();
 
 
-                        MainActivity.navigationView.setCheckedItem(R.id.observation_list);
+                    MainActivity.navigationView.setCheckedItem(R.id.observation_list);
 
-                        MainActivity.toolbar.setVisibility(View.VISIBLE);
+                    MainActivity.toolbar.setVisibility(View.VISIBLE);
 
-                        //set the title of the toolbar to Observation List
-                        MainActivity.toolbar.setTitle("Observation List");
-                    }
-
-                    else
-                    {
-                        Toast.makeText(getActivity(), "OBSERVATIONS NOT ADDED, follow the arrows", Toast.LENGTH_LONG).show();
-                    }
-
-
+                    //set the title of the toolbar to Observation List
+                    MainActivity.toolbar.setTitle("Observation List");
 
                 }
             });
@@ -587,7 +578,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             compassBearing = azimuth;
             compassDirection = direction;
 
-            if (futureCompassBearing + 2 >= azimuth && futureCompassBearing - 2 <= azimuth)
+            if (futureCompassBearing + 5 >= azimuth && futureCompassBearing - 5 <= azimuth)
             {
                 rightArrowImage.setVisibility(View.INVISIBLE);
                 leftArrowImage.setVisibility(View.INVISIBLE);
