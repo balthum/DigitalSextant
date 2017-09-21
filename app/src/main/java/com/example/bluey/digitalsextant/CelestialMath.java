@@ -21,12 +21,12 @@ public class CelestialMath
      */
     public double julianDay (CelestialBodyObservation celestialBodyObservation)
     {
-        int year    = celestialBodyObservation.getYear();
-        int month   = celestialBodyObservation.getMonth();
-        int day     = celestialBodyObservation.getDay();
-        int hour    = celestialBodyObservation.getHour();
-        int minute  = celestialBodyObservation.getMinute();
-        int second  = celestialBodyObservation.getSecond();
+        double year    = celestialBodyObservation.getYear();
+        double month   = celestialBodyObservation.getMonth();
+        double day     = celestialBodyObservation.getDay();
+        double hour    = celestialBodyObservation.getHour();
+        double minute  = celestialBodyObservation.getMinute();
+        double second  = celestialBodyObservation.getSecond();
 
         double JD = (( 367 * year - ( Math.floor( 7 * ( year + Math.floor(( month + 9) / 12 )) / 4 )
                 - Math.floor( 3 * (Math.floor(( year + ( month - 9 ) / 7)/100 + 1) / 4)
@@ -36,7 +36,7 @@ public class CelestialMath
         return JD;
     }
 
-    public double julianDay (int year, int month, int day, int hour, int minute, int second)
+    public double julianDay (double year, double month, double day, double hour, double minute, double second)
     {
         double JD = (( 367 * year - ( Math.floor( 7 * ( year + Math.floor(( month + 9) / 12 )) / 4 )
                 - Math.floor( 3 * (Math.floor(( year + ( month - 9 ) / 7)/100 + 1) / 4)
@@ -70,7 +70,13 @@ public class CelestialMath
      */
     public double ghaAries (double julianDay, double julianCentury)
     {
-        return ( 280.46061837 + (360.98564736629 * (julianDay - 2451545) ) + (0.000387933 * Math.pow(julianCentury, 2)) -  (Math.pow(julianCentury, 3) / 38710000) ) % 360;
+        double l = 360.98564736629 * (julianDay - 2451545);
+        double m = 0.000387933 * julianCentury * julianCentury;
+        double n = julianCentury * julianCentury * julianCentury/ 38710000;
+        double o = 280.46061837 + l  + m - n;
+
+
+        return o  % 360;
     }
 
     /**
@@ -265,12 +271,12 @@ public class CelestialMath
         Calendar date = Calendar.getInstance(java.util.TimeZone.getTimeZone("GMT"));
 
         //(1)
-        int year                = date.get(Calendar.YEAR);
-        int month               = date.get(Calendar.MONTH ) + 1;
-        int day                 = date.get(Calendar.DAY_OF_MONTH);
-        int hour                = date.get(Calendar.HOUR_OF_DAY);
-        int minute              = date.get(Calendar.MINUTE);
-        int second              = date.get(Calendar.SECOND);
+        double year                = date.get(Calendar.YEAR);
+        double month               = date.get(Calendar.MONTH ) + 1;
+        double day                 = date.get(Calendar.DAY_OF_MONTH);
+        double hour                = date.get(Calendar.HOUR_OF_DAY);
+        double minute              = date.get(Calendar.MINUTE);
+        double second              = date.get(Calendar.SECOND);
         double julianDay        = julianDay(year, month, day, hour, minute, second);
         double julianCentury    = julianCentury(julianDay);
 

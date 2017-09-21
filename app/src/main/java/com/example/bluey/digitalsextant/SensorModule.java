@@ -81,8 +81,6 @@ public class SensorModule implements SensorEventListener
             }
         }
 
-        //sensorManager.unregisterListener(this,accelerometerSensor);
-        //sensorManager.unregisterListener(this, magnetometerSensor);
     }
 
     /**
@@ -111,9 +109,6 @@ public class SensorModule implements SensorEventListener
             rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
             haveSensor = sensorManager.registerListener(this, rotationSensor, SensorManager.SENSOR_DELAY_UI);
         }
-        //for the system's orientation sensor registered listeners
-        //sensorManager.registerListener(this, magnetometerSensor,SensorManager.SENSOR_DELAY_NORMAL);
-        //sensorManager.registerListener(this, accelerometerSensor,SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     public void noSensorAlert()
@@ -194,51 +189,7 @@ public class SensorModule implements SensorEventListener
 
         sensorChange.compassUpdate(getDirection(), getAzimuth());
 
-//        //(1)
-//        //if(sensorEvent.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
-//          //  magnetic = sensorEvent.values.clone();
-//
-//        //(2)
-//        //if(sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
-//          //  acceleration = sensorEvent.values.clone();
-//
-//        //(3)
-//        SensorManager.getRotationMatrix(rotation, null, acceleration,magnetic);
-//
-//
-//        float xAxis = ((float)(Math.toDegrees(orientation[1])+360)%360);// around the x axis
-//
-//        //if(xAxis >= 268 && xAxis <= 272)
-//        //{
-//            //(4)
-//          //  setAzimuth((float) ((Math.toDegrees(SensorManager.getOrientation(rotation,orientation)[0])+360)%360));//around the z axis
-//        //}
-//
-//        //(5)
-//        this.observedHeight = (float) (90 + Math.toDegrees(SensorManager.getOrientation(rotation, orientation)[1] ));
-//
-//        sensorChange.observedHeightUpdate(this.observedHeight);
-//
-//        //(6)
-//        if (getAzimuth() >= 338 || getAzimuth() <= 22)
-//            setDirection("N");
-//        if(getAzimuth() < 338 && getAzimuth() > 292)
-//            setDirection("NW");
-//        if(getAzimuth() <= 292 && getAzimuth() > 247)
-//            setDirection("W");
-//        if(getAzimuth() <= 247 && getAzimuth() > 202)
-//            setDirection("SW");
-//        if(getAzimuth() <= 202 && getAzimuth() > 157)
-//            setDirection("S");
-//        if(getAzimuth() <= 157 && getAzimuth() > 112)
-//            setDirection("SE");
-//        if(getAzimuth() <= 112 && getAzimuth() > 67)
-//            setDirection("E");
-//        else if(getAzimuth() <= 67 && getAzimuth() > 22)
-//            setDirection("NE");
-//
-//        //(7)
-//        sensorChange.compassUpdate(getDirection(), getAzimuth());
+
     }
 
     /**

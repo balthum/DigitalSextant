@@ -587,7 +587,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             compassBearing = azimuth;
             compassDirection = direction;
 
-            if (futureCompassBearing + 1 >= azimuth && futureCompassBearing - 1 <= azimuth)
+            if (futureCompassBearing + 2 >= azimuth && futureCompassBearing - 2 <= azimuth)
             {
                 rightArrowImage.setVisibility(View.INVISIBLE);
                 leftArrowImage.setVisibility(View.INVISIBLE);
@@ -657,7 +657,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
                     upArrowImage.setVisibility(View.INVISIBLE);
                     downArrowImage.setVisibility(View.VISIBLE);
                 }
-                else if(spinnerDeclination + 1 >= observedHeight && spinnerDeclination - 1 <= observedHeight)
+                else if(spinnerDeclination + 2 >= observedHeight && spinnerDeclination - 2 <= observedHeight)
                 {
                     upArrowImage.setVisibility(View.INVISIBLE);
                     downArrowImage.setVisibility(View.INVISIBLE);
