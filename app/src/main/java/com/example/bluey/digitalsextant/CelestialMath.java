@@ -166,7 +166,14 @@ public class CelestialMath
      */
     public double lha(double gha, double observationLongitude)
     {
-        return (observationLongitude > 0 ? ( gha + observationLongitude ) : (gha - observationLongitude ) );
+        double a =  gha + observationLongitude;
+
+        if (360 < a)
+            return a - 360;
+        else if (0 > a)
+            return a + 360;
+        else
+            return a;
     }
 
 
@@ -184,10 +191,11 @@ public class CelestialMath
      */
     public double heightCalculated(double declination, double latitude, double lha)
     {
-        return Math.asin(
-                Math.sin(declination) * Math.sin(latitude)
-                + Math.cos(declination) * Math.cos(latitude) * Math.cos(lha)
-        );
+        latitude = Math.toRadians(latitude);
+        declination = Math.toRadians(declination);
+        lha = Math.toRadians(lha);
+
+        return Math.toDegrees(Math.asin(Math.sin(latitude) * Math.sin(declination) + Math.cos(latitude) * Math.cos(declination) * Math.cos(lha)));
     }
 
     /**
@@ -263,10 +271,10 @@ public class CelestialMath
      *
      * @param starDeclination   Double Celestial Bodies declination.
      * @param starSHA           Double Celestial Bodies Sidereal Hour Angle (SHA).
-     * @param assumedLatitude   Double Latitude in decimal notation where (-) is South and (+) is North
+     * @param assumedLongitude   Double Latitude in decimal notation where (-) is South and (+) is North
      * @return                  Double Compass Bearing to the Celestial Body from the assumed position.
      */
-    public double starBearingFromAssumedPosition( double starDeclination, double starSHA, double assumedLatitude)
+    public double starBearingFromAssumedPosition( double starDeclination, double starSHA, double assumedLongitude, double assumedLatitude)
     {
         Calendar date = Calendar.getInstance(java.util.TimeZone.getTimeZone("GMT"));
 
@@ -282,15 +290,20 @@ public class CelestialMath
 
         double ghaAries         = ghaAries(julianDay, julianCentury);
 
-        double lha              = lha( gha(ghaAries, starSHA), assumedLatitude);
+        double gha              = gha(ghaAries, starSHA);
 
-        double h = Math.atan(
+        double lha              = lha( gha, assumedLongitude);
 
-                Math.sin(lha) /
-                        ( Math.sin(assumedLatitude) * Math.cos(lha) - Math.tan(starDeclination) * Math.cos(assumedLatitude) )
+        double hc               = (heightCalculated(starDeclination,assumedLatitude,lha));
 
-                        );
-        return (Math.toDegrees(h+360)%360);
+        hc = Math.toRadians(hc);
+
+        double h = Math.acos((Math.sin(Math.toRadians(starDeclination)) -
+                Math.sin(Math.toRadians(assumedLatitude)) * Math.sin(hc)) / (Math.cos(Math.toRadians(assumedLatitude)) * Math.cos(hc)));
+
+        //double h = Math.atan(Math.sin(lha) / ( Math.sin(assumedLongitude) * Math.cos(lha) - Math.tan(starDeclination) * Math.cos(assumedLongitude) ));
+
+        return Zn(assumedLatitude,lha, Math.toDegrees(h));
     }
 
     /**
@@ -315,7 +328,7 @@ public class CelestialMath
 
     public double Zn(double assumedLatitude, double lhaStar, double azimuth )
     {
-        if ( 0 < assumedLatitude )
+        if ( 0 < assumedLatitude ) // North
         {
             if (180 < lhaStar )
             {
@@ -327,6 +340,7 @@ public class CelestialMath
                 return 360 - azimuth;
             }
         }
+        // South
         else {
             if (180 < lhaStar)
             {

@@ -568,7 +568,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
 
         PreviousPosition position = positionArrayList.get(0);
 
-        return celestialMath.starBearingFromAssumedPosition(spinnerDeclination,spinnerSHA,position.getLatitude());
+        return celestialMath.starBearingFromAssumedPosition(spinnerDeclination,spinnerSHA,position.getLongitude(), position.getLatitude());
     }
 
     @Override
