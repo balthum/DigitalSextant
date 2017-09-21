@@ -61,9 +61,16 @@ public class EstimatedPositionModule extends CelestialMath
 
             lineOfPositions[i].setBearingToLOP( Zn );
             lineOfPositions[i].setInterceptDistanceNauticalMiles( ITC );
+
+            // Set the lop location
             lineOfPositions[i].setLopLocationPosition(
                     newGeographicPosition(ITC, Zn, assumedPosition.getLatitude(), assumedPosition.getLongitude() )
             );
+            // create a line 90deg from lop
+
+            double newbearing = addDegrees(Zn, 90);
+            //lineOfPositions[i].setPositionOne( newGeographicPosition( 30,  ));
+
 
         } //END for Loop
 
@@ -150,4 +157,6 @@ public class EstimatedPositionModule extends CelestialMath
 
         return geoPosition;
     }
+
+
 }

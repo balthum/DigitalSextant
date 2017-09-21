@@ -70,8 +70,7 @@ public class CelestialMath
      */
     public double ghaAries (double julianDay, double julianCentury)
     {
-        return (280.46061837 + 360.98564736629 * (julianDay - 2451545)
-                + (0.000387933 * Math.pow(julianCentury, 2)) -  Math.pow(julianCentury, 3) / 38710000) % 360;
+        return ( 280.46061837 + (360.98564736629 * (julianDay - 2451545) ) + (0.000387933 * Math.pow(julianCentury, 2)) -  (Math.pow(julianCentury, 3) / 38710000) ) % 360;
     }
 
     /**
@@ -344,6 +343,22 @@ public class CelestialMath
     public double observedHeight(double sextantHeight)
     {
         return ( 0.96  / Math.tan(sextantHeight ) + sextantHeight );
+    }
+
+
+    public double addDegrees(double bearingOne, double bearingTwo)
+    {
+        double newBearing = bearingOne + bearingTwo;
+
+        if (360 < newBearing)
+        {
+            newBearing = newBearing - 360;
+        }
+        else if (0 > newBearing)
+        {
+            newBearing = 360 - newBearing;
+        }
+        return  newBearing;
     }
 
     /**
