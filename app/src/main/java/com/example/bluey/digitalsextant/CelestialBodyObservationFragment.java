@@ -426,6 +426,9 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
 
         MainActivity.toolbar.setVisibility(View.GONE);
 
+        CelestialBodyObservationDialog myDialog = new CelestialBodyObservationDialog(this);
+        myDialog.show(getFragmentManager(), "instructions");
+
 
         return view;
     }

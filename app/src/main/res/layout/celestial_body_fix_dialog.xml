@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textViewLine1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dialog_line_1"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/imageViewPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewLine1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="26dp"
+                app:srcCompat="@drawable/phone1" />
+
+            <TextView
+                android:id="@+id/textViewLine2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/imageViewPhone"
+                android:layout_marginTop="37dp"
+                android:text="@string/dialog_line_2"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textViewLine3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/textViewLine2"
+                android:layout_marginTop="39dp"
+                android:text="@string/dialog_line_3"
+                android:textSize="18sp" />
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -23,6 +23,15 @@
     <string name="current_positon">Your current estimated position</string>
     <string name="underline">                               </string>
 
+    <string name="dialog_line_1">Hold your phone with both hands horizontal flat with it face up like the picture below.</string>
+    <string name="dialog_line_2">Then follow the arrows of right or left, to the right compass reading.
+        If it is within the arrows push the compass reading button at the bottom.</string>
+    <string name="dialog_line_3">Then follow the next set of arrows of up or down, to get to the right star.
+        The arrows will be close but may not be the exact position of the star.
+        When you have the star within the green box push the celestial body button below.</string>
+
+
+
 
     <string name="gps_message">Select how often you want to update the GPS position from GPS sensor.</string>
 
