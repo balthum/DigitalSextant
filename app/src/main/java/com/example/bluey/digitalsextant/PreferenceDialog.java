@@ -108,15 +108,15 @@ public class PreferenceDialog extends DialogFragment
             //(a)
             builder.setTitle("TOTAL PREVIOUS POSITIONS");
 
-            if(preference.PreferenceNum == 20)
+            if(preference.PreferenceNum == 5)
                 oldPosition = 0;
-            if(preference.PreferenceNum == 30)
+            if(preference.PreferenceNum == 10)
                 oldPosition = 1;
-            if(preference.PreferenceNum == 40)
+            if(preference.PreferenceNum == 15)
                 oldPosition = 2;
-            if(preference.PreferenceNum == 50)
+            if(preference.PreferenceNum == 20)
                 oldPosition = 3;
-            if(preference.PreferenceNum == 60)
+            if(preference.PreferenceNum == 25)
                 oldPosition = 4;
 
             //(b)
@@ -126,16 +126,16 @@ public class PreferenceDialog extends DialogFragment
                 public void onClick(DialogInterface dialogInterface, int i)
                 {
                     info = savedPosition[i];
-                    if (info.equals( "20 positions"))
+                    if (info.equals( "5 positions"))
+                        num = 5;
+                    else if(info.equals( "10 positions"))
+                        num = 10;
+                    else if(info.equals( "15 positions"))
+                        num = 15;
+                    else if (info.equals( "20 positions"))
                         num = 20;
-                    else if(info.equals( "30 positions"))
-                        num = 30;
-                    else if(info.equals( "40 positions"))
-                        num = 40;
-                    else if (info.equals( "50 positions"))
-                        num = 50;
-                    else if(info.equals( "60 positions"))
-                        num = 60;
+                    else if(info.equals( "25 positions"))
+                        num = 25;
                 }
             });
         }

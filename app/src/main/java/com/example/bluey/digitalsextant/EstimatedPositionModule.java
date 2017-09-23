@@ -23,7 +23,7 @@ public class EstimatedPositionModule extends CelestialMath
         //calculateEstimatedPosition();
     }
 
-    private void calculateEstimatedPosition()
+    public void calculateEstimatedPosition()
     {
         LineOfPosition[] lineOfPositions = new LineOfPosition[celestialBodyObservations.size()];
         for ( int i = 0; i < celestialBodyObservations.size(); i++)

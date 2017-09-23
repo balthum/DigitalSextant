@@ -1,7 +1,6 @@
 package com.example.bluey.digitalsextant;
 
 import android.app.Fragment;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +27,7 @@ public class ObservationListPageFragment extends Fragment
     private ArrayList<CelestialBodyObservation>     arrayList;
     private Button                                  calculateButton;
     private int                                     position = -1; // position of observation
+    private EstimatedPositionModule                 estimatedPositionModule;
 
     /**
      *
@@ -95,7 +95,8 @@ public class ObservationListPageFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                //getContext().deleteDatabase(ObservationDatabase.DATABASE_OBSERVATION);
+                estimatedPositionModule = new EstimatedPositionModule(getActivity());
+                estimatedPositionModule.calculateEstimatedPosition();
             }
         });
 
@@ -165,7 +166,7 @@ public class ObservationListPageFragment extends Fragment
         {
             if (position != -1)
             {
-                ObservationDeleteDialog deleteDialog = new ObservationDeleteDialog(this);
+                ObservationDeleteClearAllDialog deleteDialog = new ObservationDeleteClearAllDialog(this, "delete");
                 deleteDialog.show(getFragmentManager(), "delete observation");
             }
             else
@@ -184,11 +185,8 @@ public class ObservationListPageFragment extends Fragment
             }
             else
             {
-                this.arrayList.clear();
-                this.observationDataManager.deleteDatabase();
-                this.listView.setAdapter(this.observationAdapter);
-                this.calculateButton.setEnabled(false);
-                Toast.makeText(getActivity(),"OBSERVATIONS CLEARED", Toast.LENGTH_SHORT).show();
+                ObservationDeleteClearAllDialog deleteDialog = new ObservationDeleteClearAllDialog(this, "clear all");
+                deleteDialog.show(getFragmentManager(), "clear all observations");
             }
 
         }
@@ -196,7 +194,7 @@ public class ObservationListPageFragment extends Fragment
         return super.onOptionsItemSelected(item);
     }
 
-    //delet observation
+    //delete observation
     public void deleteObservation()
     {
         int deletePosition = this.position;
@@ -224,5 +222,14 @@ public class ObservationListPageFragment extends Fragment
             this.calculateButton.setEnabled(false);
         }
          this.position = -1;
+    }
+
+    public void clearAllObservations()
+    {
+        this.arrayList.clear();
+        this.observationDataManager.deleteDatabase();
+        this.listView.setAdapter(this.observationAdapter);
+        this.calculateButton.setEnabled(false);
+        Toast.makeText(getActivity(),"OBSERVATIONS CLEARED", Toast.LENGTH_SHORT).show();
     }
 }

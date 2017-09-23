@@ -48,11 +48,11 @@
     </string-array>
 
     <string-array name="position_raidoButton">
+        <item>5 positions</item>
+        <item>10 positions</item>
+        <item>15 positions</item>
         <item>20 positions</item>
-        <item>30 positions</item>
-        <item>40 positions</item>
-        <item>50 positions</item>
-        <item>60 positions</item>
+        <item>25 positions</item>
     </string-array>
 
 </resources>

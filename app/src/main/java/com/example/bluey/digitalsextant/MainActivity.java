@@ -165,8 +165,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             //sets previous position data
             preference.setPreferenceName("Previous Positions");
-            preference.setPreferenceInfo("30 records");
-            preference.setPreferenceNum(30);
+            preference.setPreferenceInfo("20 records");
+            preference.setPreferenceNum(20);
 
             //adds gps and position data
             arrayList.add(preference);// adds record to ArrayList
