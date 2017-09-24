@@ -46,7 +46,6 @@ public class CelestialMath
         return JD;
     }
 
-
     /**
      *
      *  Calculate Julian Century
@@ -96,39 +95,13 @@ public class CelestialMath
 
     /**
      *
-     *  Calculate the Greenwich Hour Angle (GHA) of a Celestial Body.
-     *
-     * @param shaStar   double Sidereal Hour Angle (SHA) of the Celestial Body
-     * @param ghaAries  double Greenwich Hour Angle (GHA) of Aeries
-     * @return          double Greenwich Hour Angle (GHA) of the Celestial Body
-     */
-    public double ghaStar (double shaStar, double ghaAries )
-    {
-        return shaStar + ghaAries;
-    }
-
-    /**
-     *
-     * Calculate the Greenwich Hour Angle (GHA) of a Celestial Body.
-     *
-     * @param shaStar                   double Sidereal Hour Angle (SHA) of the Celestial Body
-     * @param celestialBodyObservation  Celestial Body Observation Object of the Celestial Body
-     * @return                          double Greenwich Hour Angle (GHA) of the Celestial Body
-     */
-    public double ghaStar (double shaStar, CelestialBodyObservation celestialBodyObservation)
-    {
-        return shaStar + ghaAries(celestialBodyObservation);
-    }
-
-    /**
-     *
      *  Calculate Greenwich Hour Angle (GHA) Minute using the GHA of Aries.
      *
      * @param ghaAries Double
      * @return         Double
      *
      */
-    public double ghaMinute(double ghaAries)
+    public double ghaAriesMinute(double ghaAries)
     {
         return ghaAries % 1;
     }
@@ -175,8 +148,6 @@ public class CelestialMath
         else
             return a;
     }
-
-
 
 
     /**
