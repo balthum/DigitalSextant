@@ -9,7 +9,7 @@ public class LineOfPosition extends GeoLine
     private GeoPosition     assumedLocationPosition;        // Assumed position as an Geographical position object.
     private GeoPosition     lopLocationPosition;            // Line of Position (LOP) location intercept location.
     private double          interceptDistanceNauticalMiles; // Distance in Nautical Miles to the LOP intercept location.
-    private double          bearingToLOP;                   // Bering in Degrees to intercept location.
+    private double          LineOfBearing;                  // Bering in Degrees to intercept location.
 
     public LineOfPosition()
     {
@@ -47,13 +47,13 @@ public class LineOfPosition extends GeoLine
         this.interceptDistanceNauticalMiles = interceptDistanceNauticalMiles;
     }
 
-    public double getBearingToLOP()
+    public double getLineOfBearing()
     {
-        return bearingToLOP;
+        return LineOfBearing;
     }
 
-    public void setBearingToLOP(double bearingToLOP)
+    public void setLineOfBearing(double lineOfBearing)
     {
-        this.bearingToLOP = bearingToLOP;
+        LineOfBearing = lineOfBearing;
     }
 }
