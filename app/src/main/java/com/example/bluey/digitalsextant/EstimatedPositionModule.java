@@ -1,12 +1,15 @@
+/*
 package com.example.bluey.digitalsextant;
 
 import android.content.Context;
 
 import java.util.ArrayList;
 
+*/
 /**
  * Created by toddgibson Todd Gibson on 9/8/17.
- */
+ *//*
+
 
 public class EstimatedPositionModule extends CelestialMath
 {
@@ -23,7 +26,8 @@ public class EstimatedPositionModule extends CelestialMath
         //calculateEstimatedPosition();
     }
 
-    /**
+    */
+/**
      *
      *
      *  1.) Get the currently assumed position for the Past Position Data Base <BR>
@@ -48,7 +52,8 @@ public class EstimatedPositionModule extends CelestialMath
      *          1. Add 90 Degrees to Zn and find the latitude and longitude 50 NM of the ITC. <BR>
      *          2. Subtract 90 Degrees to Zn and find the latitude and longitude 50 NM of the ITC. <BR>
      *
-     */
+     *//*
+
     public void calculateEstimatedPosition()
     {
 
@@ -122,6 +127,7 @@ public class EstimatedPositionModule extends CelestialMath
     }
 
 
+*/
 /*    private PreviousPosition caclculateEsstimatedPositionCircle()
     {
         // 1.)
@@ -152,26 +158,33 @@ public class EstimatedPositionModule extends CelestialMath
         // 3.)
 
         return new PreviousPosition();
-    }*/
+    }*//*
 
-    /*  Supporting Methods */
 
-    /**
+    */
+/*  Supporting Methods *//*
+
+
+    */
+/**
      *  Get an Array List of the Celestial Body Observation Objects
      * @return ArrayList of CelestialBodyObservation
-     */
+     *//*
+
     private ArrayList<CelestialBodyObservation> getCelestialObservations()
     {
         ObservationDataManager observationDataManager = new ObservationDataManager(context);
         return observationDataManager.getObservationFromDatabase();
     }
 
-    /**
+    */
+/**
      *
      *  Get the last know position from Past Position Database
      *
      * @return PreviousPosition Object
-     */
+     *//*
+
     private PreviousPosition getLastKnowPosition()
     {
         PreviousPositionDataManager previousPositionDataManager = new PreviousPositionDataManager(context);
@@ -204,3 +217,4 @@ public class EstimatedPositionModule extends CelestialMath
 
 
 }
+*/

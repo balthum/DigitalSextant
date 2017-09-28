@@ -27,7 +27,7 @@ public class ObservationListPageFragment extends Fragment
     private ArrayList<CelestialBodyObservation>     arrayList;
     private Button                                  calculateButton;
     private int                                     position = -1; // position of observation
-    private EstimatedPositionModule                 estimatedPositionModule;
+    //private EstimatedPositionModule                 estimatedPositionModule;
 
     /**
      *
@@ -95,8 +95,8 @@ public class ObservationListPageFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                estimatedPositionModule = new EstimatedPositionModule(getActivity());
-                estimatedPositionModule.calculateEstimatedPosition();
+                //estimatedPositionModule = new EstimatedPositionModule(getActivity());
+                //estimatedPositionModule.calculateEstimatedPosition();
             }
         });
 
@@ -210,7 +210,7 @@ public class ObservationListPageFragment extends Fragment
                 celestialBodyObservation.setTitle("Observation " + (deletePosition + 1));
                 this.arrayList.set(deletePosition, celestialBodyObservation);
 
-                 deletePosition++;
+                deletePosition++;
             }
             this.observationDataManager.updateObservationDatabase(this.arrayList);
         }
@@ -221,7 +221,7 @@ public class ObservationListPageFragment extends Fragment
         {
             this.calculateButton.setEnabled(false);
         }
-         this.position = -1;
+        this.position = -1;
     }
 
     public void clearAllObservations()

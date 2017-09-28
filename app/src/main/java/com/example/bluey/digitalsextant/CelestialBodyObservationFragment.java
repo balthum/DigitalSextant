@@ -1,5 +1,4 @@
 package com.example.bluey.digitalsextant;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
@@ -316,7 +315,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
         }
     };
     private View mControlsView;
-//    private final Runnable mShowPart2Runnable = new Runnable()
+    //    private final Runnable mShowPart2Runnable = new Runnable()
 //    {
 //        @Override
 //        public void run()
@@ -386,7 +385,7 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
             @Override
             public void onClick(View view)
             {
-  //              toggle();
+                //              toggle();
             }
         });
 
