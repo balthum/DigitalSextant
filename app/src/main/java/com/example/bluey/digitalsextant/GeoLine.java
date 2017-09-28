@@ -1,10 +1,9 @@
-/*
+
 package com.example.bluey.digitalsextant;
 
-*/
 /**
  * Created by toddgibson Todd Gibson on 9/19/17.
- *//*
+ */
 
 
 public class GeoLine
@@ -36,4 +35,4 @@ public class GeoLine
         PositionTwo = positionTwo;
     }
 }
-*/
+

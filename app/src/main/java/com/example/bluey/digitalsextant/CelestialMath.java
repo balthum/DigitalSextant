@@ -182,11 +182,15 @@ public class CelestialMath
 
     public double azimuth(double declination, double latitude, double lha, double heightCalculated)
     {
-        return Math.asin(
+        declination = Math.toRadians(declination);
+        latitude    = Math.toRadians(latitude);
+        lha         = Math.toRadians(lha);
+        heightCalculated = Math.toRadians(heightCalculated);
+        return Math.toDegrees( Math.asin(
                 (Math.sin(declination) * Math.cos(latitude)
                 - Math.cos(declination) * Math.sin(latitude) * Math.cos(lha))
                 / Math.cos(heightCalculated)
-        );
+        ) );
     }
 
     /**
@@ -333,7 +337,10 @@ public class CelestialMath
      */
     public double observedHeight(double sextantHeight)
     {
-        return ( 0.96  / Math.tan(sextantHeight ) + sextantHeight );
+        double HsRad = Math.toRadians( sextantHeight   );
+        double HsTan = Math.tan(HsRad) ;
+
+        return  (0.96  / HsTan )  + sextantHeight;
     }
 
 

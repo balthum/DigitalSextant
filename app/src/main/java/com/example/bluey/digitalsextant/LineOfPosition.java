@@ -1,10 +1,8 @@
-/*
 package com.example.bluey.digitalsextant;
 
-*/
-/**
- * Created by toddgibson Todd Gibson on 9/19/17.
- *//*
+//*
+// * Created by toddgibson Todd Gibson on 9/19/17.
+
 
 
 public class LineOfPosition extends GeoLine
@@ -60,4 +58,3 @@ public class LineOfPosition extends GeoLine
         LineOfBearing = lineOfBearing;
     }
 }
-*/

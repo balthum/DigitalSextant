@@ -528,10 +528,15 @@ public class CelestialBodyObservationFragment extends Fragment implements Sensor
                     compassButton.setEnabled(false);
                     isCompassButtonpushed = true;
                 }
-                else
-                {
-                    Toast.makeText(getActivity(), "COMPASS BEARING NOT taken, make sure to follow the arrows", Toast.LENGTH_LONG).show();
-                }
+
+                takeFixButton.setEnabled(true);
+                compassButton.setEnabled(false);
+                isCompassButtonpushed = true;
+
+//                else
+//                {
+//                    Toast.makeText(getActivity(), "COMPASS BEARING NOT taken, make sure to follow the arrows", Toast.LENGTH_LONG).show();
+//                }
             }
         });
 

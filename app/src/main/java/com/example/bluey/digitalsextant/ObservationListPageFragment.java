@@ -27,7 +27,7 @@ public class ObservationListPageFragment extends Fragment
     private ArrayList<CelestialBodyObservation>     arrayList;
     private Button                                  calculateButton;
     private int                                     position = -1; // position of observation
-    //private EstimatedPositionModule                 estimatedPositionModule;
+    private EstimatedPositionModule                 estimatedPositionModule;
 
     /**
      *
@@ -95,8 +95,8 @@ public class ObservationListPageFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                //estimatedPositionModule = new EstimatedPositionModule(getActivity());
-                //estimatedPositionModule.calculateEstimatedPosition();
+                estimatedPositionModule = new EstimatedPositionModule(getActivity());
+                estimatedPositionModule.calculateEstimatedPosition();
             }
         });
 
