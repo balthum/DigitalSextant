@@ -41,13 +41,14 @@ public class EstimatedPositionModule extends CelestialMath
      *      f. Calculate the LHA of the celestial body. <BR>
      *      g. Calculate the Star Height (Hc). <BR>
      *      h. Calculate azimuth (Z). <BR>
-     *      i. Calculate the intercept distance (ITC). <BR>
+     *      i. Calculate the intercept distance (ITC) in nautical miles (Degrees * 60). <BR>
      *      j. Calculate True azimuth (Zn). <BR>
-     *      k. Set Line Of Position assumed position. <BR>
-     *      l. Set Line of Bearing to the Celestial Body. <BR>
-     *      m. Set Intercept in nautical miles to the Line of Position. <BR>
-     *      n. Find the Line of Position intercept with the Line of Bearing using Zn, ITC and assumed position. <BR>
-     *      o. Create the Line Of Position. <BR>
+     *      k. Calculate HoMoTo (ZnHoMoTo). <BR>
+     *      l. Set Line Of Position assumed position. <BR>
+     *      m. Set Line of Bearing to the Celestial Body. <BR>
+     *      n. Set Intercept in nautical miles to the Line of Position. <BR>
+     *      o. Find the Line of Position intercept with the Line of Bearing using ZnHoMoTo, ITC and assumed position. <BR>
+     *      p. Create the Line Of Position. <BR>
      *          1. Add 90 Degrees to Zn and find the latitude and longitude 50 NM of the ITC. <BR>
      *          2. Subtract 90 Degrees to Zn and find the latitude and longitude 50 NM of the ITC. <BR>
      *
@@ -84,42 +85,45 @@ public class EstimatedPositionModule extends CelestialMath
                     celestialBody.getDeclination(), assumedPosition.getLatitude(),lhaStar, Hc
                     );
             // i.
-            double ITC = intercept(Hc, Ho);
+            double ITC      = intercept(Hc, Ho) * 60; // Times 60 to convert to Nautical Miles.
             // j.
-            double Zn  = Zn(assumedPosition.getLatitude(), lhaStar, Z);
+            double Zn       = Zn(assumedPosition.getLatitude(), lhaStar, Z);
             // k.
+            double ZnHoMoTo = HoMoTo(Hc, Ho, Zn);
+            // l.
             lineOfPositions[i].setAssumedLocationPosition(
                     new GeoPosition( assumedPosition.getLatitude(), assumedPosition.getLongitude() )
             );
-            // l.
-            lineOfPositions[i].setLineOfBearing( Zn );
             // m.
+            lineOfPositions[i].setLineOfBearing( ZnHoMoTo );
+            // n.
             lineOfPositions[i].setInterceptDistanceNauticalMiles( ITC );
 
-            // n.
+            // o.
             lineOfPositions[i].setLopLocationPosition(
-                    newGeographicPosition(ITC, Zn, assumedPosition.getLatitude(), assumedPosition.getLongitude() )
-            );
-            // o.1
-            double newBearing = addDegrees(Zn, 90);
+                    newGeographicPosition(
+                            ZnHoMoTo, ITC, assumedPosition.getLatitude(), assumedPosition.getLongitude()
+                    ));
+            // p.1
+            double newBearing = addDegrees(ZnHoMoTo, 90);
             lineOfPositions[i].setPositionOne(
                     newGeographicPosition(
-                            50,
                             newBearing,
+                            50,
                             lineOfPositions[i].getLopLocationPosition().getLatitude(),
                             lineOfPositions[i].getLopLocationPosition().getLongitude()
                     ));
-            // o.2
-            newBearing = addDegrees(Zn, -90);
-            lineOfPositions[i].setPositionOne(
+            // p.2
+            newBearing = addDegrees(ZnHoMoTo, -90);
+            lineOfPositions[i].setPositionTwo(
                     newGeographicPosition(
-                            50,
                             newBearing,
+                            50,
                             lineOfPositions[i].getLopLocationPosition().getLatitude(),
                             lineOfPositions[i].getLopLocationPosition().getLongitude()
                     ));
         } //END for Loop
-        // 4.)
+        // 4.) TODO Intercept Calculation
 
 
 
@@ -130,11 +134,11 @@ public class EstimatedPositionModule extends CelestialMath
 
 
 
-/*  Supporting Methods *//*
+/*  Supporting Methods */
 
 
-    */
-/**
+
+    /**
      *  Get an Array List of the Celestial Body Observation Objects
      * @return ArrayList of CelestialBodyObservation
      */
@@ -160,28 +164,6 @@ public class EstimatedPositionModule extends CelestialMath
         return previousPosition.get(0);
     }
 
-    private GeoPosition newGeographicPosition(double nauticalMiles, double bearing, double latitude, double longitude)
-    {
-        GeoPosition geoPosition = new GeoPosition(0.0, 0.0);
-
-        double dist         = nauticalMiles / 3440;
-        double brng         = Math.toRadians(bearing);
-        double lat1         = Math.toRadians(latitude);
-        double lon1         = Math.toRadians(longitude);
-
-        double lat2 = Math.asin( Math.sin(lat1) * Math.cos(dist) + Math.cos(lat1) * Math.sin(dist) * Math.cos(brng) );
-        double a = Math.atan2(Math.sin(brng) * Math.sin(dist) * Math.cos(lat1), Math.cos(dist) - Math.sin(lat1) * Math.sin(lat2));
-
-        System.out.println("a = " +  a);
-        double lon2 = lon1 + a;
-
-        lon2 = (lon2 + 3 * Math.PI ) % ( 2 * Math.PI ) - Math.PI;
-
-        geoPosition.setLatitude(lat2);
-        geoPosition.setLongitude(lon2);
-
-        return geoPosition;
-    }
 
 
 }
