@@ -343,10 +343,39 @@ public class CelestialMath
         return  (0.96  / HsTan )  + sextantHeight;
     }
 
-
-    public double addDegrees(double bearingOne, double bearingTwo)
+    /**
+     *   Height Observed is More Plotted Towards
+     *
+     *  It means if the height observed (Ho) is more (Mo), the LOP is plotted toward (To) the object = HoMoTo.
+     *
+     * @param heightCalculated  double Height calculated of Celestial Body
+     * @param heightObserved    double Sextant Height measured with corrections.
+     * @param trueAzimuth       double The True Azimuth of the Celestial Body
+     * @return double Bearing to Celestial Body
+     */
+    public double HoMoTo(double heightCalculated, double heightObserved, double trueAzimuth)
     {
-        double newBearing = bearingOne + bearingTwo;
+        if (heightObserved > heightCalculated) {
+            return trueAzimuth;
+        }
+        else {
+            double Zn = trueAzimuth + 180;
+            if (Zn > 360) return Zn - 360;
+            return Zn;
+        }
+    }
+
+    /**
+     *
+     *  Add a number of degrees to a bearing.
+     *
+     * @param bearing       Double A bearing in degrees
+     * @param degreesAdded  Double Degrees to be added to the bearing
+     * @return              Double new Bearing
+     */
+    public double addDegrees(double bearing, double degreesAdded)
+    {
+        double newBearing = bearing + degreesAdded;
 
         if (360 < newBearing)
         {
@@ -357,6 +386,36 @@ public class CelestialMath
             newBearing = 360 - newBearing;
         }
         return  newBearing;
+    }
+
+    /**
+     *
+     * Calculate a new geographical position (latitude and longitude) from a known geographical position
+     * using a distance in Nautical Miles (NM) and bearing to the new position.
+     *
+     * @param bearing       Double Bearing to the new geographical position.
+     * @param distance      Double Distance in Nautical Miles to the new geographical position.
+     * @param latitude      Double Starting Latitude.
+     * @param longitude     Double Starting Longitude.
+     * @return              GeoPosition Geographical Position object.
+     */
+    public GeoPosition newGeographicPosition( double bearing, double distance, double latitude, double longitude)
+    {
+        distance = distance / 3440;
+        bearing = Math.toRadians(bearing);
+
+        double lat1 = Math.toRadians(latitude), lon1 = Math.toRadians(longitude);
+        double lat2 = Math.asin(Math.sin(lat1) * Math.cos(distance) +
+                Math.cos(lat1) * Math.sin(distance) * Math.cos(bearing));
+        double lon2 = lon1 + Math.atan2(Math.sin(bearing) * Math.sin(distance) *
+                        Math.cos(lat1),
+                Math.cos(distance) - Math.sin(lat1) *
+                        Math.sin(lat2));
+        if (Double.isNaN(lat2) || Double.isNaN(lon2)) {
+            return null;
+        }
+
+        return new GeoPosition(Math.toDegrees(lat2), Math.toDegrees(lon2));
     }
 
     /**
