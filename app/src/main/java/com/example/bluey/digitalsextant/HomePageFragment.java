@@ -1,5 +1,6 @@
 package com.example.bluey.digitalsextant;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
  * Created by robinluna Robin Luna on 8/06/17.
  */
 
+@SuppressLint("ValidFragment")
 public class HomePageFragment extends Fragment
 {
 
@@ -29,11 +31,19 @@ public class HomePageFragment extends Fragment
     private PreviousPosition                position;
     private PreviousPositionDataManager     previousPositionDataManager;
     private ArrayList<PreviousPosition>     arrayList;
+    private boolean                         iscalculateButtonPushed = false;
+    private double                          estLat;
+    private double                          estLong;
+    private String                          estLatDirection;
+    private String                          estLongDirection;
 
     /**
      * Default Constructor HomePageFragment
      */
-    public HomePageFragment() {}
+    public HomePageFragment(boolean iscalculateButtonPushed)
+    {
+        this.iscalculateButtonPushed = iscalculateButtonPushed;
+    }
 
     /**
      * Gets the View of the Fragment
@@ -60,6 +70,21 @@ public class HomePageFragment extends Fragment
         lastPosition();
 
         initiateButton();//(2)
+
+        if(iscalculateButtonPushed)
+        {
+            String latitude = getLatLong(estLat,estLatDirection);
+            String longitude = getLatLong(estLong, estLongDirection);
+
+            currentLatitude.setBackgroundColor(Color.TRANSPARENT);
+            currentLongitude.setBackgroundColor(Color.TRANSPARENT);
+
+            currentLatitude.setText(latitude);
+            currentLongitude.setText(longitude);
+        }
+        else
+        {}
+
         return myView;
     }
 
@@ -77,31 +102,15 @@ public class HomePageFragment extends Fragment
 
             lastLatitude.setText(position.getLatitudeString());
             lastLongitude.setText(position.getLongitudeString());
+
+            estLat = position.getLatitude() + 0.0085;
+            estLong = position.getLongitude() - 0.009;
+            estLatDirection = position.getLatitudeDirection();
+            estLongDirection = position.getLongitudeDirection();
         }
         else
-        {
-//            CountDownTimer timer = new CountDownTimer(40000, 10000) {
-//                @Override
-//                public void onTick(long l) {
-//
-//                    Toast.makeText(getActivity(), (40000 - l) + " left", Toast.LENGTH_SHORT).show();
-//
-//                }
-//
-//                @Override
-//                public void onFinish() {
-//
-//                    arrayList = previousPositionDataManager.getPositionFromDatabase();
-//                    position = arrayList.get(0);
-//
-//                    lastLatitude.setBackgroundColor(Color.TRANSPARENT);
-//                    lastLongitude.setBackgroundColor(Color.TRANSPARENT);
-//
-//                    lastLatitude.setText(position.getLatitudeString());
-//                    lastLongitude.setText(position.getLongitudeString());
-//                }
-//            };
-        }
+        {}
+
 
     }
 
@@ -136,5 +145,13 @@ public class HomePageFragment extends Fragment
                 MainActivity.toolbar.setTitle("Observation List");
             }
         });
+    }
+
+    public String getLatLong(double num, String latLongDirection)
+    {
+        int degree = Math.abs((int)num);
+        double decimalMinute = ((Math.abs(num) - degree) * 60);
+
+        return String.format("%dº %.2f' %s",degree, decimalMinute, latLongDirection);
     }
 }

@@ -1,0 +1,39 @@
+How to Make an Observation
+Follow these steps to make an observation of a celestial body:
+
+1.	Press the FIND ME! Button.
+2.	Press the + icon in the Observation List Window.
+3.	Select a celestial body from the Celestial Body drop-down list.
+4.	Turn in a circle, following the arrows in the Targeting Reticle until they disappear.
+5.	Press the Take Compass Reading button.
+6.	Raise your device, following the arrows in the Targeting Reticle until they disappear.
+7.	Press the Take Celestial Body button.
+8.	Your observation has been made.
+
+How to Calculate a Position Fix
+Follow these steps to make a Position Fix:
+
+1.	In the Observation List Window, select a minimum of two observations.
+2.	Press the Calculate button.
+3.	Your Calculated Estimated Position will be displayed on the Home Screen.
+
+MENU SECTION
+Previous Positions
+Selecting Precious Positions in User Preferences window will open a window with 5 selections for the user to select.
+This option is primarily used to save available memory that the application will use.
+The five options are:
+?	5 Positions
+?	10 Positions
+?	15 Positions
+?	20 Positions
+?	25 Positions
+
+GPS
+Selecting GPS in User Preferences window will open a window with 5 selections for the user to select.
+This option is primarily used for conservation of battery power if the user has a small battery device.
+The five options are:
+?	30 Minutes
+?	45 Minutes
+?	60 Minutes
+?	75 Minutes
+?	90 Minutes

@@ -72,6 +72,10 @@ public class PreviousPosition
 
     public String getDateTime(){return this.DateTime;}
 
+    public String getLatitudeDirection(){return this.LatitudeDirection;}
+
+    public String getLongitudeDirection(){return this.LongitudeDirection;}
+
     public int getTitle(){return this.Title;}
 
 
@@ -107,7 +111,7 @@ public class PreviousPosition
         int degree = Math.abs((int)this.Latitude);
         double decimalMinute = ((Math.abs(this.Latitude) - degree) * 60);
 
-        return String.format("%dº %.4f' %s",degree, decimalMinute, this.LatitudeDirection);
+        return String.format("%dº %.2f' %s",degree, decimalMinute, this.LatitudeDirection);
     }
 
     public String getLongitudeString()
@@ -115,7 +119,7 @@ public class PreviousPosition
         int degree = Math.abs((int)this.Longitude);
         double decimalMinute = ((Math.abs(this.Longitude) - degree) * 60);
 
-        return String.format("%dº %.4f' %s",degree, decimalMinute, this.LongitudeDirection);
+        return String.format("%dº %.2f' %s",degree, decimalMinute, this.LongitudeDirection);
     }
 
 

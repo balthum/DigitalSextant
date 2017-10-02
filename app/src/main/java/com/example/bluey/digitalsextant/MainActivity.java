@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         //(6)
-        HomePageFragment homePageFragment = new HomePageFragment();
+        HomePageFragment homePageFragment = new HomePageFragment(false);
         android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container,homePageFragment);
         fragmentTransaction.commit();
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(item.getItemId() == R.id.home)
         {
             //goes to the home page fragment
-            HomePageFragment homePageFragment = new HomePageFragment();
+            HomePageFragment homePageFragment = new HomePageFragment(false);
             android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container,homePageFragment);
             fragmentTransaction.commit();

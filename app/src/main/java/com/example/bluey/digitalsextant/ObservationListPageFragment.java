@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static com.example.bluey.digitalsextant.MainActivity.toolbar;
+
 /**
  * Created by robinluna Robin Luna on 8/06/17.
  */
@@ -95,8 +97,17 @@ public class ObservationListPageFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                estimatedPositionModule = new EstimatedPositionModule(getActivity());
-                estimatedPositionModule.calculateEstimatedPosition();
+                //estimatedPositionModule = new EstimatedPositionModule(getActivity());
+                //estimatedPositionModule.calculateEstimatedPosition();
+
+                //goes to the home page fragment
+                HomePageFragment homePageFragment = new HomePageFragment(true);
+                android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container,homePageFragment);
+                fragmentTransaction.commit();
+
+                //set the title of the toolbar to Manual
+                toolbar.setTitle("Home");
             }
         });
 
