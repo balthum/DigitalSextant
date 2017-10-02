@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
             }
-        }, 20000, (update_time * 1l * 1000l));
+        }, 20000, (update_time * 60l * 1000l));
     }
 
     public void timerOff()

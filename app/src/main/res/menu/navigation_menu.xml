@@ -3,34 +3,29 @@
     <item
         android:id="@+id/home"
         android:icon="@drawable/ic_home_white_24dp"
-        android:iconTint="@color/icon_backgrond"
         android:title="@string/app_home"
         android:checkable="true"/>
     <item
         android:id="@+id/manual"
         android:icon="@drawable/ic_manual_white_24dp"
-        android:iconTint="@color/icon_backgrond"
         android:title="@string/app_manual"
         android:checkable="true"/>
 
     <item
         android:id="@+id/observation_list"
         android:icon="@drawable/ic_position_list_white_24dp"
-        android:iconTint="@color/icon_backgrond"
         android:title="@string/app_observation_list"
         android:checkable="true"/>
 
     <item
         android:id="@+id/previous_position_list"
         android:icon="@drawable/ic_position_list_white_24dp"
-        android:iconTint="@color/icon_backgrond"
         android:title="@string/app_previous_position_list"
         android:checkable="true"/>
 
     <item
         android:id="@+id/preferences"
         android:icon="@drawable/ic_preferences_white_24dp"
-        android:iconTint="@color/icon_backgrond"
         android:title="@string/app_preferences"
         android:checkable="true"/>
 
